@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-06T18:54:47.708055+00:00",
+  "generated_at": "2026-07-06T20:52:04.988364+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
@@ -65,14 +65,6 @@
       "type": "sismicita",
       "title": "Evento sismico Ml 1.6",
       "summary": "Localizzato: 5 km SE Maletto (CT).",
-      "level": "basso"
-    },
-    {
-      "id": "eq-46304632",
-      "timestamp": "2026-06-22T19:28:01.820000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.5",
-      "summary": "Localizzato: 2 km W Maletto (CT).",
       "level": "basso"
     }
   ]
