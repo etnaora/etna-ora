@@ -45,6 +45,29 @@ MAX_ITEMS = 25            # finestra fissa del feed, come deciso nel progetto
 FEED_PATH = Path(__file__).resolve().parent.parent / "data" / "feed.json"
 
 
+def parse_ingv_time(raw) -> str:
+    """Normalizza il campo 'time' del geojson INGV in una stringa ISO UTC.
+
+    In pratica INGV lo restituisce come stringa (es. '2026-06-15T12:28:45.130Z'),
+    ma per sicurezza gestiamo anche il caso in cui arrivi come epoch numerico
+    (ms), così lo script non si rompe se il formato cambia di nuovo in futuro.
+    """
+    if isinstance(raw, (int, float)):
+        return datetime.fromtimestamp(raw / 1000, tz=timezone.utc).isoformat()
+
+    text = str(raw).strip()
+    if text.endswith("Z"):
+        text = text[:-1] + "+00:00"
+    try:
+        dt = datetime.fromisoformat(text)
+    except ValueError:
+        # fallback estremo: tronca i microsecondi se il formato non standard fallisce
+        dt = datetime.fromisoformat(text.split(".")[0] + "+00:00")
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+    return dt.isoformat()
+
+
 def fetch_new_events() -> list[dict]:
     """Interroga INGV e restituisce una lista di item nel formato del feed."""
     starttime = (datetime.now(timezone.utc) - timedelta(days=LOOKBACK_DAYS)).strftime("%Y-%m-%dT%H:%M:%S")
@@ -64,8 +87,7 @@ def fetch_new_events() -> list[dict]:
     for feature in payload.get("features", []):
         props = feature["properties"]
         event_id = str(feature.get("id") or props.get("eventId"))
-        # time in ms epoch nel formato geojson INGV
-        ts = datetime.fromtimestamp(props["time"] / 1000, tz=timezone.utc).isoformat()
+        ts = parse_ingv_time(props["time"])
         mag = props.get("mag")
         place = props.get("place") or "area etnea"
 
