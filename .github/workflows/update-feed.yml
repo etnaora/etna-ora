@@ -1,0 +1,35 @@
+name: Aggiorna feed sismico Etna
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  update-feed:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Imposta Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Installa dipendenze
+        run: pip install requests
+
+      - name: Aggiorna data/feed.json
+        run: python3 scripts/fetch_terremoti.py
+
+      - name: Commit se ci sono cambiamenti
+        run: |
+          git config user.name "etna-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/feed.json
+          git diff --cached --quiet || git commit -m "Aggiorna feed sismico [automatico]"
+          git push
