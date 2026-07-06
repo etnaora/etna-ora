@@ -241,10 +241,11 @@
   }
 
   // ---------- caricamento dati (mock locali in /data) ----------
+  const cacheBuster = () => '?v=' + Date.now();
   Promise.all([
-    fetch('data/webcam.json').then(r=>r.json()),
-    fetch('data/hotspot.json').then(r=>r.json()),
-    fetch('data/feed.json').then(r=>r.json()),
+    fetch('data/webcam.json' + cacheBuster(), {cache:'no-store'}).then(r=>r.json()),
+    fetch('data/hotspot.json' + cacheBuster(), {cache:'no-store'}).then(r=>r.json()),
+    fetch('data/feed.json' + cacheBuster(), {cache:'no-store'}).then(r=>r.json()),
   ]).then(([webcam, hotspot, feed])=>{
     applyHotspotStatus(hotspot);
     renderWebcams(webcam.cameras);
