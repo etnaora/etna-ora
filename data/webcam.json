@@ -1,0 +1,56 @@
+{
+  "generated_at": "2026-07-06T09:00:00Z",
+  "note": "Selezione limitata alle webcam nate per il monitoraggio vulcanologico (rete INGV-OE e osservatori dedicati), non alle webcam panoramiche/turistiche.",
+  "cameras": [
+    {
+      "id": "ecv",
+      "name": "Crateri Sommitali",
+      "position": "Versante sud, stazione arrivo funivia — 2505 m",
+      "lat": 37.7510,
+      "lng": 14.9934,
+      "source": "INGV Osservatorio Etneo",
+      "stream_type": "image_refresh",
+      "stream_url": null
+    },
+    {
+      "id": "emct",
+      "name": "Cratere di Sud-Est",
+      "position": "Versante sud-est",
+      "lat": 37.7480,
+      "lng": 15.0021,
+      "source": "INGV Osservatorio Etneo",
+      "stream_type": "image_refresh",
+      "stream_url": null
+    },
+    {
+      "id": "ent",
+      "name": "Versante Nord — Piano Provenzana",
+      "position": "Osservatorio Vulcanologico, 2900 m",
+      "lat": 37.8050,
+      "lng": 15.0200,
+      "source": "Osservatorio Vulcanologico Piano Provenzana",
+      "stream_type": "image_refresh",
+      "stream_url": null
+    },
+    {
+      "id": "env",
+      "name": "Versante Sud — Rifugio Sapienza",
+      "position": "Nicolosi, 1900 m",
+      "lat": 37.6975,
+      "lng": 14.9925,
+      "source": "INGV Osservatorio Etneo",
+      "stream_type": "image_refresh",
+      "stream_url": null
+    },
+    {
+      "id": "epvh",
+      "name": "Versante Est — Milo",
+      "position": "Milo, quota media",
+      "lat": 37.7500,
+      "lng": 15.1000,
+      "source": "INGV Osservatorio Etneo",
+      "stream_type": "image_refresh",
+      "stream_url": null
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "generated_at": "2026-07-06T09:40:00Z",
+  "source": "INGV Osservatorio Etneo (ct.ingv.it) — dati mock per test locale",
+  "max_items": 25,
+  "items": [
+    {
+      "id": "f-0001",
+      "timestamp": "2026-07-06T09:30:00Z",
+      "type": "tremore",
+      "title": "Tremore vulcanico su livello medio",
+      "summary": "L'ampiezza RMS si mantiene su valori medi (350 nm/s), stazione ECPN.",
+      "level": "medio"
+    },
+    {
+      "id": "f-0002",
+      "timestamp": "2026-07-06T06:12:00Z",
+      "type": "comunicato",
+      "title": "Aggiornamento attività sommitale",
+      "summary": "Degassamento continuo al Cratere di Sud-Est, nessuna variazione significativa.",
+      "level": "basso"
+    },
+    {
+      "id": "f-0003",
+      "timestamp": "2026-07-05T22:47:00Z",
+      "type": "sismicita",
+      "title": "Evento sismico Ml 2.1",
+      "summary": "Localizzato 4 km a nord di Milo, profondità 18 km.",
+      "level": "basso"
+    },
+    {
+      "id": "f-0004",
+      "timestamp": "2026-07-05T14:03:00Z",
+      "type": "bollettino",
+      "title": "Bollettino settimanale disponibile",
+      "summary": "Riepilogo multidisciplinare del 29/06–05/07 pubblicato da INGV-OE.",
+      "level": "basso"
+    }
+  ]
+}
