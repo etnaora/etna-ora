@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-07-06T09:40:00Z",
-  "source": "INGV Osservatorio Etneo (ct.ingv.it) — dati mock per test locale",
+  "generated_at": "2026-07-06T10:03:32.609526+00:00",
+  "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
     {
@@ -20,19 +20,59 @@
       "level": "basso"
     },
     {
-      "id": "f-0003",
-      "timestamp": "2026-07-05T22:47:00Z",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 2.1",
-      "summary": "Localizzato 4 km a nord di Milo, profondità 18 km.",
-      "level": "basso"
-    },
-    {
       "id": "f-0004",
       "timestamp": "2026-07-05T14:03:00Z",
       "type": "bollettino",
       "title": "Bollettino settimanale disponibile",
       "summary": "Riepilogo multidisciplinare del 29/06–05/07 pubblicato da INGV-OE.",
+      "level": "basso"
+    },
+    {
+      "id": "eq-46383292",
+      "timestamp": "2026-06-29T22:53:53.520000+00:00",
+      "type": "sismicita",
+      "title": "Evento sismico Ml 1.2",
+      "summary": "Localizzato: 7 km S Randazzo (CT).",
+      "level": "basso"
+    },
+    {
+      "id": "eq-46360852",
+      "timestamp": "2026-06-27T21:54:40+00:00",
+      "type": "sismicita",
+      "title": "Evento sismico Ml 1.4",
+      "summary": "Localizzato: 4 km W Randazzo (CT).",
+      "level": "basso"
+    },
+    {
+      "id": "eq-46345192",
+      "timestamp": "2026-06-26T09:12:31+00:00",
+      "type": "sismicita",
+      "title": "Evento sismico Ml 1.6",
+      "summary": "Localizzato: 5 km S Bronte (CT).",
+      "level": "basso"
+    },
+    {
+      "id": "eq-46342322",
+      "timestamp": "2026-06-26T00:16:31.960000+00:00",
+      "type": "sismicita",
+      "title": "Evento sismico Ml 1.7",
+      "summary": "Localizzato: 4 km S Bronte (CT).",
+      "level": "basso"
+    },
+    {
+      "id": "eq-46316942",
+      "timestamp": "2026-06-23T21:01:33.310000+00:00",
+      "type": "sismicita",
+      "title": "Evento sismico Ml 1.6",
+      "summary": "Localizzato: 5 km SE Maletto (CT).",
+      "level": "basso"
+    },
+    {
+      "id": "eq-46304632",
+      "timestamp": "2026-06-22T19:28:01.820000+00:00",
+      "type": "sismicita",
+      "title": "Evento sismico Ml 1.5",
+      "summary": "Localizzato: 2 km W Maletto (CT).",
       "level": "basso"
     }
   ]
