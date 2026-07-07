@@ -36,10 +36,15 @@ AREA = "14.95,37.70,15.05,37.80"
 SOURCE = "VIIRS_SNPP_NRT"   # sensore VIIRS, dati quasi in tempo reale
 DAY_RANGE = 1                # solo le ultime 24 ore, ci basta per lo stato attuale
 
-# Soglie per decidere lo stato mostrato sul sito (in FRP, "fire radiative
-# power", proxy dell'intensità termica rilevata dal satellite, in MW)
-SOGLIA_MODERATA = 10
-SOGLIA_ALTA = 50
+# Soglie per decidere lo stato mostrato sul sito. A differenza di quanto si
+# potrebbe pensare, la sola PRESENZA di hotspot rilevati vicino ai crateri
+# sommitali è già un segnale significativo: in condizioni di vera quiete,
+# VIIRS in genere non rileva nulla in quest'area. Non serve un FRP enorme
+# perché conti come attività: un FRP basso ma con hotspot multipli è già
+# coerente con degassamento intenso o attività stromboliana offuscata da
+# cenere (il satellite vede "attraverso" solo in parte in questi casi).
+SOGLIA_ALTA_FRP = 15      # FRP massimo (MW) sopra cui l'attività è considerata forte
+SOGLIA_ALTA_COUNT = 6     # numero di hotspot sopra cui l'attività è considerata forte
 
 HOTSPOT_PATH = Path(__file__).resolve().parent.parent / "data" / "hotspot.json"
 
@@ -72,16 +77,16 @@ def build_status(rows: list[dict]) -> dict:
         }
 
     max_frp = max(float(r.get("frp", 0) or 0) for r in rows)
+    count = len(rows)
 
-    if max_frp >= SOGLIA_ALTA:
+    if max_frp >= SOGLIA_ALTA_FRP or count >= SOGLIA_ALTA_COUNT:
         status = "alta"
-        notes = f"Anomalia termica significativa rilevata dal satellite (FRP massimo {max_frp:.1f} MW)."
-    elif max_frp >= SOGLIA_MODERATA:
-        status = "moderata"
-        notes = f"Attività termica rilevata dal satellite (FRP massimo {max_frp:.1f} MW)."
+        notes = f"Anomalia termica significativa rilevata dal satellite ({count} hotspot, FRP massimo {max_frp:.1f} MW)."
     else:
-        status = "quiete"
-        notes = f"Anomalie termiche minime rilevate (FRP massimo {max_frp:.1f} MW), nella norma del degassamento."
+        # qualunque hotspot rilevato vicino ai crateri sommitali è già un
+        # segnale di attività: in quiete reale VIIRS non rileva quasi nulla qui
+        status = "moderata"
+        notes = f"Attività termica rilevata dal satellite ({count} hotspot, FRP massimo {max_frp:.1f} MW)."
 
     return {
         "generated_at": now.isoformat(),
