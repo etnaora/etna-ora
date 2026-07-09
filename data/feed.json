@@ -1,8 +1,16 @@
 {
-  "generated_at": "2026-07-08T23:49:13.554096+00:00",
+  "generated_at": "2026-07-09T02:52:38.649444+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
+    {
+      "id": "eq-46020191",
+      "timestamp": "2026-07-09T01:25:16.090000+00:00",
+      "type": "sismicita",
+      "title": "Evento sismico Ml 1.1",
+      "summary": "Localizzato: 2 km W Fiumefreddo di Sicilia (CT).",
+      "level": "basso"
+    },
     {
       "id": "eq-46018381",
       "timestamp": "2026-07-08T16:44:51.730000+00:00",
