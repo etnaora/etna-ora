@@ -51,7 +51,16 @@
       "source": "INGV Osservatorio Etneo",
       "stream_type": "iframe_ingv",
       "stream_url": "https://www.ct.ingv.it/sezioniesterne/webcam/Webcam.php?Vulcano=Epvh"
+    },
+    {
+      "id": "emov",
+      "name": "Montagnola",
+      "position": "Versante sud, 2600 m — la webcam pubblica più vicina ai crateri sommitali",
+      "lat": 37.7444,
+      "lng": 14.9958,
+      "source": "INGV Osservatorio Etneo",
+      "stream_type": "iframe_ingv",
+      "stream_url": "https://www.ct.ingv.it/sezioniesterne/webcam/Webcam.php?Vulcano=Emov"
     }
   ]
 }
-
