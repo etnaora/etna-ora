@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-07-06T09:00:00Z",
-  "note": "Selezione limitata alle webcam nate per il monitoraggio vulcanologico (rete INGV-OE e osservatori dedicati), non alle webcam panoramiche/turistiche.",
+  "generated_at": "2026-07-09T12:10:00Z",
+  "note": "Selezione limitata alle webcam nate per il monitoraggio vulcanologico (rete INGV-OE), non alle webcam panoramiche/turistiche. Ogni stream_url punta alla pagina ufficiale INGV che mostra sempre l'ultima immagine disponibile (nessun refresh live continuo lato INGV, ma l'immagine è aggiornata a ogni caricamento).",
   "cameras": [
     {
       "id": "ecv",
@@ -9,8 +9,8 @@
       "lat": 37.7510,
       "lng": 14.9934,
       "source": "INGV Osservatorio Etneo",
-      "stream_type": "image_refresh",
-      "stream_url": null
+      "stream_type": "iframe_ingv",
+      "stream_url": "https://www.ct.ingv.it/sezioniesterne/webcam/Webcam.php?Vulcano=Ecv"
     },
     {
       "id": "emct",
@@ -19,8 +19,8 @@
       "lat": 37.7480,
       "lng": 15.0021,
       "source": "INGV Osservatorio Etneo",
-      "stream_type": "image_refresh",
-      "stream_url": null
+      "stream_type": "iframe_ingv",
+      "stream_url": "https://www.ct.ingv.it/sezioniesterne/webcam/Webcam.php?Vulcano=Emct"
     },
     {
       "id": "ent",
@@ -28,9 +28,9 @@
       "position": "Osservatorio Vulcanologico, 2900 m",
       "lat": 37.8050,
       "lng": 15.0200,
-      "source": "Osservatorio Vulcanologico Piano Provenzana",
-      "stream_type": "image_refresh",
-      "stream_url": null
+      "source": "INGV Osservatorio Etneo",
+      "stream_type": "iframe_ingv",
+      "stream_url": "https://www.ct.ingv.it/sezioniesterne/webcam/Webcam.php?Vulcano=Ent"
     },
     {
       "id": "env",
@@ -39,8 +39,8 @@
       "lat": 37.6975,
       "lng": 14.9925,
       "source": "INGV Osservatorio Etneo",
-      "stream_type": "image_refresh",
-      "stream_url": null
+      "stream_type": "iframe_ingv",
+      "stream_url": "https://www.ct.ingv.it/sezioniesterne/webcam/Webcam.php?Vulcano=Env"
     },
     {
       "id": "epvh",
@@ -49,8 +49,9 @@
       "lat": 37.7500,
       "lng": 15.1000,
       "source": "INGV Osservatorio Etneo",
-      "stream_type": "image_refresh",
-      "stream_url": null
+      "stream_type": "iframe_ingv",
+      "stream_url": "https://www.ct.ingv.it/sezioniesterne/webcam/Webcam.php?Vulcano=Epvh"
     }
   ]
 }
+
