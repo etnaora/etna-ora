@@ -300,7 +300,7 @@
         <div class="time">${formatTime(it.timestamp)}</div>
         <div class="body">
           <div class="title"><span class="tag ${it.type}">${TYPE_LABEL[it.type]||it.type}</span>${it.title}</div>
-          <div class="summary">${it.summary}</div>
+          <div class="summary">${it.summary}${it.url ? ` · <a href="${it.url}" target="_blank" rel="noopener" style="color:var(--ash-muted);">PDF ufficiale ↗</a>` : ''}</div>
         </div>
       </div>
     `).join('');
