@@ -202,6 +202,9 @@
     <h3 id="camTitle">—</h3>
     <div class="meta" id="camMeta">—</div>
     <div class="frame" id="camFrame">stream non collegato (demo locale)</div>
+    <div style="margin-top:10px; font-size:12px;">
+      <a id="camFallbackLink" href="#" target="_blank" rel="noopener" style="color:var(--ash-muted);">Se l'immagine non appare, apri la webcam ufficiale INGV in una nuova scheda ↗</a>
+    </div>
     <button class="close" onclick="document.getElementById('camModal').classList.remove('open')">Chiudi</button>
   </div>
 </div>
@@ -280,7 +283,16 @@
         flyToPoint(cam.lat, cam.lng, 15);
         document.getElementById('camTitle').textContent = cam.name;
         document.getElementById('camMeta').textContent = cam.position + ' · fonte: ' + cam.source;
-        document.getElementById('camFrame').textContent = cam.stream_url ? '' : 'stream non collegato (demo locale)';
+        const frame = document.getElementById('camFrame');
+        const fallback = document.getElementById('camFallbackLink');
+        if(cam.stream_url){
+          frame.innerHTML = `<iframe src="${cam.stream_url}" style="width:100%;height:100%;border:0;border-radius:8px;background:#0d0b09;" loading="lazy"></iframe>`;
+          fallback.href = cam.stream_url;
+          fallback.style.display = 'block';
+        } else {
+          frame.textContent = 'stream non collegato (demo locale)';
+          fallback.style.display = 'none';
+        }
         document.getElementById('camModal').classList.add('open');
       });
     });
