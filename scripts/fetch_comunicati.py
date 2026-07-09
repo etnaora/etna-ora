@@ -17,6 +17,7 @@ import re
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
+from urllib.parse import urljoin
 
 import requests
 from bs4 import BeautifulSoup
@@ -53,13 +54,19 @@ def fetch_comunicati_etna() -> list[dict]:
         except ValueError:
             continue
 
-        # la descrizione è il testo tra la data e il nome del link/file
-        description = text.replace(ts_raw, "").strip()
-        description = re.sub(r"\s*ETNA\s*$", "", description, flags=re.IGNORECASE).strip(" -")
+        # la descrizione è il testo tra la data e il nome del link/file:
+        # rimuoviamo la data e, separatamente, il testo visibile del link
+        # stesso (es. "Download PDF"), che altrimenti resta appiccicato
+        # in coda alla frase.
+        link_text = link.get_text(" ", strip=True)
+        description = text.replace(ts_raw, "")
+        if link_text:
+            description = description.replace(link_text, "")
+        description = re.sub(r"\s*ETNA\s*$", "", description, flags=re.IGNORECASE).strip(" -–·")
         if not description:
             description = "Comunicato di attività vulcanica"
 
-        pdf_url = href if href.startswith("http") else f"https://www.ct.ingv.it{href}"
+        pdf_url = urljoin(INGV_PAGE, href)
         item_id = "com-" + re.sub(r"\W+", "", href.split("/")[-1])
 
         items.append({
