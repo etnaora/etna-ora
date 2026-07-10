@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-10T07:55:16.973217+00:00",
+  "generated_at": "2026-07-10T10:12:06.856877+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
@@ -140,14 +140,6 @@
       "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
       "level": "medio",
       "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260626110818.pdf"
-    },
-    {
-      "id": "eq-46345192",
-      "timestamp": "2026-06-26T09:12:31+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.6",
-      "summary": "Localizzato: 5 km S Bronte (CT).",
-      "level": "basso"
     },
     {
       "id": "com-ComunicatoETNA20260327133722pdf",
