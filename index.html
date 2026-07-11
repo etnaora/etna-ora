@@ -39,7 +39,7 @@
   /* ---------- top bar ---------- */
   .topbar{
     position:fixed; top:0; left:0; right:0; z-index:1000;
-    display:flex; align-items:center; justify-content:space-between;
+    display:grid; grid-template-columns:1fr auto 1fr; align-items:start;
     padding:18px 22px;
     pointer-events:none;
   }
@@ -48,19 +48,26 @@
     letter-spacing:0.02em; color:var(--ash);
     display:flex; align-items:baseline; gap:10px;
     pointer-events:auto;
+    justify-self:start;
   }
   .status-pill{
-    display:flex; align-items:center; gap:8px;
-    font-family:var(--font-mono); font-size:11px; letter-spacing:0.04em;
-    color:var(--ash-muted); text-transform:uppercase;
-    background:rgba(20,18,15,0.55); backdrop-filter:blur(6px);
-    padding:6px 12px; border-radius:100px; border:1px solid var(--hairline);
+    justify-self:center;
+    display:flex; align-items:center; gap:10px;
+    font-family:var(--font-mono); font-size:13px; letter-spacing:0.04em;
+    color:var(--ash); text-transform:uppercase;
+    background:rgba(20,18,15,0.6); backdrop-filter:blur(6px);
+    padding:11px 22px; border-radius:100px; border:1px solid var(--hairline);
+    box-shadow:0 4px 18px rgba(0,0,0,0.25);
+    pointer-events:auto;
   }
+  .status-pill .prefix{color:var(--ash-muted); font-weight:400;}
+  .status-pill .value{font-weight:600; color:var(--accent);}
   .status-dot{
-    width:8px;height:8px;border-radius:50%;background:var(--accent);
-    box-shadow:0 0 0 0 var(--accent);
+    width:10px;height:10px;border-radius:50%;background:var(--accent);
+    box-shadow:0 0 0 0 var(--accent); flex-shrink:0;
     animation:pulse 2.6s ease-out infinite;
   }
+  .topbar-right{justify-self:end; pointer-events:auto;}
   @keyframes pulse{
     0%{box-shadow:0 0 0 0 color-mix(in srgb, var(--accent) 55%, transparent);}
     70%{box-shadow:0 0 0 10px transparent;}
@@ -169,8 +176,9 @@
   }
 
   @media (max-width:640px){
-    .wordmark{font-size:17px;}
-    .status-pill{font-size:10px;}
+    .wordmark{font-size:16px;}
+    .status-pill{font-size:11px; padding:9px 14px; gap:7px;}
+    .status-pill .prefix{display:none;}
   }
 </style>
 </head>
@@ -180,10 +188,8 @@
 
 <div class="topbar">
   <div class="wordmark">Etna, ora</div>
-  <div style="display:flex; align-items:center; gap:10px; pointer-events:auto;">
-    <div class="status-pill"><span class="status-dot" id="statusDot"></span><span id="statusLabel">quiete</span></div>
-    <div class="info-btn" onclick="document.getElementById('infoModal').classList.add('open')">i</div>
-  </div>
+  <div class="status-pill"><span class="status-dot" id="statusDot"></span><span class="prefix">status attuale:</span> <span class="value" id="statusLabel">quiete</span></div>
+  <div class="topbar-right"><div class="info-btn" onclick="document.getElementById('infoModal').classList.add('open')">i</div></div>
 </div>
 
 <div class="feed collapsed" id="feed">
@@ -263,8 +269,8 @@
     const dot = document.getElementById('statusDot');
     const label = document.getElementById('statusLabel');
     let accent = '#5C7A8A', text = 'quiete';
-    if(hotspot.status === 'moderata'){ accent = '#E8541E'; text = 'attività in corso'; }
-    if(hotspot.status === 'alta'){ accent = '#FFD166'; text = 'anomalia significativa'; }
+    if(hotspot.status === 'moderata'){ accent = '#E8541E'; text = 'attività'; }
+    if(hotspot.status === 'alta'){ accent = '#FFD166'; text = 'allerta'; }
     root.style.setProperty('--accent', accent);
     label.textContent = text;
 
