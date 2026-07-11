@@ -404,7 +404,7 @@
   }
 
   // ---------- vista 3D: cono stilizzato dell'Etna, wireframe ----------
-  let scene3d, camera3d, renderer3d, controls3d, craterMesh3d, craterLight3d, animId3d;
+    let scene3d, camera3d, renderer3d, controls3d, craterMesh3d, craterGlow3d, animId3d;
   const camMeshes3d = [];
 
   function bearingDeg(lat1, lng1, lat2, lng2){
@@ -420,6 +420,24 @@
     const meters = m ? parseInt(m[1],10) : 2200;
     // scala grezza tra la base (~1400m) e la cima (~3300m) dell'edificio vulcanico
     return Math.min(0.95, Math.max(0.08, (meters-1400)/(3300-1400)));
+  }
+
+  function makeGlowSprite(hexColor){
+    const size = 256;
+    const canvas = document.createElement('canvas');
+    canvas.width = canvas.height = size;
+    const ctx = canvas.getContext('2d');
+    const grad = ctx.createRadialGradient(size/2, size/2, 0, size/2, size/2, size/2);
+    grad.addColorStop(0, hexColor + 'CC');
+    grad.addColorStop(0.4, hexColor + '55');
+    grad.addColorStop(1, hexColor + '00');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0,0,size,size);
+    const texture = new THREE.CanvasTexture(canvas);
+    const mat = new THREE.SpriteMaterial({map:texture, transparent:true, depthWrite:false, blending:THREE.AdditiveBlending});
+    const sprite = new THREE.Sprite(mat);
+    sprite.scale.set(2.2, 2.2, 1);
+    return sprite;
   }
 
   function init3DScene(hotspot, cameras){
@@ -442,27 +460,24 @@
     controls3d.enableDamping = true;
     controls3d.dampingFactor = 0.08;
     controls3d.minDistance = 3.5;
-    controls3d.maxDistance = 15;
+    controls3d.maxDistance = 30;
     controls3d.maxPolarAngle = Math.PI * 0.49; // non permette di andare sotto il "terreno"
     controls3d.target.set(0, 1.2, 0);
 
-    // luce: ambientale fredda di base + una direzionale calda "al tramonto"
-    // per dare volume alla forma solida, più una luce puntiforme sul cratere
-    scene3d.add(new THREE.AmbientLight(0x3a4a52, 1.1));
-    const sunLight = new THREE.DirectionalLight(0xE8541E, 0.5);
-    sunLight.position.set(-6, 4, 3);
-    scene3d.add(sunLight);
+    // (i materiali qui sotto sono "auto-illuminati", non dipendono da luci di scena
+    // per essere visibili — più prevedibile e leggero di una pipeline PBR completa)
 
     // ---- forma solida del vulcano, sotto il wireframe ----
     const coneHeight = 3.2, coneRadius = 3.4;
     const coneGeo = new THREE.ConeGeometry(coneRadius, coneHeight, 64, 12, false);
     coneGeo.translate(0, coneHeight/2, 0);
 
-    // colore per vertice: base scura basaltica che scalda leggermente salendo verso il cratere
+    // colore per vertice: base basaltica (comunque leggibile, non nera) che si
+    // scalda verso un bruno-ambra salendo verso il cratere
     const posAttr = coneGeo.attributes.position;
     const colors = [];
-    const baseColor = new THREE.Color(0x1a1611);
-    const peakColor = new THREE.Color(0x3a241a);
+    const baseColor = new THREE.Color(0x332A22);
+    const peakColor = new THREE.Color(0x8A4B24);
     for(let i=0; i<posAttr.count; i++){
       const yFrac = posAttr.getY(i) / coneHeight;
       const c = baseColor.clone().lerp(peakColor, Math.pow(yFrac, 1.6));
@@ -470,9 +485,7 @@
     }
     coneGeo.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
 
-    const coneMat = new THREE.MeshStandardMaterial({
-      vertexColors:true, roughness:0.95, metalness:0.05, flatShading:true
-    });
+    const coneMat = new THREE.MeshBasicMaterial({vertexColors:true});
     scene3d.add(new THREE.Mesh(coneGeo, coneMat));
 
     // contorno "a schema" sopra la forma solida: solo gli spigoli, non tutta la triangolazione
@@ -482,7 +495,7 @@
 
     // ---- terreno: piano circolare ampio con anelli di distanza, per dare scala/scenario ----
     const groundGeo = new THREE.CircleGeometry(11, 64);
-    const groundMat = new THREE.MeshStandardMaterial({color:0x1F1B17, roughness:1, transparent:true, opacity:0.85});
+    const groundMat = new THREE.MeshBasicMaterial({color:0x2A2521, transparent:true, opacity:0.9});
     const ground = new THREE.Mesh(groundGeo, groundMat);
     ground.rotation.x = -Math.PI/2;
     ground.position.y = -0.01;
@@ -558,9 +571,9 @@
     craterMesh3d.position.set(0, coneHeight + 0.05, 0);
     scene3d.add(craterMesh3d);
 
-    craterLight3d = new THREE.PointLight(new THREE.Color(accentHex), 1.6, 6);
-    craterLight3d.position.copy(craterMesh3d.position);
-    scene3d.add(craterLight3d);
+    craterGlow3d = makeGlowSprite(accentHex);
+    craterGlow3d.position.copy(craterMesh3d.position);
+    scene3d.add(craterGlow3d);
 
     // marker webcam, posizionati sul fianco del cono in base a rotta bussola + quota indicativa
     cameras.forEach(cam=>{
@@ -609,7 +622,10 @@
       const pulse = Math.sin(Date.now()/400);
       const s = 1 + pulse*0.25;
       craterMesh3d.scale.set(s,s,s);
-      if(craterLight3d) craterLight3d.intensity = 1.4 + pulse*0.5;
+      if(craterGlow3d){
+        const gs = 2.2 + pulse*0.5;
+        craterGlow3d.scale.set(gs, gs, 1);
+      }
     }
     if(controls3d) controls3d.update();
     if(renderer3d && scene3d && camera3d) renderer3d.render(scene3d, camera3d);
