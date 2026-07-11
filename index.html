@@ -67,6 +67,23 @@
   *{box-sizing:border-box;}
   html,body{margin:0;height:100%;background:var(--basalt);color:var(--ash);font-family:var(--font-body);}
   #map{position:absolute;inset:0;background:var(--basalt);filter:saturate(0.85) brightness(0.9);}
+  #scene3d{position:absolute;inset:0;background:var(--basalt);display:none;}
+  #scene3d canvas{display:block;}
+  #scene3d.active{display:block;}
+  #map.hidden-view{display:none;}
+
+  .view-toggle{
+    position:fixed; left:22px; bottom:94px; z-index:950;
+    display:flex; background:rgba(20,18,15,0.6); backdrop-filter:blur(6px);
+    border:1px solid var(--hairline); border-radius:100px; padding:3px;
+    pointer-events:auto;
+  }
+  .view-toggle button{
+    border:0; background:none; color:var(--ash-muted);
+    font-family:var(--font-mono); font-size:11px; letter-spacing:0.05em;
+    padding:7px 14px; border-radius:100px; cursor:pointer; text-transform:uppercase;
+  }
+  .view-toggle button.active{background:var(--basalt-panel-2); color:var(--ash);}
 
   /* leaflet dark tuning */
   .leaflet-tile-pane{filter:grayscale(0.35) contrast(1.05) brightness(0.55) sepia(0.15);}
@@ -230,6 +247,7 @@
 <body>
 
 <div id="map"></div>
+<div id="scene3d"></div>
 
 <div class="topbar">
   <div class="wordmark"><h1>Etna, ora</h1><span class="tagline">monitoraggio in tempo reale del vulcano</span></div>
@@ -243,6 +261,11 @@
     <p>Questo sito raccoglie in un'unica mappa il tremore vulcanico, la sismicità recente, gli hotspot termici satellitari, le webcam ufficiali INGV e i comunicati di attività vulcanica dell'Etna, aggiornati automaticamente ogni 15-30 minuti dalle fonti ufficiali INGV Osservatorio Etneo e NASA FIRMS. Attiva JavaScript nel browser per visualizzare la mappa interattiva.</p>
   </div>
 </noscript>
+
+<div class="view-toggle">
+  <button id="btn2d" class="active" onclick="setView('2d')">2D</button>
+  <button id="btn3d" onclick="setView('3d')">3D</button>
+</div>
 
 <div class="feed collapsed" id="feed">
   <div class="feed-head" onclick="toggleFeed()">
@@ -281,6 +304,8 @@
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/three@0.128.0/build/three.min.js"></script>
+<script src="https://unpkg.com/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 <script>
   // ---------- mappa ----------
   const map = L.map('map', {
@@ -302,15 +327,19 @@
   }
 
   // ---------- caricamento dati (mock locali in /data) ----------
+  let LAST_HOTSPOT = null, LAST_WEBCAMS = [];
   const cacheBuster = () => '?v=' + Date.now();
   Promise.all([
     fetch('data/webcam.json' + cacheBuster(), {cache:'no-store'}).then(r=>r.json()),
     fetch('data/hotspot.json' + cacheBuster(), {cache:'no-store'}).then(r=>r.json()),
     fetch('data/feed.json' + cacheBuster(), {cache:'no-store'}).then(r=>r.json()),
   ]).then(([webcam, hotspot, feed])=>{
+    LAST_HOTSPOT = hotspot;
+    LAST_WEBCAMS = webcam.cameras;
     applyHotspotStatus(hotspot);
     renderWebcams(webcam.cameras);
     renderFeed(feed.items);
+    init3DScene(hotspot, webcam.cameras);
   }).catch(err=>{
     console.error('Errore caricamento dati locali', err);
   });
@@ -339,19 +368,7 @@
       const marker = L.marker([cam.lat, cam.lng], {icon}).addTo(map);
       marker.on('click', ()=>{
         flyToPoint(cam.lat, cam.lng, 15);
-        document.getElementById('camTitle').textContent = cam.name;
-        document.getElementById('camMeta').textContent = cam.position + ' · fonte: ' + cam.source;
-        const frame = document.getElementById('camFrame');
-        const fallback = document.getElementById('camFallbackLink');
-        if(cam.stream_url){
-          frame.innerHTML = `<iframe src="${cam.stream_url}" style="width:100%;height:100%;border:0;border-radius:8px;background:#0d0b09;" loading="lazy"></iframe>`;
-          fallback.href = cam.stream_url;
-          fallback.style.display = 'block';
-        } else {
-          frame.textContent = 'stream non collegato (demo locale)';
-          fallback.style.display = 'none';
-        }
-        document.getElementById('camModal').classList.add('open');
+        openCamModal(cam);
       });
     });
   }
@@ -384,6 +401,167 @@
   function toggleFeed(){
     document.getElementById('feed').classList.toggle('collapsed');
     document.getElementById('feed').classList.toggle('open');
+  }
+
+  // ---------- vista 3D: cono stilizzato dell'Etna, wireframe ----------
+  let scene3d, camera3d, renderer3d, controls3d, craterMesh3d, animId3d;
+  const camMeshes3d = [];
+
+  function bearingDeg(lat1, lng1, lat2, lng2){
+    const toRad = d => d * Math.PI/180;
+    const dLng = toRad(lng2-lng1);
+    const y = Math.sin(dLng)*Math.cos(toRad(lat2));
+    const x = Math.cos(toRad(lat1))*Math.sin(toRad(lat2)) - Math.sin(toRad(lat1))*Math.cos(toRad(lat2))*Math.cos(dLng);
+    return (Math.atan2(y,x)*180/Math.PI + 360) % 360;
+  }
+
+  function elevationFraction(positionText){
+    const m = positionText && positionText.match(/(\d{3,4})\s*m/);
+    const meters = m ? parseInt(m[1],10) : 2200;
+    // scala grezza tra la base (~1400m) e la cima (~3300m) dell'edificio vulcanico
+    return Math.min(0.95, Math.max(0.08, (meters-1400)/(3300-1400)));
+  }
+
+  function init3DScene(hotspot, cameras){
+    const container = document.getElementById('scene3d');
+    const width = container.clientWidth || window.innerWidth;
+    const height = container.clientHeight || window.innerHeight;
+
+    scene3d = new THREE.Scene();
+    camera3d = new THREE.PerspectiveCamera(45, width/height, 0.1, 100);
+    camera3d.position.set(0, 3.2, 7.5);
+
+    renderer3d = new THREE.WebGLRenderer({antialias:true, alpha:true});
+    renderer3d.setSize(width, height);
+    renderer3d.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    container.appendChild(renderer3d.domElement);
+
+    controls3d = new THREE.OrbitControls(camera3d, renderer3d.domElement);
+    controls3d.enableDamping = true;
+    controls3d.dampingFactor = 0.08;
+    controls3d.minDistance = 3;
+    controls3d.maxDistance = 14;
+    controls3d.maxPolarAngle = Math.PI * 0.49; // non permette di andare sotto il "terreno"
+    controls3d.target.set(0, 1.2, 0);
+
+    // cono stilizzato dell'Etna: wireframe, base larga, cima stretta
+    const coneHeight = 3.2, coneRadius = 3.4;
+    const coneGeo = new THREE.ConeGeometry(coneRadius, coneHeight, 48, 8, true);
+    coneGeo.translate(0, coneHeight/2, 0);
+    const coneMat = new THREE.MeshBasicMaterial({
+      color: 0x9C948A, wireframe:true, transparent:true, opacity:0.55
+    });
+    scene3d.add(new THREE.Mesh(coneGeo, coneMat));
+
+    // base leggera, solo per dare un riferimento di "suolo"
+    const ringGeo = new THREE.RingGeometry(coneRadius*0.98, coneRadius*1.35, 48);
+    const ringMat = new THREE.MeshBasicMaterial({color:0x1F1B17, side:THREE.DoubleSide, transparent:true, opacity:0.6});
+    const ring = new THREE.Mesh(ringGeo, ringMat);
+    ring.rotation.x = -Math.PI/2;
+    scene3d.add(ring);
+
+    // cratere pulsante in cima, stesso colore di stato della vista 2D
+    const accentHex = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#5C7A8A';
+    const craterGeo = new THREE.SphereGeometry(0.11, 16, 16);
+    const craterMat = new THREE.MeshBasicMaterial({color: new THREE.Color(accentHex)});
+    craterMesh3d = new THREE.Mesh(craterGeo, craterMat);
+    craterMesh3d.position.set(0, coneHeight + 0.05, 0);
+    scene3d.add(craterMesh3d);
+
+    // marker webcam, posizionati sul fianco del cono in base a rotta bussola + quota indicativa
+    const summit = {lat:37.751, lng:14.9934};
+    cameras.forEach(cam=>{
+      const bearing = bearingDeg(summit.lat, summit.lng, cam.lat, cam.lng);
+      const heightFrac = elevationFraction(cam.position);
+      const y = heightFrac * coneHeight;
+      const radiusAtHeight = coneRadius * (1 - heightFrac) * 0.92;
+      const theta = bearing * Math.PI/180;
+      const x = radiusAtHeight * Math.sin(theta);
+      const z = -radiusAtHeight * Math.cos(theta);
+
+      const markerGeo = new THREE.SphereGeometry(0.09, 12, 12);
+      const markerMat = new THREE.MeshBasicMaterial({color:0xEDE6DB});
+      const marker = new THREE.Mesh(markerGeo, markerMat);
+      marker.position.set(x, y, z);
+      marker.userData = {cam};
+      scene3d.add(marker);
+      camMeshes3d.push(marker);
+    });
+
+    // click/tap sui marker webcam nella scena 3D → stesso modale della vista 2D
+    const raycaster = new THREE.Raycaster();
+    const pointer = new THREE.Vector2();
+    renderer3d.domElement.addEventListener('click', (ev)=>{
+      const rect = renderer3d.domElement.getBoundingClientRect();
+      pointer.x = ((ev.clientX-rect.left)/rect.width)*2-1;
+      pointer.y = -((ev.clientY-rect.top)/rect.height)*2+1;
+      raycaster.setFromCamera(pointer, camera3d);
+      const hits = raycaster.intersectObjects(camMeshes3d);
+      if(hits.length) openCamModal(hits[0].object.userData.cam);
+    });
+
+    window.addEventListener('resize', ()=>{
+      if(!renderer3d) return;
+      const w = container.clientWidth, h = container.clientHeight;
+      camera3d.aspect = w/h; camera3d.updateProjectionMatrix();
+      renderer3d.setSize(w,h);
+    });
+
+    animate3d();
+  }
+
+  function animate3d(){
+    animId3d = requestAnimationFrame(animate3d);
+    if(craterMesh3d){
+      const s = 1 + Math.sin(Date.now()/400)*0.25;
+      craterMesh3d.scale.set(s,s,s);
+    }
+    if(controls3d) controls3d.update();
+    if(renderer3d && scene3d && camera3d) renderer3d.render(scene3d, camera3d);
+  }
+
+  // fattorizzo l'apertura del modale webcam, riusata sia da 2D che da 3D
+  function openCamModal(cam){
+    document.getElementById('camTitle').textContent = cam.name;
+    document.getElementById('camMeta').textContent = cam.position + ' · fonte: ' + cam.source;
+    const frame = document.getElementById('camFrame');
+    const fallback = document.getElementById('camFallbackLink');
+    if(cam.stream_url){
+      frame.innerHTML = `<iframe src="${cam.stream_url}" style="width:100%;height:100%;border:0;border-radius:8px;background:#0d0b09;" loading="lazy"></iframe>`;
+      fallback.href = cam.stream_url;
+      fallback.style.display = 'block';
+    } else {
+      frame.textContent = 'stream non collegato (demo locale)';
+      fallback.style.display = 'none';
+    }
+    document.getElementById('camModal').classList.add('open');
+  }
+
+  function setView(view){
+    const map3dBtn = document.getElementById('btn3d');
+    const map2dBtn = document.getElementById('btn2d');
+    const mapEl = document.getElementById('map');
+    const sceneEl = document.getElementById('scene3d');
+    if(view === '3d'){
+      mapEl.classList.add('hidden-view');
+      sceneEl.classList.add('active');
+      map3dBtn.classList.add('active');
+      map2dBtn.classList.remove('active');
+      // forza un resize corretto al primo passaggio in 3D (il canvas nasceva a container invisibile)
+      setTimeout(()=>{
+        if(renderer3d){
+          const w = sceneEl.clientWidth, h = sceneEl.clientHeight;
+          camera3d.aspect = w/h; camera3d.updateProjectionMatrix();
+          renderer3d.setSize(w,h);
+        }
+      }, 50);
+    } else {
+      mapEl.classList.remove('hidden-view');
+      sceneEl.classList.remove('active');
+      map2dBtn.classList.add('active');
+      map3dBtn.classList.remove('active');
+      setTimeout(()=> map.invalidateSize(), 50);
+    }
   }
 </script>
 
