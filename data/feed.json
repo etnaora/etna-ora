@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-11T21:29:42.236797+00:00",
+  "generated_at": "2026-07-11T22:08:25.802828+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
@@ -113,14 +113,6 @@
       "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
       "level": "medio",
       "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260629181630.pdf"
-    },
-    {
-      "id": "eq-46360852",
-      "timestamp": "2026-06-27T21:54:40+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.4",
-      "summary": "Localizzato: 4 km W Randazzo (CT).",
-      "level": "basso"
     },
     {
       "id": "com-ComunicatoETNA20260627175452pdf",
