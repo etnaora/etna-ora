@@ -3,8 +3,46 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Etna, ora — monitoraggio in tempo reale</title>
-<meta name="description" content="La mappa dell'Etna aggiornata in tempo reale: tremore vulcanico, hotspot termici satellitari, webcam di osservazione e feed INGV.">
+<title>Etna, ora — monitoraggio in tempo reale del vulcano</title>
+<meta name="description" content="Mappa dell'Etna aggiornata in tempo reale: stato del vulcano, tremore, sismicità, hotspot termici satellitari, webcam ufficiali INGV e comunicati di attività vulcanica.">
+<meta name="keywords" content="etna, eruzione etna, stato etna oggi, webcam etna live, tremore etna, sismicità etna, INGV etna, mappa etna tempo reale, vulcano etna">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://etnaora.github.io/etna-ora/">
+
+<!-- Open Graph (anteprime social/condivisione) -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Etna, ora — monitoraggio in tempo reale del vulcano">
+<meta property="og:description" content="Stato del vulcano, tremore, sismicità, hotspot termici satellitari, webcam ufficiali INGV e comunicati di attività vulcanica, aggiornati in tempo reale.">
+<meta property="og:url" content="https://etnaora.github.io/etna-ora/">
+<meta property="og:locale" content="it_IT">
+<meta property="og:site_name" content="Etna, ora">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Etna, ora — monitoraggio in tempo reale del vulcano">
+<meta name="twitter:description" content="Stato del vulcano, tremore, sismicità, hotspot termici satellitari, webcam ufficiali INGV e comunicati di attività vulcanica.">
+
+<!-- Dati strutturati: aiuta Google a capire di cosa parla il sito -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Etna, ora",
+  "url": "https://etnaora.github.io/etna-ora/",
+  "description": "Monitoraggio in tempo reale del vulcano Etna: tremore, sismicità, hotspot termici satellitari, webcam ufficiali INGV e comunicati di attività vulcanica.",
+  "inLanguage": "it",
+  "about": {
+    "@type": "Place",
+    "name": "Etna",
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 37.751,
+      "longitude": 14.9934
+    }
+  }
+}
+</script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
@@ -46,9 +84,16 @@
   .wordmark{
     font-family:var(--font-display); font-weight:600; font-size:20px;
     letter-spacing:0.02em; color:var(--ash);
-    display:flex; align-items:baseline; gap:10px;
+    display:flex; flex-direction:column; gap:2px;
     pointer-events:auto;
     justify-self:start;
+  }
+  .wordmark h1{
+    margin:0; font:inherit; font-size:20px; color:inherit;
+  }
+  .tagline{
+    font-family:var(--font-body); font-weight:400; font-size:11px;
+    letter-spacing:0.01em; color:var(--ash-muted); text-transform:none;
   }
   .status-pill{
     justify-self:center;
@@ -187,10 +232,17 @@
 <div id="map"></div>
 
 <div class="topbar">
-  <div class="wordmark">Etna, ora</div>
+  <div class="wordmark"><h1>Etna, ora</h1><span class="tagline">monitoraggio in tempo reale del vulcano</span></div>
   <div class="status-pill"><span class="status-dot" id="statusDot"></span><span class="prefix">status attuale:</span> <span class="value" id="statusLabel">quiete</span></div>
   <div class="topbar-right"><div class="info-btn" onclick="document.getElementById('infoModal').classList.add('open')">i</div></div>
 </div>
+
+<noscript>
+  <div style="max-width:640px;margin:80px auto;padding:0 20px;color:#EDE6DB;font-family:sans-serif;line-height:1.6;">
+    <h1>Etna, ora — monitoraggio in tempo reale del vulcano</h1>
+    <p>Questo sito raccoglie in un'unica mappa il tremore vulcanico, la sismicità recente, gli hotspot termici satellitari, le webcam ufficiali INGV e i comunicati di attività vulcanica dell'Etna, aggiornati automaticamente ogni 15-30 minuti dalle fonti ufficiali INGV Osservatorio Etneo e NASA FIRMS. Attiva JavaScript nel browser per visualizzare la mappa interattiva.</p>
+  </div>
+</noscript>
 
 <div class="feed collapsed" id="feed">
   <div class="feed-head" onclick="toggleFeed()">
