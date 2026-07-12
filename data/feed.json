@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-07-12T22:27:34.924018+00:00",
+  "generated_at": "2026-07-12T22:31:59.025855+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
     {
       "id": "eq-46533032",
-      "timestamp": "2026-07-12T21:09:55.800000+00:00",
+      "timestamp": "2026-07-12T21:09:56.370000+00:00",
       "type": "sismicita",
       "title": "Evento sismico Ml 1.5",
-      "summary": "Localizzato: 4 km SW Bronte (CT).",
+      "summary": "Localizzato: 2 km SW Bronte (CT).",
       "level": "basso"
     },
     {
