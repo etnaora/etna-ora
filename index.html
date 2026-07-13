@@ -472,20 +472,10 @@
     const coneGeo = new THREE.ConeGeometry(coneRadius, coneHeight, 64, 12, false);
     coneGeo.translate(0, coneHeight/2, 0);
 
-    // colore per vertice: base basaltica (comunque leggibile, non nera) che si
-    // scalda verso un bruno-ambra salendo verso il cratere
-    const posAttr = coneGeo.attributes.position;
-    const colors = [];
-    const baseColor = new THREE.Color(0x332A22);
-    const peakColor = new THREE.Color(0x8A4B24);
-    for(let i=0; i<posAttr.count; i++){
-      const yFrac = posAttr.getY(i) / coneHeight;
-      const c = baseColor.clone().lerp(peakColor, Math.pow(yFrac, 1.6));
-      colors.push(c.r, c.g, c.b);
-    }
-    coneGeo.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
-
-    const coneMat = new THREE.MeshBasicMaterial({vertexColors:true});
+    // colore fisso e uniforme (niente gradiente/finta illuminazione): un
+    // bruno basaltico caldo unico, leggermente trasparente così i marker
+    // sul lato opposto restano visibili "in trasparenza"
+    const coneMat = new THREE.MeshBasicMaterial({color:0x4a3527, transparent:true, opacity:0.88});
     scene3d.add(new THREE.Mesh(coneGeo, coneMat));
 
     // contorno "a schema" sopra la forma solida: solo gli spigoli, non tutta la triangolazione
@@ -508,6 +498,28 @@
       ring.rotation.x = -Math.PI/2;
       scene3d.add(ring);
     });
+
+    // ---- alberi stilizzati low-poly, sparsi alla base (sotto la linea di vegetazione) ----
+    const treeFoliageMat = new THREE.MeshBasicMaterial({color:0x3d4a35});
+    const treeTrunkMat = new THREE.MeshBasicMaterial({color:0x2a231c});
+    const treeCount = 55;
+    for(let i=0; i<treeCount; i++){
+      const theta = Math.random() * Math.PI*2;
+      const r = coneRadius*1.05 + Math.random()*3.2; // subito fuori dalla base, verso il primo anello
+      const tx = r*Math.sin(theta), tz = -r*Math.cos(theta);
+      const scale = 0.6 + Math.random()*0.7;
+
+      const trunkGeo = new THREE.CylinderGeometry(0.02*scale, 0.03*scale, 0.14*scale, 5);
+      const trunk = new THREE.Mesh(trunkGeo, treeTrunkMat);
+      trunk.position.set(tx, 0.07*scale, tz);
+
+      const foliageGeo = new THREE.ConeGeometry(0.11*scale, 0.32*scale, 6);
+      const foliage = new THREE.Mesh(foliageGeo, treeFoliageMat);
+      foliage.position.set(tx, 0.14*scale + 0.16*scale, tz);
+
+      scene3d.add(trunk);
+      scene3d.add(foliage);
+    }
 
     // ---- etichette testuali (sprite, sempre rivolte verso la camera) ----
     function makeLabel(text, opts={}){
@@ -566,8 +578,9 @@
     // ---- cratere pulsante in cima, stesso colore di stato della vista 2D ----
     const accentHex = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#5C7A8A';
     const craterGeo = new THREE.SphereGeometry(0.12, 16, 16);
-    const craterMat = new THREE.MeshBasicMaterial({color: new THREE.Color(accentHex)});
+    const craterMat = new THREE.MeshBasicMaterial({color: new THREE.Color(accentHex), depthTest:false});
     craterMesh3d = new THREE.Mesh(craterGeo, craterMat);
+    craterMesh3d.renderOrder = 11;
     craterMesh3d.position.set(0, coneHeight + 0.05, 0);
     scene3d.add(craterMesh3d);
 
@@ -585,10 +598,11 @@
       const x = radiusAtHeight * Math.sin(theta);
       const z = -radiusAtHeight * Math.cos(theta);
 
-      const markerGeo = new THREE.SphereGeometry(0.09, 12, 12);
-      const markerMat = new THREE.MeshBasicMaterial({color:0xEDE6DB});
+      const markerGeo = new THREE.SphereGeometry(0.11, 12, 12);
+      const markerMat = new THREE.MeshBasicMaterial({color:0xEDE6DB, depthTest:false});
       const marker = new THREE.Mesh(markerGeo, markerMat);
       marker.position.set(x, y, z);
+      marker.renderOrder = 10;
       marker.userData = {cam};
       scene3d.add(marker);
       camMeshes3d.push(marker);
