@@ -1,8 +1,16 @@
 {
-  "generated_at": "2026-07-21T04:36:05.369591+00:00",
+  "generated_at": "2026-07-21T06:17:22.866983+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
+    {
+      "id": "eq-46608742",
+      "timestamp": "2026-07-21T04:23:57.780000+00:00",
+      "type": "sismicita",
+      "title": "Evento sismico Ml 1.6",
+      "summary": "Localizzato: Zafferana Etnea (CT).",
+      "level": "basso"
+    },
     {
       "id": "eq-46605882",
       "timestamp": "2026-07-20T16:01:01.580000+00:00",
@@ -201,15 +209,6 @@
       "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
       "level": "medio",
       "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260629181630.pdf"
-    },
-    {
-      "id": "com-ComunicatoETNA20260627175452pdf",
-      "timestamp": "2026-06-27T18:04:02+00:00",
-      "type": "comunicato",
-      "title": "Invio comunicato generico di attività vulcanica",
-      "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
-      "level": "medio",
-      "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260627175452.pdf"
     }
   ]
 }
