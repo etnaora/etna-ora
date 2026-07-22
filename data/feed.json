@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-22T15:54:23.852222+00:00",
+  "generated_at": "2026-07-22T16:45:23.535366+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
@@ -121,14 +121,6 @@
       "type": "sismicita",
       "title": "Evento sismico Ml 1.1",
       "summary": "Localizzato: 2 km W Fiumefreddo di Sicilia (CT).",
-      "level": "basso"
-    },
-    {
-      "id": "eq-46488292",
-      "timestamp": "2026-07-08T16:44:51.730000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.1",
-      "summary": "Localizzato: 3 km NW Santa Domenica Vittoria (ME).",
       "level": "basso"
     },
     {
