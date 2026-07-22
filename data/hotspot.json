@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-22T11:24:00.426426+00:00",
+  "generated_at": "2026-07-22T12:55:00.024065+00:00",
   "source": "NASA FIRMS (VIIRS_SNPP_NRT) — https://firms.modaps.eosdis.nasa.gov",
   "status": "moderata",
   "notes": "Attività termica rilevata dal satellite (2 hotspot, FRP massimo 0.4 MW).",
-  "last_significant_event": "2026-07-22T11:24:00.426426+00:00",
+  "last_significant_event": "2026-07-22T12:55:00.024065+00:00",
   "hotspot_count_24h": 2
 }
