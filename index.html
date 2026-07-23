@@ -67,24 +67,31 @@
   *{box-sizing:border-box;}
   html,body{margin:0;height:100%;background:var(--basalt);color:var(--ash);font-family:var(--font-body);}
   #map{position:absolute;inset:0;background:var(--basalt);filter:saturate(0.85) brightness(0.9);}
-  #scene3d{position:absolute;inset:0;background:var(--basalt);display:none;}
-  #scene3d canvas{display:block;}
-  #scene3d.active{display:block;}
-  #map.hidden-view{display:none;}
 
-  .view-toggle{
+  .ash-btn{
     position:fixed; left:22px; bottom:94px; z-index:950;
-    display:flex; background:rgba(20,18,15,0.6); backdrop-filter:blur(6px);
-    border:1px solid var(--hairline); border-radius:100px; padding:3px;
-    pointer-events:auto;
-  }
-  .view-toggle button{
-    border:0; background:none; color:var(--ash-muted);
+    display:flex; align-items:center; gap:8px;
+    background:rgba(20,18,15,0.6); backdrop-filter:blur(6px);
+    border:1px solid var(--hairline); border-radius:100px;
+    padding:9px 16px; cursor:pointer; pointer-events:auto;
     font-family:var(--font-mono); font-size:11px; letter-spacing:0.05em;
-    padding:7px 14px; border-radius:100px; cursor:pointer; text-transform:uppercase;
+    color:var(--ash-muted); text-transform:uppercase;
   }
-  .view-toggle button.active{background:var(--basalt-panel-2); color:var(--ash);}
+  .ash-btn:hover{color:var(--ash); border-color:rgba(237,230,219,0.25);}
+  .ash-dot{width:7px;height:7px;border-radius:50%;background:var(--sulfur); flex-shrink:0;}
 
+  .ash-slots{display:flex; flex-wrap:wrap; gap:6px; margin:14px 0;}
+  .ash-slot{
+    font-family:var(--font-mono); font-size:11px; color:var(--ash-muted);
+    background:var(--basalt-panel-2); border:1px solid var(--hairline); border-radius:6px;
+    padding:6px 10px; cursor:pointer;
+  }
+  .ash-slot.active{color:var(--basalt); background:var(--sulfur); border-color:var(--sulfur);}
+  .ash-image-wrap{
+    background:#0d0b09; border-radius:8px; border:1px solid var(--hairline);
+    display:flex; align-items:center; justify-content:center; min-height:200px; overflow:hidden;
+  }
+  .ash-image-wrap img{width:100%; display:block;}
   /* leaflet dark tuning */
   .leaflet-tile-pane{filter:grayscale(0.35) contrast(1.05) brightness(0.55) sepia(0.15);}
   .leaflet-control-attribution{background:rgba(20,18,15,0.7)!important;color:var(--ash-muted)!important;font-family:var(--font-mono);font-size:10px;}
@@ -247,7 +254,6 @@
 <body>
 
 <div id="map"></div>
-<div id="scene3d"></div>
 
 <div class="topbar">
   <div class="wordmark"><h1>Etna, ora</h1><span class="tagline">monitoraggio in tempo reale del vulcano</span></div>
@@ -262,9 +268,8 @@
   </div>
 </noscript>
 
-<div class="view-toggle">
-  <button id="btn2d" class="active" onclick="setView('2d')">2D</button>
-  <button id="btn3d" onclick="setView('3d')">3D</button>
+<div class="ash-btn" id="ashBtn" onclick="openAshModal()">
+  <span class="ash-dot"></span> ricaduta cenere
 </div>
 
 <div class="feed collapsed" id="feed">
@@ -303,9 +308,27 @@
   </div>
 </div>
 
+<div class="modal-backdrop" id="ashModal">
+  <div class="modal" style="width:min(640px,92vw);">
+    <h3>Previsione ricaduta cenere vulcanica</h3>
+    <div class="meta" style="font-family:var(--font-body); font-size:13px; color:var(--ash); line-height:1.6; margin-bottom:4px;">
+      Simulazione giornaliera INGV della possibile dispersione e ricaduta al suolo dei prodotti piroclastici, basata su un ipotetico scenario eruttivo e sui venti reali del giorno. <strong>È un modello standard, generato ogni giorno indipendentemente da un'eruzione in corso</strong> — non è una previsione garantita, ma un'indicazione utile per capire la tendenza dei venti in quota.
+    </div>
+    <div class="ash-slots" id="ashSlots"></div>
+    <div class="ash-image-wrap">
+      <img id="ashImage" src="" alt="Mappa previsionale ricaduta cenere" loading="lazy" onerror="document.getElementById('ashImageError').style.display='block'">
+    </div>
+    <div id="ashImageError" style="display:none; font-size:12px; color:var(--ash-muted); margin-top:8px;">
+      Immagine non ancora disponibile per questa fascia oraria (può volerci qualche minuto dopo l'orario di aggiornamento).
+    </div>
+    <div style="margin-top:10px; font-size:12px;">
+      <a id="ashSourceLink" href="https://www.ct.ingv.it/sezioniesterne/Ceneri/ceneri.php" target="_blank" rel="noopener" style="color:var(--ash-muted);">Fonte ufficiale INGV, tutti gli orari del giorno ↗</a>
+    </div>
+    <button class="close" onclick="document.getElementById('ashModal').classList.remove('open')">Chiudi</button>
+  </div>
+</div>
+
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="https://unpkg.com/three@0.128.0/build/three.min.js"></script>
-<script src="https://unpkg.com/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 <script>
   // ---------- mappa ----------
   const map = L.map('map', {
@@ -327,19 +350,15 @@
   }
 
   // ---------- caricamento dati (mock locali in /data) ----------
-  let LAST_HOTSPOT = null, LAST_WEBCAMS = [];
   const cacheBuster = () => '?v=' + Date.now();
   Promise.all([
     fetch('data/webcam.json' + cacheBuster(), {cache:'no-store'}).then(r=>r.json()),
     fetch('data/hotspot.json' + cacheBuster(), {cache:'no-store'}).then(r=>r.json()),
     fetch('data/feed.json' + cacheBuster(), {cache:'no-store'}).then(r=>r.json()),
   ]).then(([webcam, hotspot, feed])=>{
-    LAST_HOTSPOT = hotspot;
-    LAST_WEBCAMS = webcam.cameras;
     applyHotspotStatus(hotspot);
     renderWebcams(webcam.cameras);
     renderFeed(feed.items);
-    init3DScene(hotspot, webcam.cameras);
   }).catch(err=>{
     console.error('Errore caricamento dati locali', err);
   });
@@ -403,249 +422,54 @@
     document.getElementById('feed').classList.toggle('open');
   }
 
-  // ---------- vista 3D: cono stilizzato dell'Etna, wireframe ----------
-    let scene3d, camera3d, renderer3d, controls3d, craterMesh3d, craterGlow3d, animId3d;
-  const camMeshes3d = [];
+  // ---------- previsione ricaduta cenere (INGV, immagine diretta per orario UTC) ----------
+  const ASH_SLOTS = ['0000','0300','0600','0900','1200','1500','1800','2100'];
 
-  function bearingDeg(lat1, lng1, lat2, lng2){
-    const toRad = d => d * Math.PI/180;
-    const dLng = toRad(lng2-lng1);
-    const y = Math.sin(dLng)*Math.cos(toRad(lat2));
-    const x = Math.cos(toRad(lat1))*Math.sin(toRad(lat2)) - Math.sin(toRad(lat1))*Math.cos(toRad(lat2))*Math.cos(dLng);
-    return (Math.atan2(y,x)*180/Math.PI + 360) % 360;
+  function ashDateStr(d){
+    const y = d.getUTCFullYear();
+    const m = String(d.getUTCMonth()+1).padStart(2,'0');
+    const day = String(d.getUTCDate()).padStart(2,'0');
+    return `${y}${m}${day}`;
   }
 
-  function elevationFraction(positionText){
-    const m = positionText && positionText.match(/(\d{3,4})\s*m/);
-    const meters = m ? parseInt(m[1],10) : 2200;
-    // scala grezza tra la base (~1400m) e la cima (~3300m) dell'edificio vulcanico
-    return Math.min(0.95, Math.max(0.08, (meters-1400)/(3300-1400)));
+  function ashImageUrl(dateStr, slot){
+    return `https://www.ct.ingv.it/Dati/ASH/ASH_${dateStr}_${slot}.jpg`;
   }
 
-  function makeGlowSprite(hexColor){
-    const size = 256;
-    const canvas = document.createElement('canvas');
-    canvas.width = canvas.height = size;
-    const ctx = canvas.getContext('2d');
-    const grad = ctx.createRadialGradient(size/2, size/2, 0, size/2, size/2, size/2);
-    grad.addColorStop(0, hexColor + 'CC');
-    grad.addColorStop(0.4, hexColor + '55');
-    grad.addColorStop(1, hexColor + '00');
-    ctx.fillStyle = grad;
-    ctx.fillRect(0,0,size,size);
-    const texture = new THREE.CanvasTexture(canvas);
-    const mat = new THREE.SpriteMaterial({map:texture, transparent:true, depthWrite:false, blending:THREE.AdditiveBlending});
-    const sprite = new THREE.Sprite(mat);
-    sprite.scale.set(2.2, 2.2, 1);
-    return sprite;
-  }
-
-  function init3DScene(hotspot, cameras){
-    const container = document.getElementById('scene3d');
-    const width = container.clientWidth || window.innerWidth;
-    const height = container.clientHeight || window.innerHeight;
-
-    scene3d = new THREE.Scene();
-    scene3d.fog = new THREE.FogExp2(0x14120F, 0.05);
-
-    camera3d = new THREE.PerspectiveCamera(45, width/height, 0.1, 100);
-    camera3d.position.set(0, 3.6, 8.2);
-
-    renderer3d = new THREE.WebGLRenderer({antialias:true, alpha:true});
-    renderer3d.setSize(width, height);
-    renderer3d.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    container.appendChild(renderer3d.domElement);
-
-    controls3d = new THREE.OrbitControls(camera3d, renderer3d.domElement);
-    controls3d.enableDamping = true;
-    controls3d.dampingFactor = 0.08;
-    controls3d.minDistance = 3.5;
-    controls3d.maxDistance = 30;
-    controls3d.maxPolarAngle = Math.PI * 0.49; // non permette di andare sotto il "terreno"
-    controls3d.target.set(0, 1.2, 0);
-
-    // (i materiali qui sotto sono "auto-illuminati", non dipendono da luci di scena
-    // per essere visibili — più prevedibile e leggero di una pipeline PBR completa)
-
-    // ---- forma solida del vulcano, sotto il wireframe ----
-    const coneHeight = 3.2, coneRadius = 3.4;
-    const coneGeo = new THREE.ConeGeometry(coneRadius, coneHeight, 64, 12, false);
-    coneGeo.translate(0, coneHeight/2, 0);
-
-    // colore fisso e uniforme (niente gradiente/finta illuminazione): un
-    // bruno basaltico caldo unico, leggermente trasparente così i marker
-    // sul lato opposto restano visibili "in trasparenza"
-    const coneMat = new THREE.MeshBasicMaterial({color:0x4a3527, transparent:true, opacity:0.88});
-    scene3d.add(new THREE.Mesh(coneGeo, coneMat));
-
-    // contorno "a schema" sopra la forma solida: solo gli spigoli, non tutta la triangolazione
-    const edges = new THREE.EdgesGeometry(coneGeo, 20);
-    const edgeMat = new THREE.LineBasicMaterial({color:0x9C948A, transparent:true, opacity:0.35});
-    scene3d.add(new THREE.LineSegments(edges, edgeMat));
-
-    // ---- terreno: piano circolare ampio con anelli di distanza, per dare scala/scenario ----
-    const groundGeo = new THREE.CircleGeometry(11, 64);
-    const groundMat = new THREE.MeshBasicMaterial({color:0x2A2521, transparent:true, opacity:0.9});
-    const ground = new THREE.Mesh(groundGeo, groundMat);
-    ground.rotation.x = -Math.PI/2;
-    ground.position.y = -0.01;
-    scene3d.add(ground);
-
-    [4.2, 7, 9.6].forEach(r=>{
-      const ringGeo = new THREE.RingGeometry(r-0.015, r, 64);
-      const ringMat = new THREE.MeshBasicMaterial({color:0x9C948A, side:THREE.DoubleSide, transparent:true, opacity:0.14});
-      const ring = new THREE.Mesh(ringGeo, ringMat);
-      ring.rotation.x = -Math.PI/2;
-      scene3d.add(ring);
-    });
-
-    // ---- alberi stilizzati low-poly, sparsi alla base (sotto la linea di vegetazione) ----
-    const treeFoliageMat = new THREE.MeshBasicMaterial({color:0x3d4a35});
-    const treeTrunkMat = new THREE.MeshBasicMaterial({color:0x2a231c});
-    const treeCount = 55;
-    for(let i=0; i<treeCount; i++){
-      const theta = Math.random() * Math.PI*2;
-      const r = coneRadius*1.05 + Math.random()*3.2; // subito fuori dalla base, verso il primo anello
-      const tx = r*Math.sin(theta), tz = -r*Math.cos(theta);
-      const scale = 0.6 + Math.random()*0.7;
-
-      const trunkGeo = new THREE.CylinderGeometry(0.02*scale, 0.03*scale, 0.14*scale, 5);
-      const trunk = new THREE.Mesh(trunkGeo, treeTrunkMat);
-      trunk.position.set(tx, 0.07*scale, tz);
-
-      const foliageGeo = new THREE.ConeGeometry(0.11*scale, 0.32*scale, 6);
-      const foliage = new THREE.Mesh(foliageGeo, treeFoliageMat);
-      foliage.position.set(tx, 0.14*scale + 0.16*scale, tz);
-
-      scene3d.add(trunk);
-      scene3d.add(foliage);
+  function currentAshSlot(){
+    const now = new Date();
+    const hourUtc = now.getUTCHours();
+    // trova la fascia di 3 ore più recente non successiva all'ora attuale
+    let slot = ASH_SLOTS[0];
+    for(const s of ASH_SLOTS){
+      if(parseInt(s.slice(0,2),10) <= hourUtc) slot = s;
     }
-
-    // ---- etichette testuali (sprite, sempre rivolte verso la camera) ----
-    function makeLabel(text, opts={}){
-      const {size=64, color='#9C948A', weight=500, muted=true} = opts;
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      const scale = 4; // per testo nitido anche da vicino
-      ctx.font = `${weight} ${size*scale}px 'IBM Plex Mono', monospace`;
-      const textWidth = ctx.measureText(text).width;
-      canvas.width = textWidth + 40*scale;
-      canvas.height = size*scale + 30*scale;
-      ctx.font = `${weight} ${size*scale}px 'IBM Plex Mono', monospace`;
-      ctx.fillStyle = color;
-      ctx.textBaseline = 'middle';
-      ctx.textAlign = 'center';
-      ctx.globalAlpha = muted ? 0.75 : 1;
-      ctx.fillText(text, canvas.width/2, canvas.height/2);
-      const texture = new THREE.CanvasTexture(canvas);
-      const mat = new THREE.SpriteMaterial({map:texture, transparent:true, depthWrite:false});
-      const sprite = new THREE.Sprite(mat);
-      const aspect = canvas.width/canvas.height;
-      const h = opts.scale || 0.5;
-      sprite.scale.set(h*aspect, h, 1);
-      return sprite;
-    }
-
-    // punti cardinali, sul bordo esterno degli anelli
-    const cardinals = [{t:'N', deg:0},{t:'E', deg:90},{t:'S', deg:180},{t:'O', deg:270}];
-    cardinals.forEach(c=>{
-      const theta = c.deg * Math.PI/180;
-      const label = makeLabel(c.t, {size:52, color:'#EDE6DB', weight:600, muted:false, scale:0.55});
-      label.position.set(9.6*Math.sin(theta), 0.4, -9.6*Math.cos(theta));
-      scene3d.add(label);
-    });
-
-    // centri abitati reali intorno all'Etna, per dare senso di orientamento geografico
-    // (angolo bussola reale dal cratere sommitale; distanza compressa artisticamente,
-    // non in scala, per restare leggibile nella scena)
-    const summit = {lat:37.751, lng:14.9934};
-    const landmarks = [
-      {name:'Catania', lat:37.5079, lng:15.0830},
-      {name:'Taormina', lat:37.8527, lng:15.2853},
-      {name:'Linguaglossa', lat:37.8365, lng:15.1443},
-      {name:'Bronte', lat:37.7846, lng:14.8329},
-      {name:'Zafferana', lat:37.6912, lng:15.1078},
-    ];
-    landmarks.forEach(loc=>{
-      const bearing = bearingDeg(summit.lat, summit.lng, loc.lat, loc.lng);
-      const theta = bearing * Math.PI/180;
-      const r = 8.3;
-      const label = makeLabel(loc.name, {size:36, scale:0.38});
-      label.position.set(r*Math.sin(theta), 0.15, -r*Math.cos(theta));
-      scene3d.add(label);
-    });
-
-    // ---- cratere pulsante in cima, stesso colore di stato della vista 2D ----
-    const accentHex = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#5C7A8A';
-    const craterGeo = new THREE.SphereGeometry(0.12, 16, 16);
-    const craterMat = new THREE.MeshBasicMaterial({color: new THREE.Color(accentHex), depthTest:false});
-    craterMesh3d = new THREE.Mesh(craterGeo, craterMat);
-    craterMesh3d.renderOrder = 11;
-    craterMesh3d.position.set(0, coneHeight + 0.05, 0);
-    scene3d.add(craterMesh3d);
-
-    craterGlow3d = makeGlowSprite(accentHex);
-    craterGlow3d.position.copy(craterMesh3d.position);
-    scene3d.add(craterGlow3d);
-
-    // marker webcam, posizionati sul fianco del cono in base a rotta bussola + quota indicativa
-    cameras.forEach(cam=>{
-      const bearing = bearingDeg(summit.lat, summit.lng, cam.lat, cam.lng);
-      const heightFrac = elevationFraction(cam.position);
-      const y = heightFrac * coneHeight;
-      const radiusAtHeight = coneRadius * (1 - heightFrac) * 0.92;
-      const theta = bearing * Math.PI/180;
-      const x = radiusAtHeight * Math.sin(theta);
-      const z = -radiusAtHeight * Math.cos(theta);
-
-      const markerGeo = new THREE.SphereGeometry(0.11, 12, 12);
-      const markerMat = new THREE.MeshBasicMaterial({color:0xEDE6DB, depthTest:false});
-      const marker = new THREE.Mesh(markerGeo, markerMat);
-      marker.position.set(x, y, z);
-      marker.renderOrder = 10;
-      marker.userData = {cam};
-      scene3d.add(marker);
-      camMeshes3d.push(marker);
-    });
-
-    // click/tap sui marker webcam nella scena 3D → stesso modale della vista 2D
-    const raycaster = new THREE.Raycaster();
-    const pointer = new THREE.Vector2();
-    renderer3d.domElement.addEventListener('click', (ev)=>{
-      const rect = renderer3d.domElement.getBoundingClientRect();
-      pointer.x = ((ev.clientX-rect.left)/rect.width)*2-1;
-      pointer.y = -((ev.clientY-rect.top)/rect.height)*2+1;
-      raycaster.setFromCamera(pointer, camera3d);
-      const hits = raycaster.intersectObjects(camMeshes3d);
-      if(hits.length) openCamModal(hits[0].object.userData.cam);
-    });
-
-    window.addEventListener('resize', ()=>{
-      if(!renderer3d) return;
-      const w = container.clientWidth, h = container.clientHeight;
-      camera3d.aspect = w/h; camera3d.updateProjectionMatrix();
-      renderer3d.setSize(w,h);
-    });
-
-    animate3d();
+    return slot;
   }
 
-  function animate3d(){
-    animId3d = requestAnimationFrame(animate3d);
-    if(craterMesh3d){
-      const pulse = Math.sin(Date.now()/400);
-      const s = 1 + pulse*0.25;
-      craterMesh3d.scale.set(s,s,s);
-      if(craterGlow3d){
-        const gs = 2.2 + pulse*0.5;
-        craterGlow3d.scale.set(gs, gs, 1);
-      }
-    }
-    if(controls3d) controls3d.update();
-    if(renderer3d && scene3d && camera3d) renderer3d.render(scene3d, camera3d);
+  function selectAshSlot(dateStr, slot){
+    document.getElementById('ashImageError').style.display = 'none';
+    document.getElementById('ashImage').src = ashImageUrl(dateStr, slot);
+    document.querySelectorAll('.ash-slot').forEach(btn=>{
+      btn.classList.toggle('active', btn.dataset.slot === slot);
+    });
   }
 
-  // fattorizzo l'apertura del modale webcam, riusata sia da 2D che da 3D
+  function openAshModal(){
+    const now = new Date();
+    const dateStr = ashDateStr(now);
+    const defaultSlot = currentAshSlot();
+
+    const slotsEl = document.getElementById('ashSlots');
+    slotsEl.innerHTML = ASH_SLOTS.map(s=>{
+      const label = s.slice(0,2) + ':' + s.slice(2) + ' UTC';
+      return `<button class="ash-slot" data-slot="${s}" onclick="selectAshSlot('${dateStr}','${s}')">${label}</button>`;
+    }).join('');
+
+    selectAshSlot(dateStr, defaultSlot);
+    document.getElementById('ashModal').classList.add('open');
+  }
+
   function openCamModal(cam){
     document.getElementById('camTitle').textContent = cam.name;
     document.getElementById('camMeta').textContent = cam.position + ' · fonte: ' + cam.source;
@@ -662,32 +486,6 @@
     document.getElementById('camModal').classList.add('open');
   }
 
-  function setView(view){
-    const map3dBtn = document.getElementById('btn3d');
-    const map2dBtn = document.getElementById('btn2d');
-    const mapEl = document.getElementById('map');
-    const sceneEl = document.getElementById('scene3d');
-    if(view === '3d'){
-      mapEl.classList.add('hidden-view');
-      sceneEl.classList.add('active');
-      map3dBtn.classList.add('active');
-      map2dBtn.classList.remove('active');
-      // forza un resize corretto al primo passaggio in 3D (il canvas nasceva a container invisibile)
-      setTimeout(()=>{
-        if(renderer3d){
-          const w = sceneEl.clientWidth, h = sceneEl.clientHeight;
-          camera3d.aspect = w/h; camera3d.updateProjectionMatrix();
-          renderer3d.setSize(w,h);
-        }
-      }, 50);
-    } else {
-      mapEl.classList.remove('hidden-view');
-      sceneEl.classList.remove('active');
-      map2dBtn.classList.add('active');
-      map3dBtn.classList.remove('active');
-      setTimeout(()=> map.invalidateSize(), 50);
-    }
-  }
 </script>
 
 </body>
