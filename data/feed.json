@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-23T01:07:43.603149+00:00",
+  "generated_at": "2026-07-23T04:33:16.645382+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
@@ -113,14 +113,6 @@
       "type": "sismicita",
       "title": "Evento sismico Ml 1.5",
       "summary": "Localizzato: 8 km SW Linguaglossa (CT).",
-      "level": "basso"
-    },
-    {
-      "id": "eq-46490442",
-      "timestamp": "2026-07-09T01:25:16.090000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.1",
-      "summary": "Localizzato: 2 km W Fiumefreddo di Sicilia (CT).",
       "level": "basso"
     },
     {
