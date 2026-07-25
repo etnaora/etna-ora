@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-25T04:32:43.637784+00:00",
+  "generated_at": "2026-07-25T06:39:41.841473+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
@@ -121,14 +121,6 @@
       "type": "sismicita",
       "title": "Evento sismico Ml 1.4",
       "summary": "Localizzato: 8 km W Linguaglossa (CT).",
-      "level": "basso"
-    },
-    {
-      "id": "eq-46516232",
-      "timestamp": "2026-07-11T06:05:35.980000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.5",
-      "summary": "Localizzato: 8 km SW Linguaglossa (CT).",
       "level": "basso"
     },
     {
