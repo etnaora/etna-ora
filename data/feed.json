@@ -1,8 +1,16 @@
 {
-  "generated_at": "2026-07-25T06:59:22.628204+00:00",
+  "generated_at": "2026-07-25T08:50:40.455689+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
+    {
+      "id": "eq-46659272",
+      "timestamp": "2026-07-25T07:41:38.620000+00:00",
+      "type": "sismicita",
+      "title": "Evento sismico Ml 1.5",
+      "summary": "Localizzato: 8 km N Nicolosi (CT).",
+      "level": "basso"
+    },
     {
       "id": "eq-46651932",
       "timestamp": "2026-07-24T13:34:53.370000+00:00",
@@ -201,15 +209,6 @@
       "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
       "level": "medio",
       "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260629181630.pdf"
-    },
-    {
-      "id": "com-ComunicatoETNA20260627175452pdf",
-      "timestamp": "2026-06-27T18:04:02+00:00",
-      "type": "comunicato",
-      "title": "Invio comunicato generico di attività vulcanica",
-      "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
-      "level": "medio",
-      "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260627175452.pdf"
     }
   ]
 }
