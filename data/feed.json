@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-26T07:27:40.200758+00:00",
+  "generated_at": "2026-07-26T07:33:53.485576+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
@@ -129,14 +129,6 @@
       "type": "sismicita",
       "title": "Evento sismico Ml 1.5",
       "summary": "Localizzato: 2 km SW Bronte (CT).",
-      "level": "basso"
-    },
-    {
-      "id": "eq-46526172",
-      "timestamp": "2026-07-12T04:48:33.140000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.4",
-      "summary": "Localizzato: 8 km W Linguaglossa (CT).",
       "level": "basso"
     },
     {
