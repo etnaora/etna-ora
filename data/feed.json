@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-07-27T11:34:55.582192+00:00",
+  "generated_at": "2026-07-27T13:53:15.020739+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
     {
-      "id": "eq-46191471",
+      "id": "eq-46680252",
       "timestamp": "2026-07-27T00:10:00.320000+00:00",
       "type": "sismicita",
       "title": "Evento sismico Ml 1.1",
@@ -12,7 +12,7 @@
       "level": "basso"
     },
     {
-      "id": "eq-46190611",
+      "id": "eq-46679342",
       "timestamp": "2026-07-26T20:55:56.410000+00:00",
       "type": "sismicita",
       "title": "Evento sismico Ml 1.4",
@@ -20,7 +20,7 @@
       "level": "basso"
     },
     {
-      "id": "eq-46190311",
+      "id": "eq-46679012",
       "timestamp": "2026-07-26T19:20:15.510000+00:00",
       "type": "sismicita",
       "title": "Evento sismico Ml 1.2",
@@ -129,14 +129,6 @@
       "type": "sismicita",
       "title": "Evento sismico Ml 1.8",
       "summary": "Localizzato: 2 km W Ragalna (CT).",
-      "level": "basso"
-    },
-    {
-      "id": "eq-46538922",
-      "timestamp": "2026-07-13T12:37:11.440000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.6",
-      "summary": "Localizzato: 2 km SW Bronte (CT).",
       "level": "basso"
     },
     {
