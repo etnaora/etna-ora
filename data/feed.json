@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-31T21:31:47.923525+00:00",
+  "generated_at": "2026-07-31T21:46:12.931741+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
@@ -158,14 +158,6 @@
       "title": "Evento sismico Ml 2.2",
       "summary": "Localizzato: 2 km NE Santa Maria di Licodia (CT).",
       "level": "medio"
-    },
-    {
-      "id": "eq-46582542",
-      "timestamp": "2026-07-17T21:14:49.780000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.1",
-      "summary": "Localizzato: 12 km W Milo (CT).",
-      "level": "basso"
     },
     {
       "id": "com-ComunicatoETNA20260708084950pdf",
