@@ -1,8 +1,17 @@
 {
-  "generated_at": "2026-07-31T09:32:36.241004+00:00",
+  "generated_at": "2026-07-31T10:21:02.427568+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
+    {
+      "id": "com-ComunicatoETNA20260731082041pdf",
+      "timestamp": "2026-07-31T08:23:17+00:00",
+      "type": "comunicato",
+      "title": "Invio comunicato generico di attività vulcanica",
+      "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
+      "level": "medio",
+      "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260731082041.pdf"
+    },
     {
       "id": "com-ComunicatoETNA20260730193029pdf",
       "timestamp": "2026-07-30T19:33:53+00:00",
@@ -200,15 +209,6 @@
       "title": "Bollettino settimanale disponibile",
       "summary": "Riepilogo multidisciplinare del 29/06–05/07 pubblicato da INGV-OE.",
       "level": "basso"
-    },
-    {
-      "id": "com-ComunicatoETNA20260705072916pdf",
-      "timestamp": "2026-07-05T07:43:40+00:00",
-      "type": "comunicato",
-      "title": "Invio comunicato generico di attività vulcanica",
-      "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
-      "level": "medio",
-      "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260705072916.pdf"
     }
   ]
 }
