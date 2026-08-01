@@ -1,8 +1,17 @@
 {
-  "generated_at": "2026-08-01T11:42:14.332952+00:00",
+  "generated_at": "2026-08-01T12:09:18.906591+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
+    {
+      "id": "com-ComunicatoETNA20260801110937pdf",
+      "timestamp": "2026-08-01T11:13:16+00:00",
+      "type": "comunicato",
+      "title": "Invio comunicato generico di attività vulcanica",
+      "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
+      "level": "medio",
+      "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260801110937.pdf"
+    },
     {
       "id": "eq-46736242",
       "timestamp": "2026-08-01T10:51:47.010000+00:00",
@@ -201,14 +210,6 @@
       "title": "Tremore vulcanico su livello medio",
       "summary": "L'ampiezza RMS si mantiene su valori medi (350 nm/s), stazione ECPN.",
       "level": "medio"
-    },
-    {
-      "id": "f-0004",
-      "timestamp": "2026-07-05T14:03:00Z",
-      "type": "bollettino",
-      "title": "Bollettino settimanale disponibile",
-      "summary": "Riepilogo multidisciplinare del 29/06–05/07 pubblicato da INGV-OE.",
-      "level": "basso"
     }
   ]
 }
