@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-02T21:39:39.384490+00:00",
+  "generated_at": "2026-08-02T22:09:33.516907+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
@@ -167,14 +167,6 @@
       "type": "sismicita",
       "title": "Evento sismico Ml 1.0",
       "summary": "Localizzato: 10 km W Linguaglossa (CT).",
-      "level": "basso"
-    },
-    {
-      "id": "eq-46599242",
-      "timestamp": "2026-07-19T21:50:34.350000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.1",
-      "summary": "Localizzato: 3 km W Ragalna (CT).",
       "level": "basso"
     },
     {
