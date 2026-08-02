@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-02T17:28:11.363721+00:00",
+  "generated_at": "2026-08-02T17:44:13.210963+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
@@ -176,14 +176,6 @@
       "title": "Evento sismico Ml 1.1",
       "summary": "Localizzato: 3 km W Ragalna (CT).",
       "level": "basso"
-    },
-    {
-      "id": "eq-46597132",
-      "timestamp": "2026-07-19T16:41:13.060000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 2.2",
-      "summary": "Localizzato: 2 km NE Santa Maria di Licodia (CT).",
-      "level": "medio"
     },
     {
       "id": "com-ComunicatoETNA20260708084950pdf",
