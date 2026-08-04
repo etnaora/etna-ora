@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-04T03:43:56.301867+00:00",
+  "generated_at": "2026-08-04T04:30:11.595629+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
@@ -143,14 +143,6 @@
       "type": "sismicita",
       "title": "Evento sismico Ml 1.0",
       "summary": "Localizzato: 10 km SW Linguaglossa (CT).",
-      "level": "basso"
-    },
-    {
-      "id": "eq-46608742",
-      "timestamp": "2026-07-21T04:23:57.780000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.6",
-      "summary": "Localizzato: Zafferana Etnea (CT).",
       "level": "basso"
     },
     {
