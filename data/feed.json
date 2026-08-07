@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-07T12:24:49.203963+00:00",
+  "generated_at": "2026-08-07T13:38:00.201776+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
@@ -173,14 +173,6 @@
       "title": "Evento sismico Ml 1.5",
       "summary": "Localizzato: 8 km N Nicolosi (CT).",
       "level": "basso"
-    },
-    {
-      "id": "eq-46651932",
-      "timestamp": "2026-07-24T13:34:53.370000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 2.0",
-      "summary": "Localizzato: 6 km SE Bronte (CT).",
-      "level": "medio"
     },
     {
       "id": "com-ComunicatoETNA20260708084950pdf",
