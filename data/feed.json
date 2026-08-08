@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-08T07:31:37.606975+00:00",
+  "generated_at": "2026-08-08T08:01:30.466009+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
@@ -173,14 +173,6 @@
       "type": "sismicita",
       "title": "Evento sismico Ml 1.7",
       "summary": "Localizzato: 7 km NW Milo (CT).",
-      "level": "basso"
-    },
-    {
-      "id": "eq-46659272",
-      "timestamp": "2026-07-25T07:41:38.620000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.5",
-      "summary": "Localizzato: 8 km N Nicolosi (CT).",
       "level": "basso"
     },
     {
