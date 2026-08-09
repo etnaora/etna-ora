@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-09T20:46:13.319225+00:00",
+  "generated_at": "2026-08-09T21:12:30.259194+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
@@ -185,14 +185,6 @@
       "type": "sismicita",
       "title": "Evento sismico Ml 1.1",
       "summary": "Localizzato: 4 km W Milo (CT).",
-      "level": "basso"
-    },
-    {
-      "id": "eq-46679342",
-      "timestamp": "2026-07-26T20:55:56.410000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.4",
-      "summary": "Localizzato: 1 km S Moio Alcantara (ME).",
       "level": "basso"
     },
     {
