@@ -1,8 +1,16 @@
 {
-  "generated_at": "2026-08-10T20:25:54.401281+00:00",
+  "generated_at": "2026-08-10T21:11:47.822056+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
+    {
+      "id": "eq-46849322",
+      "timestamp": "2026-08-10T20:58:05+00:00",
+      "type": "sismicita",
+      "title": "Evento sismico Ml 1.4",
+      "summary": "Localizzato: 7 km W Milo (CT).",
+      "level": "basso"
+    },
     {
       "id": "com-ComunicatoETNA20260810175504pdf",
       "timestamp": "2026-08-10T18:03:21+00:00",
@@ -214,15 +222,6 @@
       "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
       "level": "medio",
       "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260707212013.pdf"
-    },
-    {
-      "id": "com-ComunicatoETNA20260707135914pdf",
-      "timestamp": "2026-07-07T14:01:39+00:00",
-      "type": "comunicato",
-      "title": "Invio comunicato generico di attività vulcanica",
-      "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
-      "level": "medio",
-      "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260707135914.pdf"
     }
   ]
 }
