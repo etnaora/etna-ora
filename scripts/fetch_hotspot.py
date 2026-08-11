@@ -17,12 +17,27 @@ https://firms.modaps.eosdis.nasa.gov/api/area/
 import csv
 import io
 import os
+import socket
 import sys
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 from json import dumps
 
 import requests
+import urllib3.util.connection as urllib3_cn
+
+# ---------------------------------------------------------------------------
+# Fix di rete: alcuni runner GitHub Actions non instradano correttamente
+# l'IPv6, e host come firms.modaps.eosdis.nasa.gov rispondono anche con un
+# indirizzo IPv6 — il tentativo di connessione va in "Network is unreachable"
+# prima ancora di raggiungere NASA. Forzando la risoluzione DNS solo su IPv4
+# evitiamo il problema alla radice.
+# ---------------------------------------------------------------------------
+def _forza_ipv4():
+    return socket.AF_INET
+
+urllib3_cn.allowed_gai_family = _forza_ipv4
 
 # ---------------------------------------------------------------------------
 # Configurazione
@@ -49,19 +64,32 @@ SOGLIA_ALTA_COUNT = 6     # numero di hotspot sopra cui l'attività è considera
 HOTSPOT_PATH = Path(__file__).resolve().parent.parent / "data" / "hotspot.json"
 
 
-def fetch_hotspots(map_key: str) -> list[dict]:
+def fetch_hotspots(map_key: str, max_tentativi: int = 3) -> list[dict]:
     url = f"https://firms.modaps.eosdis.nasa.gov/api/area/csv/{map_key}/{SOURCE}/{AREA}/{DAY_RANGE}"
-    resp = requests.get(url, timeout=20)
-    resp.raise_for_status()
 
-    # Un errore di chiave non valida spesso torna comunque HTTP 200 ma con
-    # un corpo di testo che non è un CSV valido: lo intercettiamo a parte.
-    text = resp.text.strip()
-    if not text or "latitude" not in text.splitlines()[0]:
-        raise ValueError(f"Risposta FIRMS inattesa (chiave non valida?): {text[:200]!r}")
+    ultimo_errore = None
+    for tentativo in range(1, max_tentativi + 1):
+        try:
+            resp = requests.get(url, timeout=20)
+            resp.raise_for_status()
 
-    reader = csv.DictReader(io.StringIO(text))
-    return list(reader)
+            # Un errore di chiave non valida spesso torna comunque HTTP 200 ma con
+            # un corpo di testo che non è un CSV valido: lo intercettiamo a parte.
+            text = resp.text.strip()
+            if not text or "latitude" not in text.splitlines()[0]:
+                raise ValueError(f"Risposta FIRMS inattesa (chiave non valida?): {text[:200]!r}")
+
+            reader = csv.DictReader(io.StringIO(text))
+            return list(reader)
+
+        except (requests.RequestException, ValueError) as exc:
+            ultimo_errore = exc
+            if tentativo < max_tentativi:
+                attesa = 5 * tentativo
+                print(f"Tentativo {tentativo}/{max_tentativi} fallito ({exc}), riprovo tra {attesa}s...", file=sys.stderr)
+                time.sleep(attesa)
+
+    raise ultimo_errore
 
 
 def build_status(rows: list[dict]) -> dict:
