@@ -1,0 +1,333 @@
+# Etna, ora — Note complete di progetto
+
+Questo file è il "cervello" del progetto: architettura, decisioni prese, logiche
+implementate, insidie già risolte, e cosa manca ancora. Se riprendi il lavoro
+(con me o con chiunque altro, umano o AI), leggi questo file per intero prima
+di modificare qualcosa — evita di rifare errori già corretti.
+
+Ultimo aggiornamento contenuti: sessione in cui sono stati risolti i fallimenti
+di rete IPv6 su GitHub Actions e rimossa la vista 3D.
+
+---
+
+## 1. Cos'è il progetto
+
+Sito statico gratuito di monitoraggio in tempo reale del vulcano Etna.
+Filosofia guida, decisa fin dall'inizio e mai cambiata: **"la cosa più bella e
+più snella dedicata solo all'Etna"** — non un cruscotto tecnico stile
+strumentazione (quello lo fa già bene un concorrente, EtnaMonitor.it), ma una
+mappa scenografica essenziale, emozionale più che "da controllo missione".
+
+Vincoli permanenti del progetto:
+- **Zero costi fissi**: solo servizi con piano gratuito (GitHub Pages, GitHub
+  Actions su repo pubblico, API gratuite di INGV/NASA)
+- **Nessun backend sempre acceso**: tutta la logica "server-side" gira come
+  job periodici GitHub Actions che scrivono file JSON statici
+- **No scopo di lucro nella fase attuale**, ma pensato per essere scalabile in
+  futuro (dominio proprio, affiliazioni turistiche, canale Telegram)
+
+---
+
+## 2. Dove vive il progetto
+
+- **Organization GitHub**: `etnaora` (creata apposta, namespace separato
+  dall'account personale dell'utente, stesso login)
+- **Repository**: `github.com/etnaora/etna-ora` (pubblico — deve restare
+  pubblico, altrimenti GitHub Actions e Pages non sono più gratuiti illimitati)
+- **Sito pubblicato**: `https://etnaora.github.io/etna-ora/` (GitHub Pages,
+  branch `main`, root)
+- **Dominio proprio**: non ancora acquistato. Quando succede, vanno aggiornati
+  a mano tutti i riferimenti elencati nella sezione 9.
+
+---
+
+## 3. Struttura dei file
+
+```
+etna-ora/
+├── index.html                          # l'intero sito (HTML+CSS+JS in un file)
+├── privacy.html                        # pagina privacy (editata a mano dall'utente)
+├── cookie.html                         # pagina cookie (editata a mano dall'utente)
+├── robots.txt                          # SEO
+├── sitemap.xml                         # SEO
+├── README.md                           # doc tecnico "storico" (vedi nota sotto)
+├── PROGETTO_NOTE.md                    # QUESTO FILE
+├── data/
+│   ├── feed.json                       # sismicità + comunicati INGV (finestra 25 elementi)
+│   ├── hotspot.json                    # stato termico satellitare (quiete/moderata/alta)
+│   └── webcam.json                     # elenco statico delle 6 webcam ufficiali
+├── scripts/
+│   ├── fetch_terremoti.py              # popola gli item "sismicita" in feed.json
+│   ├── fetch_comunicati.py             # popola gli item "comunicato" in feed.json
+│   └── fetch_hotspot.py                # popola hotspot.json
+└── .github/workflows/
+    ├── update-feed.yml                 # esegue fetch_terremoti.py ogni 15 min
+    ├── update-comunicati.yml           # esegue fetch_comunicati.py ogni 15 min (sfasato +5)
+    └── update-hotspot.yml              # esegue fetch_hotspot.py ogni 30 min
+```
+
+**Nota sul README.md**: esiste da prima di questo file ed è stato aggiornato
+via via, ma è meno organico di questo documento (cresciuto "a incrementi").
+Questo `PROGETTO_NOTE.md` è la fonte di verità più completa e aggiornata; il
+README può essere considerato un sotto-insieme/duplicato parziale.
+
+**Assenti di proposito**: nessun `package.json`, nessun bundler, nessun
+framework frontend. `index.html` carica Leaflet via CDN (`unpkg.com`) e non
+ha altre dipendenze runtime lato client.
+
+---
+
+## 4. index.html — architettura del sito
+
+Un solo file, self-contained. Struttura interna:
+
+1. **`<head>`**: meta tag SEO completi (title, description, keywords, Open
+   Graph, Twitter Card, canonical, JSON-LD schema.org `WebSite`), font Google
+   (Fraunces per i titoli, IBM Plex Sans per il corpo, IBM Plex Mono per
+   dati/numeri/orari), CSS Leaflet da CDN.
+2. **Design tokens** (CSS custom properties in `:root`):
+   - `--basalt #14120F` sfondo principale
+   - `--basalt-panel #1F1B17` / `--basalt-panel-2 #26211C` pannelli/modali
+   - `--ash #EDE6DB` testo primario, `--ash-muted #9C948A` testo secondario
+   - `--mist #5C7A8A` = stato "quiete", `--ember #E8541E` = stato "attività",
+     `--sulfur #FFD166` = stato "allerta" (usato anche per il pallino del
+     pulsante "ricaduta cenere")
+   - `--accent` è **dinamico**: viene riassegnato via JS in base allo stato
+     hotspot (vedi punto 6), e pilota sia il colore del pallino di stato che
+     quello del marker pulsante sul cratere
+3. **`<body>`**: mappa Leaflet full-bleed (`#map`), topbar con wordmark +
+   pillola di stato centrata + bottone info, cassetto feed in basso, bottone
+   "ricaduta cenere" fluttuante, 4 modali (webcam, info, ricaduta cenere).
+4. **`<script>`** (un solo blocco finale): inizializzazione mappa Leaflet,
+   fetch dei 3 JSON con **cache-busting esplicito** (`?v=timestamp` +
+   `{cache:'no-store'}` — necessario, vedi insidia in sezione 8), rendering
+   webcam/feed/stato, logica modali, logica "ricaduta cenere".
+
+### Elementi chiave del DOM (id) da conoscere se si modifica il codice
+- `#map` — contenitore Leaflet
+- `#statusDot` / `#statusLabel` — pillola di stato in alto
+- `#feed` / `#feedList` / `#feedHeadline` — cassetto feed
+- `#camModal` / `#camTitle` / `#camMeta` / `#camFrame` / `#camFallbackLink`
+- `#infoModal` — spiegazione + link privacy/cookie
+- `#ashModal` / `#ashSlots` / `#ashImage` / `#ashImageError` — ricaduta cenere
+
+---
+
+## 5. Le tre pipeline dati automatiche (schema comune)
+
+Tutte e tre seguono lo stesso pattern:
+**script Python → GitHub Actions schedulato → commit automatico del bot
+`etna-bot` → GitHub Pages si ripubblica da solo**.
+
+### 5.1 Sismicità (`fetch_terremoti.py` + `update-feed.yml`)
+- Fonte: webservice ufficiale INGV FDSN event
+  (`webservices.ingv.it/fdsnws/event/1/query`, licenza CC-BY 4.0)
+- Bounding box: lat 37.55–37.95, lon 14.75–15.25 (edificio etneo + zone
+  sismogenetiche limitrofe)
+- Filtro: `minmagnitude=1.0`, `LOOKBACK_DAYS=14`
+- Logica di merge: rilegge `feed.json`, **rimuove solo gli item con
+  `type=="sismicita"`**, li ricostruisce da zero con i dati freschi, li
+  rimescola con gli item degli altri tipi (comunicato/tremore/bollettino) già
+  presenti, ordina per `timestamp` decrescente, taglia a `MAX_ITEMS=25`
+- **Insidia già risolta**: il campo `time` del geojson INGV arriva come
+  **stringa ISO**, non timestamp numerico come da spec FDSN generica —
+  c'è una funzione `parse_ingv_time()` che gestisce entrambi i casi
+- Cron: `*/15 * * * *` (ogni 15 minuti)
+
+### 5.2 Comunicati INGV (`fetch_comunicati.py` + `update-comunicati.yml`)
+- Fonte: **non è un'API strutturata** — scraping HTML leggero della pagina
+  pubblica `ct.ingv.it/sezioniesterne/Comunicati/ComunicatiVulcanici.php?I=0`
+  (tabella con link a PDF)
+- Filtro: solo link con `ETNA` nell'href (scarta Stromboli)
+- Estrazione: cerca un pattern data `YYYY-MM-DD HH:MM:SS` nel testo del
+  blocco contenente il link, poi ripulisce la descrizione rimuovendo la data
+  e il testo visibile del link (es. "Download PDF") — **senza questa pulizia
+  il titolo finisce con "download pdf" appiccicato in coda**
+- URL del PDF: costruito con `urllib.parse.urljoin()`, **mai concatenazione
+  manuale** — l'href della pagina è un percorso relativo (`../../Dati/...`),
+  concatenarlo a mano produce URL rotti (bug già commesso e corretto)
+- Logica di merge: stessa identica logica della sismicità, ma sul
+  `type=="comunicato"`
+- Se non trova nulla, **non sovrascrive il feed con un vuoto** (probabile
+  cambio di formato della pagina, meglio lasciare i dati vecchi che perderli)
+- Cron: `5-59/15 * * * *` — **sfasato di 5 minuti** rispetto a
+  `update-feed.yml` apposta, perché entrambi scrivono su `feed.json` e un
+  'push' concorrente nello stesso istante potrebbe fallire
+
+### 5.3 Hotspot termico satellitare (`fetch_hotspot.py` + `update-hotspot.yml`)
+- Fonte: NASA FIRMS (VIIRS_SNPP_NRT), endpoint area CSV
+  `firms.modaps.eosdis.nasa.gov/api/area/csv/{MAP_KEY}/{SOURCE}/{AREA}/{DAY_RANGE}`
+- Richiede una **API key gratuita** salvata come secret GitHub
+  `FIRMS_MAP_KEY` (organization secret, repository access = etna-ora)
+- Bounding box strettissima intorno ai crateri sommitali: `14.95,37.70,15.05,37.80`
+- **Logica di classificazione (calibrata su un caso reale di eruzione in
+  corso, non teorica)**:
+  - 0 hotspot rilevati → `quiete`
+  - ≥1 hotspot ma sotto soglia → `moderata` (**anche un solo hotspot con FRP
+    basso conta come attività**: in condizioni di vera quiete VIIRS non
+    rileva quasi nulla in quest'area, quindi la sola presenza è già
+    significativa — non serve un FRP alto)
+  - `FRP massimo ≥ 15 MW` OPPURE `numero hotspot ≥ 6` → `alta`
+- Questo stato pilota **sia** la pillola "status attuale" in alto sul sito
+  **sia** il colore (`--accent`) del marker pulsante sul cratere
+- Cron: `*/30 * * * *`
+
+### 5.4 Fix di rete comune a tutti e tre gli script (importante!)
+Tutti e tre gli script hanno, in testa, questo blocco:
+```python
+import socket
+import urllib3.util.connection as urllib3_cn
+def _forza_ipv4():
+    return socket.AF_INET
+urllib3_cn.allowed_gai_family = _forza_ipv4
+```
+**Perché esiste**: alcuni runner GitHub Actions non instradano correttamente
+l'IPv6. Host come `firms.modaps.eosdis.nasa.gov` rispondono anche con un
+indirizzo IPv6, e la richiesta falliva con `Errno 101 Network is unreachable`
+— **prima ancora di raggiungere il server**, quindi non è un problema NASA/INGV.
+Questo causava sia fallimenti frequenti (email di notifica continue) sia,
+concretamente, un **falso stato "quiete" durante un'eruzione realmente in
+corso** (perché lo script falliva prima di scrivere `hotspot.json`, che
+restava bloccato all'ultimo dato buono). **Non rimuovere questo blocco.**
+
+`fetch_hotspot.py` ha in più una **logica di retry**: fino a 3 tentativi con
+attesa crescente (5s, 10s) prima di arrendersi, per assorbire intoppi di rete
+transitori senza generare un fallimento (e quindi una notifica email) per
+ogni singolo intoppo passeggero.
+
+---
+
+## 6. webcam.json — dati statici (nessuno script)
+
+6 webcam reali della rete INGV-OE, aggiornate a mano (non cambiano spesso):
+`ecv` (crateri sommitali), `emct` (cratere SE), `ent` (Piano Provenzana,
+nord), `env` (Rifugio Sapienza, sud), `epvh` (Milo, est), `emov` (Montagnola,
+2600m, la più vicina ai crateri).
+
+Ogni voce ha `stream_url` che punta a
+`ct.ingv.it/sezioniesterne/webcam/Webcam.php?Vulcano={CODICE}` — questa
+pagina INGV **non fa refresh automatico lato loro**, ma restituisce sempre
+l'ultima immagine disponibile a ogni caricamento: per questo il sito la
+incorpora in un `<iframe>` dentro il modale, ricreato ogni volta che si apre
+(non serve nessun job di aggiornamento).
+
+**Webcam INGV note ma NON incluse** per mancanza di una fonte affidabile
+sulla loro posizione esatta: `Emot`, `Emv`. Se in futuro si trova una fonte
+verificata (non un blog, una pagina ufficiale con nome+coordinate), si
+possono aggiungere con lo stesso schema.
+
+**Fallback se l'iframe non carica**: sotto l'immagine c'è sempre un link
+"apri in una nuova scheda" — in caso INGV introduca protezioni anti-iframe
+in futuro (X-Frame-Options), quel link resta la via di riserva.
+
+---
+
+## 7. Funzionalità "ricaduta cenere" (nessuno script, zero backend)
+
+Aggiunta più recente. Mostra la mappa previsionale INGV di dispersione/
+ricaduta dei tefra (prodotti piroclastici), **generata sempre ogni giorno**
+da INGV come simulazione standard (scenario eruttivo ipotetico applicato ai
+venti reali) — **non è specifica di un'eruzione in corso**, va presentata
+con quella cornice (c'è già un disclaimer nel modale).
+
+- URL immagine, prevedibile e documentato:
+  `https://www.ct.ingv.it/Dati/ASH/ASH_{AAAAMMGG}_{HHMM}.jpg`
+- 8 fasce orarie fisse UTC: `0000,0300,0600,0900,1200,1500,1800,2100`
+- Tutto calcolato **client-side in JavaScript** (funzioni `ashDateStr()`,
+  `currentAshSlot()`, `ashImageUrl()` in `index.html`) — nessuno script
+  Python, nessun workflow, nessun costo aggiuntivo. È il pezzo più "snello"
+  di tutto il sito.
+- L'utente può cambiare fascia oraria dal selettore nel modale; di default
+  si apre sulla fascia più recente rispetto a "adesso" (UTC)
+- Se l'immagine non carica, mostra un messaggio di errore invece di un
+  riquadro vuoto muto (gestito con `onerror` sull'`<img>`)
+
+---
+
+## 8. Insidie già affrontate (per non ripeterle)
+
+1. **Cache del browser + cache CDN di GitHub Pages**: i fetch dei JSON in
+   `index.html` hanno cache-busting esplicito (`?v=timestamp`,
+   `{cache:'no-store'}`). Anche così, dopo un commit può volerci un minuto
+   perché "pages build and deployment" (workflow automatico di GitHub, non
+   nostro) ripubblichi — se il sito "non cambia mai", controllare prima
+   quello, non il codice.
+2. **`.github` non caricata dal drag&drop del browser**: GitHub a volte
+   ignora le cartelle che iniziano con il punto durante l'upload trascinato.
+   Va creata a mano da interfaccia web se manca ("Add file → Create new file"
+   scrivendo il percorso completo `.github/workflows/nome.yml`).
+3. **Workflow "verde" non significa "ha fatto qualcosa"**: un job può avere
+   successo (nessun errore) ma non trovare nulla di nuovo da scrivere — va
+   sempre controllato anche il file `data/*.json` raw, non solo il colore del
+   pallino su Actions.
+4. **Errore di rete IPv6 su GitHub Actions**: vedi sezione 5.4. Causa reale
+   di gran parte dei fallimenti intermittenti osservati.
+5. **URL relativi INGV**: sempre `urljoin()`, mai concatenazione manuale di
+   stringhe (vedi 5.2).
+6. **Formato data INGV incoerente**: FDSN a volte stringa ISO, non sempre
+   epoch numerico (vedi 5.1, `parse_ingv_time()`).
+7. **Vista 3D rimossa**: è stata costruita con Three.js (cono wireframe
+   stilizzato, toggle 2D/3D, marker orientati per bussola+quota), ma **non
+   ha convinto esteticamente l'utente dopo più iterazioni** (illuminazione
+   incoerente, webcam nascoste dietro la mesh solida) ed è stata **rimossa
+   completamente e deliberatamente**. Se in futuro si volesse riprovare,
+   ripartire da zero concettualmente piuttosto che recuperare quel codice —
+   non era il problema tecnico, era la direzione estetica a non funzionare.
+
+---
+
+## 9. Cose da NON dimenticare quando si compra il dominio proprio
+
+Riferimenti oggi puntati a `https://etnaora.github.io/etna-ora/`, da
+aggiornare ovunque quando si passa a un dominio proprio (es. `etna-ora.it`):
+- `index.html`: tag `<link rel="canonical">`, tutti i tag Open Graph
+  (`og:url`), Twitter Card, il JSON-LD schema.org (`"url"`)
+- `robots.txt`: riga `Sitemap:`
+- `sitemap.xml`: tutti i `<loc>`
+- Eventuali link hardcoded rimasti in giro (cercare "etnaora.github.io" nel
+  progetto prima di considerarlo fatto)
+- Registrare il nuovo dominio su **Google Search Console**
+
+---
+
+## 10. Cosa manca / possibili sviluppi futuri (non fatti, solo annotati)
+
+- **Bollettino settimanale multidisciplinare**: nel feed è ancora un item
+  finto/statico (`f-0004` originario) — nessuno script lo aggiorna. Bassa
+  priorità (si aggiorna una volta a settimana), ma è l'ultimo pezzo "mock"
+  rimasto nel feed.
+- **Tremore vulcanico "vero"**: quello attuale (`type=tremore`, item
+  `f-0001`) è ancora **statico/finto**, mai collegato a un dato reale.
+  Richiederebbe scaricare le forme d'onda sismiche grezze e calcolarne
+  l'RMS (es. con la libreria ObsPy) — tecnicamente il pezzo più complesso
+  di tutti quelli discussi, deliberatamente rimandato.
+- **Le due webcam INGV non mappate** (Emot, Emv) — vedi sezione 6.
+- **App mobile**: discusso ma non avviato. Percorso consigliato se si
+  riprende: PWA gratuita prima di tutto (manifest.json + service worker),
+  poi eventualmente Google Play via Trusted Web Activity (~25$ una tantum),
+  App Store solo se il progetto cresce abbastanza da giustificare Capacitor
+  + Mac + Apple Developer Program (99$/anno) — Apple non accetta un sito
+  "travestito" da app senza funzionalità native vere.
+- **Dominio proprio + SEO attiva** (Search Console, contenuti più ricchi nel
+  tempo) — impostato tecnicamente (sezione 9) ma non ancora attivato.
+- **Canale Telegram**: discusso come estensione naturale (lo stesso script
+  che rileva "cosa è cambiato" per il feed potrebbe mandare un messaggio a
+  un bot Telegram gratuito), mai implementato.
+- **Terza telecamera/ubicazioni verificate**: se si trova una fonte
+  ufficiale (non un blog) con l'elenco nome↔codice↔coordinate di tutte le
+  webcam della rete INGV-OE, vale la pena completare `webcam.json`.
+
+---
+
+## 11. Riferimenti rapidi
+
+- Repo: `github.com/etnaora/etna-ora`
+- Sito: `https://etnaora.github.io/etna-ora/`
+- INGV Osservatorio Etneo: `ct.ingv.it`
+- Comunicati (scraping): `ct.ingv.it/sezioniesterne/Comunicati/ComunicatiVulcanici.php?I=0`
+- Webcam ufficiali: `ct.ingv.it/sezioniesterne/webcam/Webcam.php?Vulcano={CODICE}`
+- Ricaduta cenere: `ct.ingv.it/Dati/ASH/ASH_{AAAAMMGG}_{HHMM}.jpg`
+- Terremoti (FDSN): `webservices.ingv.it/fdsnws/event/1/query`
+- Hotspot satellitari: `firms.modaps.eosdis.nasa.gov/api/area/csv/`
+- Competitor di riferimento (per differenziazione, non per copiare):
+  `etnamonitor.it`
