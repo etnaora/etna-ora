@@ -14,6 +14,7 @@ ma non dovrebbe rompersi per dettagli minori.
 
 import json
 import re
+import socket
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -21,6 +22,14 @@ from urllib.parse import urljoin
 
 import requests
 from bs4 import BeautifulSoup
+import urllib3.util.connection as urllib3_cn
+
+# Fix di rete preventivo: forza la risoluzione DNS su IPv4 (vedi
+# fetch_hotspot.py per la spiegazione completa del problema).
+def _forza_ipv4():
+    return socket.AF_INET
+
+urllib3_cn.allowed_gai_family = _forza_ipv4
 
 INGV_PAGE = "https://www.ct.ingv.it/sezioniesterne/Comunicati/ComunicatiVulcanici.php?I=0"
 
