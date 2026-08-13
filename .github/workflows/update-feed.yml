@@ -2,8 +2,10 @@ name: Aggiorna feed sismico Etna
 
 on:
   schedule:
+    # Ogni 15 minuti. Su GitHub Actions gli orari cron possono avere qualche
+    # minuto di ritardo nei momenti di alto carico globale: normale, non è un bug.
     - cron: "*/15 * * * *"
-  workflow_dispatch: {}
+  workflow_dispatch: {}  # permette anche l'avvio manuale dalla tab Actions
 
 permissions:
   contents: write
