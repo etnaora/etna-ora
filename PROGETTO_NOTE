@@ -105,11 +105,14 @@ Un solo file, self-contained. Struttura interna:
 
 ### Elementi chiave del DOM (id) da conoscere se si modifica il codice
 - `#map` — contenitore Leaflet
-- `#statusDot` / `#statusLabel` — pillola di stato in alto
+- `#statusDot` / `#statusLabel` — pillola di stato in alto (testo generato via `renderStatus()`, i18n-aware)
 - `#feed` / `#feedList` / `#feedHeadline` — cassetto feed
 - `#camModal` / `#camTitle` / `#camMeta` / `#camFrame` / `#camFallbackLink`
 - `#infoModal` — spiegazione + link privacy/cookie
 - `#ashModal` / `#ashSlots` / `#ashImage` / `#ashImageError` — ricaduta cenere
+- `#topicDock` — dock di 5 pulsanti circolari collassabili (vedi §12), sostituisce il vecchio `.ash-btn`
+- `#gasModal` / `#aeroportoModal` / `#scientificoModal` / `#satelliteModal` — i 4 nuovi tab, scheletro (vedi §12)
+- `#langBtnIt` / `#langBtnEn` — toggle lingua in topbar, accanto al bottone info
 
 ---
 
@@ -155,8 +158,13 @@ Tutte e tre seguono lo stesso pattern:
   'push' concorrente nello stesso istante potrebbe fallire
 
 ### 5.3 Hotspot termico satellitare (`fetch_hotspot.py` + `update-hotspot.yml`)
-- Fonte: NASA FIRMS (VIIRS_SNPP_NRT), endpoint area CSV
+- Fonte primaria: NASA FIRMS (VIIRS_SNPP_NRT), endpoint area CSV
   `firms.modaps.eosdis.nasa.gov/api/area/csv/{MAP_KEY}/{SOURCE}/{AREA}/{DAY_RANGE}`
+- **Fix 2026-08 — mirror di riserva**: se il dominio primario non risponde,
+  lo script riprova automaticamente su `firms2.modaps.eosdis.nasa.gov`, il
+  mirror ufficiale NASA usato durante le manutenzioni programmate (NASA sta
+  migrando i siti Earth Science su Earthdata durante tutto il 2026, con
+  finestre di manutenzione note). Prima non veniva mai usato.
 - Richiede una **API key gratuita** salvata come secret GitHub
   `FIRMS_MAP_KEY` (organization secret, repository access = etna-ora)
 - Bounding box strettissima intorno ai crateri sommitali: `14.95,37.70,15.05,37.80`
@@ -171,6 +179,23 @@ Tutte e tre seguono lo stesso pattern:
 - Questo stato pilota **sia** la pillola "status attuale" in alto sul sito
   **sia** il colore (`--accent`) del marker pulsante sul cratere
 - Cron: `*/30 * * * *`
+- **Fix 2026-08 — stato "stale" onesto invece del silenzio**: se ANCHE il
+  mirror fallisce, lo script non lascia `hotspot.json` intonso: scrive
+  comunque il file, mantenendo l'ultimo stato noto ma aggiungendo
+  `"stale": true`, `"stale_reason"` e `"last_success_at"`. Il frontend
+  (`renderStatus()` in `index.html`) mostra in quel caso un suffisso
+  esplicito accanto allo stato ("· dato non aggiornato" / "· data not up to
+  date"), invece di far sembrare fresco un dato vecchio.
+  **Prima**, in questo scenario, lo script terminava con `exit 1` senza
+  toccare il file, e il workflow saltava anche lo step di commit — quindi
+  il sito mostrava con sicurezza uno stato potenzialmente vecchio di ore o
+  giorni, senza alcun indicatore. Era questo il bug segnalato ("il job
+  fallisce, il sito mostra un dato non veritiero"), non (solo) il problema
+  di rete IPv6.
+- Il job GitHub Actions **fallisce comunque visibilmente** (notifica email)
+  quando il fetch non riesce — utile per sapere se serve intervenire (es.
+  chiave FIRMS scaduta) — ma questo non impedisce più la pubblicazione dello
+  stato onesto sul sito, perché lo step di commit ora ha `if: always()`.
 
 ### 5.4 Fix di rete comune a tutti e tre gli script (importante!)
 Tutti e tre gli script hanno, in testa, questo blocco:
@@ -190,10 +215,10 @@ concretamente, un **falso stato "quiete" durante un'eruzione realmente in
 corso** (perché lo script falliva prima di scrivere `hotspot.json`, che
 restava bloccato all'ultimo dato buono). **Non rimuovere questo blocco.**
 
-`fetch_hotspot.py` ha in più una **logica di retry**: fino a 3 tentativi con
-attesa crescente (5s, 10s) prima di arrendersi, per assorbire intoppi di rete
-transitori senza generare un fallimento (e quindi una notifica email) per
-ogni singolo intoppo passeggero.
+`fetch_hotspot.py` prova fino a 2 tentativi per host (attesa 5s tra un
+tentativo e l'altro), poi passa all'host successivo nell'elenco
+`FIRMS_HOSTS` (primario → mirror), prima di arrendersi e scrivere lo stato
+"stale" descritto sopra.
 
 ---
 
@@ -328,6 +353,117 @@ aggiornare ovunque quando si passa a un dominio proprio (es. `etna-ora.it`):
 - Webcam ufficiali: `ct.ingv.it/sezioniesterne/webcam/Webcam.php?Vulcano={CODICE}`
 - Ricaduta cenere: `ct.ingv.it/Dati/ASH/ASH_{AAAAMMGG}_{HHMM}.jpg`
 - Terremoti (FDSN): `webservices.ingv.it/fdsnws/event/1/query`
-- Hotspot satellitari: `firms.modaps.eosdis.nasa.gov/api/area/csv/`
+- Hotspot satellitari: `firms.modaps.eosdis.nasa.gov/api/area/csv/` (mirror:
+  `firms2.modaps.eosdis.nasa.gov`, vedi §12)
+- Bollettini VAAC Toulouse (Etna): `vaac.meteo.fr/volcanoes/etna/`
+- Bollettini settimanali multidisciplinari INGV:
+  `ct.ingv.it/index.php/monitoraggio-e-sorveglianza/prodotti-del-monitoraggio/bollettini-settimanali-multidisciplinari`
+- SACS (SO₂/cenere satellitare, ESA/BIRA-IASB): `sacs.aeronomie.be`
 - Competitor di riferimento (per differenziazione, non per copiare):
   `etnamonitor.it`
+
+---
+
+## 12. Sessione 2026-08 — fix affidabilità hotspot + scheletro 4 nuovi tab + i18n IT/EN
+
+Sessione avviata da tre richieste: (1) risolvere i fallimenti ricorrenti del
+job hotspot, (2) aggiungere 4 nuovi tab sul modello di "ricaduta cenere"
+(gas, aeroporto, dati scientifici, satelliti), (3) sito bilingue IT/EN.
+D'accordo con l'utente, in questa sessione sono stati completati **solo** il
+punto (1) e lo **scheletro** dei punti (2)-(3) — non le pipeline dati live
+dei 4 nuovi tab, rimandate a sessioni successive.
+
+### 12.1 Fix hotspot — vedi già sezioni 5.3/5.4 sopra, aggiornate
+Riassunto: mirror FIRMS di riserva + stato `"stale": true` scritto e
+pubblicato onestamente invece di far sparire il problema in silenzio.
+**Da fare quando si riprende**: osservare per un paio di settimane se lo
+`stale` compare mai nei log/nel sito — se sì, capire se è il mirror a non
+bastare (es. entrambi i domini NASA down insieme, raro ma possibile) e in
+quel caso valutare una fonte satellite alternativa come **secondo livello
+di verifica indipendente** (non come sostituto): MIROVA (mirovaweb.it) è
+stato scartato perché non ha un'API pubblica documentata — è un sito pensato
+per consultazione umana, non per essere interrogato da uno script.
+
+### 12.2 Nuovo dock di icone circolari collassabili (`#topicDock`)
+Sostituisce il vecchio pulsante singolo "ricaduta cenere" (`.ash-btn`, ora
+rimosso). 5 pulsanti circolari (44px), impilati verticalmente in basso a
+sinistra, sopra al cassetto feed. CSS puro, nessuna libreria: al passaggio
+del mouse (`:hover`/`:focus-visible`) il pulsante si espande in larghezza
+(`transition: width`) rivelando l'etichetta testuale già prima del click,
+esattamente come richiesto. Ogni pulsante ha un pittogramma SVG inline
+minimale (stroke `currentColor`, nessun emoji per coerenza visiva con la
+palette basalto) e un pallino colorato d'accento nell'angolo, che sparisce
+quando il pulsante è espanso. Per aggiungere un sesto tab in futuro: copiare
+un blocco `<button class="topic-btn">` in `#topicDock`, scegliere un colore
+per `--topic-accent` inline, disegnare l'SVG (viewBox 0 24 24, stroke 1.6),
+e aggiungere le chiavi i18n `topic.<nome>` in entrambe le lingue.
+
+### 12.3 Sistema i18n IT/EN
+Nessuna libreria: dizionario piatto `I18N = {it:{...}, en:{...}}` in cima
+allo script, funzione `t(chiave)` per leggerlo, funzione `setLang(lang)` che:
+applica `textContent` a tutti gli elementi `[data-i18n]`, `innerHTML` a
+quelli `[data-i18n-html]` (i pochi blocchi con `<strong>`/`<br>`/`<a>`
+interni, es. il corpo del modale info), aggiorna `document.documentElement
+.lang`, aggiorna lo stato attivo dei due bottoni `#langBtnIt`/`#langBtnEn`,
+e **ri-renderizza i blocchi generati via JS** (stato, feed, meta webcam)
+riusando l'ultimo dato ricevuto (`window.lastHotspot`, `window.lastFeedItems`,
+`window.lastCam`) — senza bisogno di rifare il fetch. La lingua scelta è
+salvata in `localStorage['etnaora_lang']` e riletta a ogni caricamento;
+default `it`. Per tradurre una nuova stringa statica: aggiungere
+`data-i18n="chiave"` (o `data-i18n-html` se contiene markup) all'elemento
+nell'HTML, e la stessa chiave in **entrambi** i blocchi `it`/`en` del
+dizionario — c'è uno script di verifica rapido (vedi sotto) per controllare
+che le chiavi combacino sempre tra le due lingue.
+
+```bash
+# verifica che ogni chiave data-i18n usata nell'HTML esista in IT ed EN,
+# e che IT ed EN abbiano esattamente lo stesso insieme di chiavi
+python3 << 'EOF'
+import re
+html = open('index.html', encoding='utf-8').read()
+keys_used = set(re.findall(r'data-i18n(?:-html)?="([^"]+)"', html))
+it_block = re.search(r"it:\s*\{(.*?)\n    \},\n    en:", html, re.S).group(1)
+en_block = re.search(r"en:\s*\{(.*?)\n    \},\n  \};", html, re.S).group(1)
+it_keys = set(re.findall(r"'([\w.]+)':", it_block))
+en_keys = set(re.findall(r"'([\w.]+)':", en_block))
+assert not (keys_used - it_keys), f"mancano in IT: {keys_used - it_keys}"
+assert not (keys_used - en_keys), f"mancano in EN: {keys_used - en_keys}"
+assert not (it_keys ^ en_keys), f"IT/EN disallineati: {it_keys ^ en_keys}"
+print("OK")
+EOF
+```
+
+**Cose NON tradotte in questa sessione (scelta deliberata, basso impatto)**:
+meta tag SEO (`<title>`, `og:*`, JSON-LD — restano IT anche con sito in EN,
+impatta solo le anteprime social/i motori di ricerca, non l'esperienza in
+pagina), `privacy.html`/`cookie.html` (restano solo IT, il link dal modale
+info punta sempre lì in entrambe le lingue), nomi propri delle webcam
+(vengono da `webcam.json`, dato non tradotto).
+
+### 12.4 I 4 nuovi tab: cosa è reale oggi, cosa manca
+Ogni modale ha **contenuto reale scritto a mano** (non segnaposto vuoto):
+un badge onesto "in sviluppo", una spiegazione di cosa mostreranno quando
+saranno collegati, e link diretti alle fonti ufficiali già verificate in
+questa sessione. Nessuna pipeline Python/workflow ancora creata per loro.
+
+| Tab | Fonte scelta per la pipeline futura | Perché | Frequenza reale |
+|---|---|---|---|
+| Gas (SO₂) | Bollettino settimanale INGV (rete FLAME) + link SACS | Nessun feed SO₂ giornaliero pubblico affidabile trovato | Settimanale (certificato) |
+| Aeroporto | VAAC Toulouse (bollettini VAA testuali, ente ICAO) | `aeroporto.catania.it` è una SPA Next.js non scrapabile senza browser headless (costo non compatibile con l'architettura zero-backend) — confermato con l'utente che VAAC va bene come proxy | Ogni 3-6h durante un episodio attivo |
+| Dati scientifici | Bollettino settimanale INGV | Tremore RMS "vero" richiede ObsPy + forme d'onda grezze, confermato come pezzo più complesso, rimandato (vedi anche §10) | Settimanale (certificato) |
+| Satelliti | Stesso pattern URL diretta di "ricaduta cenere", NASA Worldview + FIRMS | Zero backend, coerente con l'architettura esistente | Da definire in dettaglio nella prossima sessione |
+
+**Prossimi passi consigliati, in ordine**:
+1. `scripts/fetch_aviation.py` + `update-aviation.yml` — il più a valore
+   immediato (utile ai turisti, dato quasi in tempo reale, fonte già
+   individuata e testata in questa sessione: `vaac.meteo.fr/volcanoes/etna/`)
+2. `scripts/fetch_gas.py` + `update-gas.yml` — riusa lo stesso pattern di
+   `fetch_comunicati.py` (scraping bollettino INGV), aggiungendo
+   l'estrazione del dato FLAME dal PDF/pagina settimanale
+3. Tab scientifico — stessa pipeline di (2), campo diverso dello stesso
+   bollettino (deformazione/tremore invece di gas): si può fare insieme
+   costruendo un unico script che estrae più campi dal bollettino settimanale
+4. Tab satellitare — costruire gli URL diretti NASA Worldview/FIRMS per
+   Etna con parametri fissi (bounding box, layer), sul modello di
+   `ashImageUrl()` in `index.html`
+
