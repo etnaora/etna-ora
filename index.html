@@ -68,17 +68,73 @@
   html,body{margin:0;height:100%;background:var(--basalt);color:var(--ash);font-family:var(--font-body);}
   #map{position:absolute;inset:0;background:var(--basalt);filter:saturate(0.85) brightness(0.9);}
 
-  .ash-btn{
+  /* ---------- topic dock: pulsanti circolari collassabili ---------- */
+  .topic-dock{
     position:fixed; left:22px; bottom:94px; z-index:950;
-    display:flex; align-items:center; gap:8px;
-    background:rgba(20,18,15,0.6); backdrop-filter:blur(6px);
-    border:1px solid var(--hairline); border-radius:100px;
-    padding:9px 16px; cursor:pointer; pointer-events:auto;
-    font-family:var(--font-mono); font-size:11px; letter-spacing:0.05em;
-    color:var(--ash-muted); text-transform:uppercase;
+    display:flex; flex-direction:column-reverse; gap:10px;
+    pointer-events:none;
   }
-  .ash-btn:hover{color:var(--ash); border-color:rgba(237,230,219,0.25);}
-  .ash-dot{width:7px;height:7px;border-radius:50%;background:var(--sulfur); flex-shrink:0;}
+  .topic-btn{
+    pointer-events:auto; position:relative;
+    display:flex; align-items:center;
+    width:44px; height:44px; overflow:hidden;
+    background:rgba(20,18,15,0.65); backdrop-filter:blur(6px);
+    border:1px solid var(--hairline); border-radius:100px;
+    cursor:pointer; padding:0;
+    transition:width .28s cubic-bezier(.4,0,.2,1), border-color .2s ease, background .2s ease;
+  }
+  .topic-btn:hover, .topic-btn:focus-visible{
+    width:var(--topic-expand-w, 210px);
+    border-color:rgba(237,230,219,0.28);
+    background:rgba(20,18,15,0.85);
+  }
+  .topic-icon{
+    flex:0 0 44px; width:44px; height:44px;
+    display:flex; align-items:center; justify-content:center;
+    color:var(--ash-muted);
+  }
+  .topic-btn:hover .topic-icon, .topic-btn:focus-visible .topic-icon{color:var(--topic-accent, var(--ash));}
+  .topic-icon svg{width:19px; height:19px; stroke:currentColor; fill:none; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round;}
+  .topic-label{
+    font-family:var(--font-mono); font-size:11px; letter-spacing:0.04em;
+    color:var(--ash-muted); text-transform:uppercase; white-space:nowrap;
+    padding-right:16px;
+  }
+  .topic-dot{
+    position:absolute; top:8px; right:8px; width:6px; height:6px; border-radius:50%;
+    background:var(--topic-accent, var(--ash-muted));
+  }
+  .topic-btn:hover .topic-dot, .topic-btn:focus-visible .topic-dot{display:none;}
+
+  /* ---------- contenuto dei modali "topic" (gas, aeroporto, scienza, satellite) ---------- */
+  .topic-modal-body{font-family:var(--font-body); font-size:13px; color:var(--ash); line-height:1.6;}
+  .dev-badge{
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:var(--font-mono); font-size:10px; letter-spacing:0.06em; text-transform:uppercase;
+    color:var(--sulfur); border:1px solid color-mix(in srgb, var(--sulfur) 40%, transparent);
+    background:color-mix(in srgb, var(--sulfur) 10%, transparent);
+    padding:4px 10px; border-radius:100px; margin-bottom:12px;
+  }
+  .source-list{list-style:none; margin:12px 0 0; padding:0; display:flex; flex-direction:column; gap:8px;}
+  .source-list li{
+    border-top:1px solid var(--hairline); padding-top:8px;
+  }
+  .source-list a{color:var(--ash); text-decoration:none; font-weight:500;}
+  .source-list a:hover{text-decoration:underline;}
+  .source-list .src-note{display:block; color:var(--ash-muted); font-size:12px; margin-top:2px;}
+
+  /* ---------- toggle lingua IT/EN ---------- */
+  .lang-toggle{display:flex; gap:6px; align-items:center; margin-right:8px;}
+  .lang-btn{
+    pointer-events:auto;
+    min-width:30px; height:30px; padding:0 6px; border-radius:100px;
+    display:flex; align-items:center; justify-content:center;
+    background:rgba(20,18,15,0.55); border:1px solid var(--hairline);
+    color:var(--ash-muted); font-family:var(--font-mono); font-size:10px; letter-spacing:0.03em;
+    cursor:pointer; transition:color .2s ease, border-color .2s ease, background .2s ease;
+  }
+  .lang-btn:hover{color:var(--ash); border-color:rgba(237,230,219,0.25);}
+  .lang-btn.active{color:var(--basalt); background:var(--ash); border-color:var(--ash); font-weight:600;}
 
   .ash-slots{display:flex; flex-wrap:wrap; gap:6px; margin:14px 0;}
   .ash-slot{
@@ -256,27 +312,74 @@
 <div id="map"></div>
 
 <div class="topbar">
-  <div class="wordmark"><h1>Etna, ora</h1><span class="tagline">monitoraggio in tempo reale del vulcano</span></div>
-  <div class="status-pill"><span class="status-dot" id="statusDot"></span><span class="prefix">status attuale:</span> <span class="value" id="statusLabel">quiete</span></div>
-  <div class="topbar-right"><div class="info-btn" onclick="document.getElementById('infoModal').classList.add('open')">i</div></div>
+  <div class="wordmark"><h1>Etna, ora</h1><span class="tagline" data-i18n="tagline">monitoraggio in tempo reale del vulcano</span></div>
+  <div class="status-pill"><span class="status-dot" id="statusDot"></span><span class="prefix" data-i18n="status.prefix">status attuale:</span> <span class="value" id="statusLabel">quiete</span></div>
+  <div class="topbar-right" style="display:flex; align-items:center;">
+    <div class="lang-toggle" role="group" aria-label="Lingua / Language">
+      <button class="lang-btn" id="langBtnIt" onclick="setLang('it')">IT</button>
+      <button class="lang-btn" id="langBtnEn" onclick="setLang('en')">EN</button>
+    </div>
+    <div class="info-btn" onclick="document.getElementById('infoModal').classList.add('open')">i</div>
+  </div>
 </div>
 
 <noscript>
   <div style="max-width:640px;margin:80px auto;padding:0 20px;color:#EDE6DB;font-family:sans-serif;line-height:1.6;">
     <h1>Etna, ora — monitoraggio in tempo reale del vulcano</h1>
     <p>Questo sito raccoglie in un'unica mappa il tremore vulcanico, la sismicità recente, gli hotspot termici satellitari, le webcam ufficiali INGV e i comunicati di attività vulcanica dell'Etna, aggiornati automaticamente ogni 15-30 minuti dalle fonti ufficiali INGV Osservatorio Etneo e NASA FIRMS. Attiva JavaScript nel browser per visualizzare la mappa interattiva.</p>
+    <p><em>This site collects, on a single map, volcanic tremor, recent seismicity, satellite thermal hotspots, official INGV webcams and volcanic activity notices for Etna. Please enable JavaScript to view the interactive map.</em></p>
   </div>
 </noscript>
 
-<div class="ash-btn" id="ashBtn" onclick="openAshModal()">
-  <span class="ash-dot"></span> ricaduta cenere
+<div class="topic-dock" id="topicDock" style="--topic-expand-w:210px;">
+
+  <button class="topic-btn" data-topic="cenere" style="--topic-accent:var(--sulfur);" onclick="openAshModal()" aria-haspopup="dialog">
+    <span class="topic-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><path d="M6 15a4 4 0 0 1 .4-7.97A5.5 5.5 0 0 1 17 8.5 4 4 0 0 1 16.5 16H7"/><path d="M9 19v.01M12 19v.01M15 19v.01M9 22v.01M15 22v.01"/></svg>
+    </span>
+    <span class="topic-label" data-i18n="topic.cenere">Ricaduta cenere</span>
+    <span class="topic-dot"></span>
+  </button>
+
+  <button class="topic-btn" data-topic="gas" style="--topic-accent:#B9A0E8;" onclick="openModalById('gasModal')" aria-haspopup="dialog">
+    <span class="topic-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><path d="M4 20c1.5-2 1.5-4 0-6M9 20c1.5-3 1.5-6 0-9M14 20c1.5-4 1.5-8 0-12M19 20c1.5-5 1.5-9.5 0-14"/></svg>
+    </span>
+    <span class="topic-label" data-i18n="topic.gas">Gas in atmosfera</span>
+    <span class="topic-dot"></span>
+  </button>
+
+  <button class="topic-btn" data-topic="aeroporto" style="--topic-accent:#7FB6D9;" onclick="openModalById('aeroportoModal')" aria-haspopup="dialog">
+    <span class="topic-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><path d="M10.5 20.5 12 17l1.5 3.5-1.5-1-1.5 1zM3 15l7-2.2M21 15l-7-2.2M12 3v9.8M12 3l3 2 .3 4.4L21 15l-9-2.2L3 15l5.7-4.8L9 5.8 12 3z"/></svg>
+    </span>
+    <span class="topic-label" data-i18n="topic.aeroporto">Aeroporto Catania</span>
+    <span class="topic-dot"></span>
+  </button>
+
+  <button class="topic-btn" data-topic="scientifico" style="--topic-accent:var(--mist);" onclick="openModalById('scientificoModal')" aria-haspopup="dialog">
+    <span class="topic-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><path d="M2 12h4l2-7 3 14 2.5-10L15 15l1.5-3H22"/></svg>
+    </span>
+    <span class="topic-label" data-i18n="topic.scientifico">Dati scientifici</span>
+    <span class="topic-dot"></span>
+  </button>
+
+  <button class="topic-btn" data-topic="satellite" style="--topic-accent:var(--ember);" onclick="openModalById('satelliteModal')" aria-haspopup="dialog">
+    <span class="topic-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><path d="m14.5 3.5-3 3 6 6 3-3zM7 11l6 6-2 2a4.24 4.24 0 0 1-6-6zM3 21l3.5-3.5M17 3l1.5 1.5M20.5 6.5 22 8"/></svg>
+    </span>
+    <span class="topic-label" data-i18n="topic.satellite">Foto satellitari</span>
+    <span class="topic-dot"></span>
+  </button>
+
 </div>
 
 <div class="feed collapsed" id="feed">
   <div class="feed-head" onclick="toggleFeed()">
     <div>
-      <div class="label">Ultimo aggiornamento · fonte INGV Osservatorio Etneo</div>
-      <div class="headline" id="feedHeadline">Caricamento…</div>
+      <div class="label" data-i18n="feed.label">Ultimo aggiornamento · fonte INGV Osservatorio Etneo</div>
+      <div class="headline" id="feedHeadline" data-i18n="feed.loading">Caricamento…</div>
     </div>
     <div class="chev">▲</div>
   </div>
@@ -287,49 +390,293 @@
   <div class="modal">
     <h3 id="camTitle">—</h3>
     <div class="meta" id="camMeta">—</div>
-    <div class="frame" id="camFrame">stream non collegato (demo locale)</div>
+    <div class="frame" id="camFrame" data-i18n="cam.noStream">stream non collegato (demo locale)</div>
     <div style="margin-top:10px; font-size:12px;">
-      <a id="camFallbackLink" href="#" target="_blank" rel="noopener" style="color:var(--ash-muted);">Se l'immagine non appare, apri la webcam ufficiale INGV in una nuova scheda ↗</a>
+      <a id="camFallbackLink" href="#" target="_blank" rel="noopener" style="color:var(--ash-muted);" data-i18n="cam.fallback">Se l'immagine non appare, apri la webcam ufficiale INGV in una nuova scheda ↗</a>
     </div>
-    <button class="close" onclick="document.getElementById('camModal').classList.remove('open')">Chiudi</button>
+    <button class="close" onclick="document.getElementById('camModal').classList.remove('open')" data-i18n="btn.close">Chiudi</button>
   </div>
 </div>
 
 <div class="modal-backdrop" id="infoModal">
   <div class="modal">
-    <h3>Cos'è questo sito</h3>
-    <div class="meta" style="font-family:var(--font-body); font-size:13px; color:var(--ash); line-height:1.6;">
+    <h3 data-i18n="info.title">Cos'è questo sito</h3>
+    <div class="meta" style="font-family:var(--font-body); font-size:13px; color:var(--ash); line-height:1.6;" id="infoModalBody" data-i18n-html="info.body">
       "Etna, ora" raccoglie in un'unica mappa il tremore vulcanico, gli hotspot termici satellitari, le webcam di osservazione e le comunicazioni ufficiali dell'INGV Osservatorio Etneo.<br><br>
       <strong>Non è un servizio ufficiale di allerta.</strong> La fonte ufficiale per l'attività vulcanica e sismica resta l'INGV Osservatorio Etneo (ct.ingv.it) e la Protezione Civile.<br><br>
-      Dati: INGV Osservatorio Etneo, NASA FIRMS / MIROVA. Progetto indipendente, senza scopo di lucro.<br><br>
+      Dati: INGV Osservatorio Etneo, NASA FIRMS, VAAC Toulouse. Progetto indipendente, senza scopo di lucro.<br><br>
       <a href="privacy.html" style="color:var(--ash-muted);">Privacy</a> · <a href="cookie.html" style="color:var(--ash-muted);">Cookie</a>
     </div>
-    <button class="close" onclick="document.getElementById('infoModal').classList.remove('open')">Chiudi</button>
+    <button class="close" onclick="document.getElementById('infoModal').classList.remove('open')" data-i18n="btn.close">Chiudi</button>
   </div>
 </div>
 
 <div class="modal-backdrop" id="ashModal">
   <div class="modal" style="width:min(640px,92vw);">
-    <h3>Previsione ricaduta cenere vulcanica</h3>
-    <div class="meta" style="font-family:var(--font-body); font-size:13px; color:var(--ash); line-height:1.6; margin-bottom:4px;">
+    <h3 data-i18n="ash.title">Previsione ricaduta cenere vulcanica</h3>
+    <div class="meta" style="font-family:var(--font-body); font-size:13px; color:var(--ash); line-height:1.6; margin-bottom:4px;" data-i18n-html="ash.disclaimer">
       Simulazione giornaliera INGV della possibile dispersione e ricaduta al suolo dei prodotti piroclastici, basata su un ipotetico scenario eruttivo e sui venti reali del giorno. <strong>È un modello standard, generato ogni giorno indipendentemente da un'eruzione in corso</strong> — non è una previsione garantita, ma un'indicazione utile per capire la tendenza dei venti in quota.
     </div>
     <div class="ash-slots" id="ashSlots"></div>
     <div class="ash-image-wrap">
       <img id="ashImage" src="" alt="Mappa previsionale ricaduta cenere" loading="lazy" onerror="document.getElementById('ashImageError').style.display='block'">
     </div>
-    <div id="ashImageError" style="display:none; font-size:12px; color:var(--ash-muted); margin-top:8px;">
+    <div id="ashImageError" style="display:none; font-size:12px; color:var(--ash-muted); margin-top:8px;" data-i18n="ash.imgError">
       Immagine non ancora disponibile per questa fascia oraria (può volerci qualche minuto dopo l'orario di aggiornamento).
     </div>
     <div style="margin-top:10px; font-size:12px;">
-      <a id="ashSourceLink" href="https://www.ct.ingv.it/sezioniesterne/Ceneri/ceneri.php" target="_blank" rel="noopener" style="color:var(--ash-muted);">Fonte ufficiale INGV, tutti gli orari del giorno ↗</a>
+      <a id="ashSourceLink" href="https://www.ct.ingv.it/sezioniesterne/Ceneri/ceneri.php" target="_blank" rel="noopener" style="color:var(--ash-muted);" data-i18n="ash.sourceLink">Fonte ufficiale INGV, tutti gli orari del giorno ↗</a>
     </div>
-    <button class="close" onclick="document.getElementById('ashModal').classList.remove('open')">Chiudi</button>
+    <button class="close" onclick="document.getElementById('ashModal').classList.remove('open')" data-i18n="btn.close">Chiudi</button>
+  </div>
+</div>
+
+<!-- ============================================================
+     Nuovi tab "topic" — scheletro sessione 2026-08.
+     Nessuna pipeline dati live ancora collegata (vedi PROGETTO_NOTE.md
+     §12 per il piano completo di ognuno). Per ora ogni modale mostra un
+     badge "in sviluppo" onesto e link diretti alle fonti ufficiali già
+     verificate, così il contenuto è comunque reale e utile oggi stesso,
+     senza inventare dati o fingere un aggiornamento automatico che non
+     esiste ancora.
+     ============================================================ -->
+
+<div class="modal-backdrop" id="gasModal">
+  <div class="modal" style="width:min(560px,92vw);">
+    <div class="dev-badge" data-i18n="dev.badge">🛠 in sviluppo</div>
+    <h3 data-i18n="gas.title">Diffusione di gas in atmosfera</h3>
+    <div class="topic-modal-body" data-i18n-html="gas.body">
+      Mostreremo qui l'anidride solforosa (SO₂) e gli altri gas vulcanici dispersi in atmosfera. Il dato "certificato" più solido — quello della rete geochimica FLAME dell'INGV — viene però pubblicato dall'INGV con cadenza <strong>settimanale</strong>, non in tempo reale: non esiste un feed pubblico giornaliero altrettanto affidabile, quindi non lo simuleremo. Nel frattempo, ecco le fonti ufficiali dove trovare il dato oggi stesso.
+    </div>
+    <ul class="source-list">
+      <li>
+        <a href="https://www.ct.ingv.it/index.php/monitoraggio-e-sorveglianza/prodotti-del-monitoraggio/bollettini-settimanali-multidisciplinari" target="_blank" rel="noopener" data-i18n="gas.link1">Bollettini settimanali multidisciplinari INGV ↗</a>
+        <span class="src-note" data-i18n="gas.link1note">Flusso SO₂ (rete FLAME) e CO₂ dal suolo (rete EtnaGas), dato ufficiale INGV</span>
+      </li>
+      <li>
+        <a href="https://sacs.aeronomie.be" target="_blank" rel="noopener" data-i18n="gas.link2">SACS — Support to Aviation Control Service ↗</a>
+        <span class="src-note" data-i18n="gas.link2note">Monitoraggio satellitare quasi in tempo reale di SO₂ e cenere, progetto ESA/BIRA-IASB</span>
+      </li>
+    </ul>
+    <button class="close" onclick="document.getElementById('gasModal').classList.remove('open')" data-i18n="btn.close">Chiudi</button>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="aeroportoModal">
+  <div class="modal" style="width:min(560px,92vw);">
+    <div class="dev-badge" data-i18n="dev.badge">🛠 in sviluppo</div>
+    <h3 data-i18n="aeroporto.title">Impatto sull'aviazione — aeroporto di Catania</h3>
+    <div class="topic-modal-body" data-i18n-html="aeroporto.body">
+      Mostreremo qui il codice colore aviazione ufficiale (VAAC Toulouse, ente ICAO) quando la cenere vulcanica dell'Etna interessa lo spazio aereo. <strong>Non è lo stesso dato dello stato voli "aperto/chiuso" pubblicato da SAC</strong> — quel dato non è raggiungibile in modo automatico e gratuito — ma è la fonte ufficiale standard con cui l'aviazione civile valuta il rischio cenere, ed è un ottimo indicatore indiretto. Per lo stato esatto del proprio volo, il riferimento resta sempre la compagnia aerea o SAC.
+    </div>
+    <ul class="source-list">
+      <li>
+        <a href="https://vaac.meteo.fr/volcanoes/etna/" target="_blank" rel="noopener" data-i18n="aeroporto.link1">Bollettini VAAC Toulouse per l'Etna ↗</a>
+        <span class="src-note" data-i18n="aeroporto.link1note">Codice colore aviazione e avvisi di cenere in quota, ente ICAO ufficiale</span>
+      </li>
+      <li>
+        <a href="https://www.aeroporto.catania.it/" target="_blank" rel="noopener" data-i18n="aeroporto.link2">Aeroporto di Catania — sito ufficiale SAC ↗</a>
+        <span class="src-note" data-i18n="aeroporto.link2note">Stato reale di voli, arrivi e partenze</span>
+      </li>
+    </ul>
+    <button class="close" onclick="document.getElementById('aeroportoModal').classList.remove('open')" data-i18n="btn.close">Chiudi</button>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="scientificoModal">
+  <div class="modal" style="width:min(560px,92vw);">
+    <div class="dev-badge" data-i18n="dev.badge">🛠 in sviluppo</div>
+    <h3 data-i18n="scientifico.title">Deformazione del suolo e tremore vulcanico</h3>
+    <div class="topic-modal-body" data-i18n-html="scientifico.body">
+      Mostreremo qui grafici e tabelle su deformazione del suolo (reti GPS/clinometriche) e tremore vulcanico. Un vero calcolo del tremore in tempo reale richiede l'elaborazione di forme d'onda sismiche grezze (libreria ObsPy) — è il pezzo tecnicamente più complesso del progetto, rimandato deliberatamente. Nel frattempo, il dato certificato disponibile è quello del bollettino settimanale INGV.
+    </div>
+    <ul class="source-list">
+      <li>
+        <a href="https://www.ct.ingv.it/index.php/monitoraggio-e-sorveglianza/segnali-in-tempo-reale/tremore-vulcanico" target="_blank" rel="noopener" data-i18n="scientifico.link1">Tremore vulcanico in tempo reale — INGV ↗</a>
+        <span class="src-note" data-i18n="scientifico.link1note">Grafico ufficiale INGV, aggiornato quasi in tempo reale</span>
+      </li>
+      <li>
+        <a href="https://www.ct.ingv.it/index.php/monitoraggio-e-sorveglianza/prodotti-del-monitoraggio/bollettini-settimanali-multidisciplinari" target="_blank" rel="noopener" data-i18n="scientifico.link2">Bollettini settimanali multidisciplinari INGV ↗</a>
+        <span class="src-note" data-i18n="scientifico.link2note">Deformazione del suolo, sismicità e tremore, dato ufficiale INGV</span>
+      </li>
+    </ul>
+    <button class="close" onclick="document.getElementById('scientificoModal').classList.remove('open')" data-i18n="btn.close">Chiudi</button>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="satelliteModal">
+  <div class="modal" style="width:min(560px,92vw);">
+    <div class="dev-badge" data-i18n="dev.badge">🛠 in sviluppo</div>
+    <h3 data-i18n="satellite.title">Foto satellitari — termiche e reali</h3>
+    <div class="topic-modal-body" data-i18n-html="satellite.body">
+      Mostreremo qui le immagini satellitari più recenti del vulcano, sia nello spettro termico (per individuare colate laviche e anomalie) sia nel visibile. Solo fonti ufficiali NASA/ESA, con lo stesso approccio "URL diretta, zero backend" già usato per la ricaduta cenere.
+    </div>
+    <ul class="source-list">
+      <li>
+        <a href="https://worldview.earthdata.nasa.gov/?v=13.9,36.9,16.1,38.9&l=VIIRS_SNPP_CorrectedReflectance_TrueColor,VIIRS_SNPP_Thermal_Anomalies_375m_All,Coastlines&t=" target="_blank" rel="noopener" data-i18n="satellite.link1">NASA Worldview — Etna, vero colore e anomalie termiche ↗</a>
+        <span class="src-note" data-i18n="satellite.link1note">Immagini satellitari NASA aggiornate quotidianamente</span>
+      </li>
+      <li>
+        <a href="https://firms.modaps.eosdis.nasa.gov/map/#z:8;c:15.0,37.75;d:2025-01-01..2025-01-02" target="_blank" rel="noopener" data-i18n="satellite.link2">NASA FIRMS — mappa hotspot termici ↗</a>
+        <span class="src-note" data-i18n="satellite.link2note">Stessa fonte usata per lo stato attuale del sito</span>
+      </li>
+    </ul>
+    <button class="close" onclick="document.getElementById('satelliteModal').classList.remove('open')" data-i18n="btn.close">Chiudi</button>
   </div>
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
+  // ---------- i18n ----------
+  // Sistema minimo, senza dipendenze: dizionario piatto chiave→testo,
+  // applicato agli elementi con data-i18n (textContent) o data-i18n-html
+  // (innerHTML, per i pochi blocchi con <strong>/<br>/<a> interni). Le
+  // stringhe generate da JS (stato, tipi feed, formattazione date) leggono
+  // dallo stesso dizionario tramite t('chiave'). La lingua scelta è salvata
+  // in localStorage e riletta al prossimo caricamento.
+  const I18N = {
+    it: {
+      'tagline': 'monitoraggio in tempo reale del vulcano',
+      'status.prefix': 'status attuale:',
+      'status.quiete': 'quiete',
+      'status.moderata': 'attività',
+      'status.alta': 'allerta',
+      'status.staleSuffix': ' · dato non aggiornato',
+      'topic.cenere': 'Ricaduta cenere',
+      'topic.gas': 'Gas in atmosfera',
+      'topic.aeroporto': 'Aeroporto Catania',
+      'topic.scientifico': 'Dati scientifici',
+      'topic.satellite': 'Foto satellitari',
+      'feed.label': 'Ultimo aggiornamento · fonte INGV Osservatorio Etneo',
+      'feed.loading': 'Caricamento…',
+      'feed.pdf': 'PDF ufficiale ↗',
+      'type.tremore': 'Tremore',
+      'type.comunicato': 'Comunicato',
+      'type.sismicita': 'Sismicità',
+      'type.bollettino': 'Bollettino',
+      'cam.noStream': 'stream non collegato (demo locale)',
+      'cam.fallback': `Se l'immagine non appare, apri la webcam ufficiale INGV in una nuova scheda ↗`,
+      'cam.metaSep': ' · fonte: ',
+      'btn.close': 'Chiudi',
+      'info.title': `Cos'è questo sito`,
+      'info.body': `"Etna, ora" raccoglie in un'unica mappa il tremore vulcanico, gli hotspot termici satellitari, le webcam di osservazione e le comunicazioni ufficiali dell'INGV Osservatorio Etneo.<br><br><strong>Non è un servizio ufficiale di allerta.</strong> La fonte ufficiale per l'attività vulcanica e sismica resta l'INGV Osservatorio Etneo (ct.ingv.it) e la Protezione Civile.<br><br>Dati: INGV Osservatorio Etneo, NASA FIRMS, VAAC Toulouse. Progetto indipendente, senza scopo di lucro.<br><br><a href="privacy.html" style="color:var(--ash-muted);">Privacy</a> · <a href="cookie.html" style="color:var(--ash-muted);">Cookie</a>`,
+      'ash.title': 'Previsione ricaduta cenere vulcanica',
+      'ash.disclaimer': `Simulazione giornaliera INGV della possibile dispersione e ricaduta al suolo dei prodotti piroclastici, basata su un ipotetico scenario eruttivo e sui venti reali del giorno. <strong>È un modello standard, generato ogni giorno indipendentemente da un'eruzione in corso</strong> — non è una previsione garantita, ma un'indicazione utile per capire la tendenza dei venti in quota.`,
+      'ash.imgError': `Immagine non ancora disponibile per questa fascia oraria (può volerci qualche minuto dopo l'orario di aggiornamento).`,
+      'ash.sourceLink': 'Fonte ufficiale INGV, tutti gli orari del giorno ↗',
+      'dev.badge': '🛠 in sviluppo',
+      'gas.title': 'Diffusione di gas in atmosfera',
+      'gas.body': `Mostreremo qui l'anidride solforosa (SO₂) e gli altri gas vulcanici dispersi in atmosfera. Il dato "certificato" più solido — quello della rete geochimica FLAME dell'INGV — viene però pubblicato dall'INGV con cadenza <strong>settimanale</strong>, non in tempo reale: non esiste un feed pubblico giornaliero altrettanto affidabile, quindi non lo simuleremo. Nel frattempo, ecco le fonti ufficiali dove trovare il dato oggi stesso.`,
+      'gas.link1': 'Bollettini settimanali multidisciplinari INGV ↗',
+      'gas.link1note': 'Flusso SO₂ (rete FLAME) e CO₂ dal suolo (rete EtnaGas), dato ufficiale INGV',
+      'gas.link2': 'SACS — Support to Aviation Control Service ↗',
+      'gas.link2note': 'Monitoraggio satellitare quasi in tempo reale di SO₂ e cenere, progetto ESA/BIRA-IASB',
+      'aeroporto.title': `Impatto sull'aviazione — aeroporto di Catania`,
+      'aeroporto.body': `Mostreremo qui il codice colore aviazione ufficiale (VAAC Toulouse, ente ICAO) quando la cenere vulcanica dell'Etna interessa lo spazio aereo. <strong>Non è lo stesso dato dello stato voli "aperto/chiuso" pubblicato da SAC</strong> — quel dato non è raggiungibile in modo automatico e gratuito — ma è la fonte ufficiale standard con cui l'aviazione civile valuta il rischio cenere, ed è un ottimo indicatore indiretto. Per lo stato esatto del proprio volo, il riferimento resta sempre la compagnia aerea o SAC.`,
+      'aeroporto.link1': `Bollettini VAAC Toulouse per l'Etna ↗`,
+      'aeroporto.link1note': 'Codice colore aviazione e avvisi di cenere in quota, ente ICAO ufficiale',
+      'aeroporto.link2': 'Aeroporto di Catania — sito ufficiale SAC ↗',
+      'aeroporto.link2note': 'Stato reale di voli, arrivi e partenze',
+      'scientifico.title': 'Deformazione del suolo e tremore vulcanico',
+      'scientifico.body': `Mostreremo qui grafici e tabelle su deformazione del suolo (reti GPS/clinometriche) e tremore vulcanico. Un vero calcolo del tremore in tempo reale richiede l'elaborazione di forme d'onda sismiche grezze (libreria ObsPy) — è il pezzo tecnicamente più complesso del progetto, rimandato deliberatamente. Nel frattempo, il dato certificato disponibile è quello del bollettino settimanale INGV.`,
+      'scientifico.link1': 'Tremore vulcanico in tempo reale — INGV ↗',
+      'scientifico.link1note': 'Grafico ufficiale INGV, aggiornato quasi in tempo reale',
+      'scientifico.link2': 'Bollettini settimanali multidisciplinari INGV ↗',
+      'scientifico.link2note': 'Deformazione del suolo, sismicità e tremore, dato ufficiale INGV',
+      'satellite.title': 'Foto satellitari — termiche e reali',
+      'satellite.body': `Mostreremo qui le immagini satellitari più recenti del vulcano, sia nello spettro termico (per individuare colate laviche e anomalie) sia nel visibile. Solo fonti ufficiali NASA/ESA, con lo stesso approccio "URL diretta, zero backend" già usato per la ricaduta cenere.`,
+      'satellite.link1': 'NASA Worldview — Etna, vero colore e anomalie termiche ↗',
+      'satellite.link1note': 'Immagini satellitari NASA aggiornate quotidianamente',
+      'satellite.link2': 'NASA FIRMS — mappa hotspot termici ↗',
+      'satellite.link2note': 'Stessa fonte usata per lo stato attuale del sito',
+    },
+    en: {
+      'tagline': 'real-time monitoring of the volcano',
+      'status.prefix': 'current status:',
+      'status.quiete': 'calm',
+      'status.moderata': 'active',
+      'status.alta': 'alert',
+      'status.staleSuffix': ' · data not up to date',
+      'topic.cenere': 'Ashfall forecast',
+      'topic.gas': 'Gas in the atmosphere',
+      'topic.aeroporto': 'Catania airport',
+      'topic.scientifico': 'Scientific data',
+      'topic.satellite': 'Satellite photos',
+      'feed.label': 'Latest update · source: INGV Osservatorio Etneo',
+      'feed.loading': 'Loading…',
+      'feed.pdf': 'Official PDF ↗',
+      'type.tremore': 'Tremor',
+      'type.comunicato': 'Notice',
+      'type.sismicita': 'Seismicity',
+      'type.bollettino': 'Bulletin',
+      'cam.noStream': 'stream not connected (local demo)',
+      'cam.fallback': 'If the image doesn\u2019t load, open the official INGV webcam in a new tab ↗',
+      'cam.metaSep': ' · source: ',
+      'btn.close': 'Close',
+      'info.title': 'About this site',
+      'info.body': `"Etna, ora" brings together, on a single map, volcanic tremor, satellite thermal hotspots, observation webcams and official INGV Osservatorio Etneo communications.<br><br><strong>This is not an official alert service.</strong> The official source for volcanic and seismic activity remains INGV Osservatorio Etneo (ct.ingv.it) and Italy's Civil Protection Department.<br><br>Data: INGV Osservatorio Etneo, NASA FIRMS, VAAC Toulouse. Independent, non-profit project.<br><br><a href="privacy.html" style="color:var(--ash-muted);">Privacy</a> · <a href="cookie.html" style="color:var(--ash-muted);">Cookies</a>`,
+      'ash.title': 'Volcanic ashfall forecast',
+      'ash.disclaimer': `Daily INGV simulation of the possible dispersion and fallout of pyroclastic products, based on a hypothetical eruptive scenario and the actual winds of the day. <strong>It is a standard model, generated every day regardless of whether an eruption is under way</strong> — it is not a guaranteed forecast, but a useful indication of upper-level wind trends.`,
+      'ash.imgError': 'Image not yet available for this time slot (it can take a few minutes after the update time).',
+      'ash.sourceLink': 'Official INGV source, all times of day ↗',
+      'dev.badge': '🛠 in development',
+      'gas.title': 'Gas dispersion in the atmosphere',
+      'gas.body': `Here we will show sulphur dioxide (SO₂) and other volcanic gases dispersed in the atmosphere. The most solid "certified" figure — from INGV's FLAME geochemical network — is published by INGV on a <strong>weekly</strong> basis, not in real time: there is no equally reliable public daily feed, so we won't fake one. In the meantime, here are the official sources where you can find the data today.`,
+      'gas.link1': 'INGV weekly multidisciplinary bulletins ↗',
+      'gas.link1note': 'SO₂ flux (FLAME network) and soil CO₂ (EtnaGas network), official INGV data',
+      'gas.link2': 'SACS — Support to Aviation Control Service ↗',
+      'gas.link2note': 'Near-real-time satellite monitoring of SO₂ and ash, ESA/BIRA-IASB project',
+      'aeroporto.title': 'Impact on aviation — Catania airport',
+      'aeroporto.body': `Here we will show the official aviation colour code (VAAC Toulouse, an ICAO body) when Etna's volcanic ash affects airspace. <strong>This is not the same as the open/closed flight status published by SAC</strong> — that data can't be fetched automatically for free — but it's the standard official source civil aviation uses to assess ash risk, and a good indirect indicator. For your exact flight status, always check with your airline or SAC.`,
+      'aeroporto.link1': 'VAAC Toulouse bulletins for Etna ↗',
+      'aeroporto.link1note': 'Aviation colour code and ash-in-airspace advisories, official ICAO body',
+      'aeroporto.link2': 'Catania airport — official SAC website ↗',
+      'aeroporto.link2note': 'Real flight, arrival and departure status',
+      'scientifico.title': 'Ground deformation and volcanic tremor',
+      'scientifico.body': `Here we will show charts and tables on ground deformation (GPS/tilt networks) and volcanic tremor. A genuine real-time tremor calculation requires processing raw seismic waveforms (ObsPy library) — it's the technically most complex piece of the project, deliberately postponed. In the meantime, the certified data available is from the INGV weekly bulletin.`,
+      'scientifico.link1': 'Volcanic tremor in real time — INGV ↗',
+      'scientifico.link1note': 'Official INGV chart, updated near real-time',
+      'scientifico.link2': 'INGV weekly multidisciplinary bulletins ↗',
+      'scientifico.link2note': 'Ground deformation, seismicity and tremor, official INGV data',
+      'satellite.title': 'Satellite photos — thermal and true colour',
+      'satellite.body': `Here we will show the most recent satellite images of the volcano, both in the thermal spectrum (to spot lava flows and anomalies) and in true colour. Official NASA/ESA sources only, with the same "direct URL, zero backend" approach already used for the ashfall forecast.`,
+      'satellite.link1': 'NASA Worldview — Etna, true colour and thermal anomalies ↗',
+      'satellite.link1note': 'NASA satellite imagery updated daily',
+      'satellite.link2': 'NASA FIRMS — thermal hotspot map ↗',
+      'satellite.link2note': 'Same source used for the site\u2019s current status',
+    },
+  };
+
+  let currentLang = localStorage.getItem('etnaora_lang') || 'it';
+  function t(key){ return (I18N[currentLang] && I18N[currentLang][key]) ?? key; }
+
+  function setLang(lang){
+    if(!I18N[lang]) return;
+    currentLang = lang;
+    localStorage.setItem('etnaora_lang', lang);
+    document.documentElement.lang = lang;
+
+    document.querySelectorAll('[data-i18n]').forEach(el=>{
+      el.textContent = t(el.getAttribute('data-i18n'));
+    });
+    document.querySelectorAll('[data-i18n-html]').forEach(el=>{
+      el.innerHTML = t(el.getAttribute('data-i18n-html'));
+    });
+
+    document.getElementById('langBtnIt').classList.toggle('active', lang === 'it');
+    document.getElementById('langBtnEn').classList.toggle('active', lang === 'en');
+
+    // ricostruisce i blocchi generati via JS (non toccati dagli attributi
+    // data-i18n sopra), riusando l'ultimo dato ricevuto se già caricato
+    if(window.lastHotspot) renderStatus(window.lastHotspot);
+    if(window.lastFeedItems) renderFeed(window.lastFeedItems);
+    if(window.lastCam) renderCamMeta(window.lastCam);
+  }
+
+  function openModalById(id){
+    document.getElementById(id).classList.add('open');
+  }
+
   // ---------- mappa ----------
   const map = L.map('map', {
     zoomControl:false,
@@ -356,26 +703,36 @@
     fetch('data/hotspot.json' + cacheBuster(), {cache:'no-store'}).then(r=>r.json()),
     fetch('data/feed.json' + cacheBuster(), {cache:'no-store'}).then(r=>r.json()),
   ]).then(([webcam, hotspot, feed])=>{
-    applyHotspotStatus(hotspot);
+    window.lastHotspot = hotspot;
+    window.lastFeedItems = feed.items;
+    renderStatus(hotspot);
     renderWebcams(webcam.cameras);
     renderFeed(feed.items);
+    placeCraterMarker(hotspot);
+    setLang(currentLang); // applica la lingua salvata anche ai blocchi appena renderizzati
   }).catch(err=>{
     console.error('Errore caricamento dati locali', err);
   });
 
   // ---------- stato termico → colore dinamico dell'accento ----------
-  function applyHotspotStatus(hotspot){
+  // hotspot.stale (vedi fetch_hotspot.py, fix 2026-08): se true, l'ultimo
+  // fetch da NASA FIRMS è fallito e questo è l'ultimo dato buono noto, non
+  // quello di adesso — lo dichiariamo in etichetta invece di mostrarlo come
+  // fresco.
+  function renderStatus(hotspot){
     const root = document.documentElement;
-    const dot = document.getElementById('statusDot');
     const label = document.getElementById('statusLabel');
-    let accent = '#5C7A8A', text = 'quiete';
-    if(hotspot.status === 'moderata'){ accent = '#E8541E'; text = 'attività'; }
-    if(hotspot.status === 'alta'){ accent = '#FFD166'; text = 'allerta'; }
+    let accent = '#5C7A8A', key = 'status.quiete';
+    if(hotspot.status === 'moderata'){ accent = '#E8541E'; key = 'status.moderata'; }
+    if(hotspot.status === 'alta'){ accent = '#FFD166'; key = 'status.alta'; }
     root.style.setProperty('--accent', accent);
-    label.textContent = text;
+    label.textContent = t(key) + (hotspot.stale ? t('status.staleSuffix') : '');
+  }
 
-    // marker pulsante sul cratere sommitale
-    L.marker([37.751,14.9934], {
+  let craterMarker = null;
+  function placeCraterMarker(hotspot){
+    if(craterMarker) map.removeLayer(craterMarker);
+    craterMarker = L.marker([37.751,14.9934], {
       icon: L.divIcon({className:'', html:'<div class="crater-marker"></div>', iconSize:[16,16]})
     }).addTo(map).bindPopup(hotspot.notes || '');
   }
@@ -393,9 +750,10 @@
   }
 
   // ---------- feed (finestra fissa, la più recente in evidenza) ----------
-  const TYPE_LABEL = {tremore:'Tremore', comunicato:'Comunicato', sismicita:'Sismicità', bollettino:'Bollettino'};
+  function typeLabel(type){ return t('type.' + type) !== ('type.' + type) ? t('type.' + type) : type; }
 
   function renderFeed(items){
+    window.lastFeedItems = items;
     const sorted = [...items].sort((a,b)=> new Date(b.timestamp) - new Date(a.timestamp)).slice(0,25);
     if(sorted.length){
       document.getElementById('feedHeadline').textContent = sorted[0].title;
@@ -405,8 +763,8 @@
       <div class="feed-item">
         <div class="time">${formatTime(it.timestamp)}</div>
         <div class="body">
-          <div class="title"><span class="tag ${it.type}">${TYPE_LABEL[it.type]||it.type}</span>${it.title}</div>
-          <div class="summary">${it.summary}${it.url ? ` · <a href="${it.url}" target="_blank" rel="noopener" style="color:var(--ash-muted);">PDF ufficiale ↗</a>` : ''}</div>
+          <div class="title"><span class="tag ${it.type}">${typeLabel(it.type)}</span>${it.title}</div>
+          <div class="summary">${it.summary}${it.url ? ` · <a href="${it.url}" target="_blank" rel="noopener" style="color:var(--ash-muted);">${t('feed.pdf')}</a>` : ''}</div>
         </div>
       </div>
     `).join('');
@@ -414,7 +772,8 @@
 
   function formatTime(ts){
     const d = new Date(ts);
-    return d.toLocaleDateString('it-IT',{day:'2-digit',month:'2-digit'}) + ' ' + d.toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'});
+    const locale = currentLang === 'en' ? 'en-GB' : 'it-IT';
+    return d.toLocaleDateString(locale,{day:'2-digit',month:'2-digit'}) + ' ' + d.toLocaleTimeString(locale,{hour:'2-digit',minute:'2-digit'});
   }
 
   function toggleFeed(){
@@ -470,9 +829,9 @@
     document.getElementById('ashModal').classList.add('open');
   }
 
-  function openCamModal(cam){
+  function renderCamMeta(cam){
     document.getElementById('camTitle').textContent = cam.name;
-    document.getElementById('camMeta').textContent = cam.position + ' · fonte: ' + cam.source;
+    document.getElementById('camMeta').textContent = cam.position + t('cam.metaSep') + cam.source;
     const frame = document.getElementById('camFrame');
     const fallback = document.getElementById('camFallbackLink');
     if(cam.stream_url){
@@ -480,12 +839,20 @@
       fallback.href = cam.stream_url;
       fallback.style.display = 'block';
     } else {
-      frame.textContent = 'stream non collegato (demo locale)';
+      frame.textContent = t('cam.noStream');
       fallback.style.display = 'none';
     }
+  }
+
+  function openCamModal(cam){
+    window.lastCam = cam;
+    renderCamMeta(cam);
     document.getElementById('camModal').classList.add('open');
   }
 
+  // applica la lingua salvata subito, prima ancora che i dati remoti
+  // arrivino, così wordmark/status-pill/modali statici sono già corretti
+  setLang(currentLang);
 </script>
 
 </body>
