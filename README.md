@@ -73,7 +73,15 @@ grezzo) è tecnicamente più pesante — richiede scaricare forme d'onda e
 processarle con una libreria come ObsPy — e lo affrontiamo come step
 successivo, separato da questo.
 
-## Prima di comprare dominio/hosting
+## ## SEO — da aggiornare quando si passa al dominio proprio
+
+Oggi `index.html` (tag `canonical`, Open Graph, Twitter Card, JSON-LD) e
+`robots.txt`/`sitemap.xml` puntano tutti a `https://etnaora.github.io/etna-ora/`.
+Quando il sito passerà su un dominio proprio (es. `etna-ora.it`), questi
+riferimenti vanno sostituiti ovunque con il nuovo indirizzo — altrimenti
+Google continuerà a considerare l'indirizzo GitHub come quello "ufficiale".
+
+Prima di comprare dominio/hosting
 
 - [ ] Sostituire i placeholder in `privacy.html` e `cookie.html` con dati reali (titolare, email) o generarli via Iubenda free tier
 - [ ] Verificare disponibilità dominio (.it e .com)
