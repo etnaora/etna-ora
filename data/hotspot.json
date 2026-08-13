@@ -1,7 +1,10 @@
 {
-  "generated_at": "2026-07-06T09:00:00Z",
-  "source": "NASA FIRMS / MIROVA — dati mock per test locale",
-  "status": "quiete",
-  "notes": "Nessuna anomalia termica significativa rilevata nelle ultime 24 ore.",
-  "last_significant_event": "2026-06-30T03:15:00Z"
+  "generated_at": "2026-08-13T12:54:34.433821+00:00",
+  "source": "NASA FIRMS (VIIRS_SNPP_NRT) — https://firms.modaps.eosdis.nasa.gov",
+  "status": "alta",
+  "notes": "Anomalia termica significativa rilevata dal satellite (21 hotspot, FRP massimo 7.1 MW).",
+  "last_significant_event": "2026-08-13T12:54:34.433821+00:00",
+  "hotspot_count_24h": 21,
+  "stale": false,
+  "last_success_at": "2026-08-13T12:54:34.433821+00:00"
 }
