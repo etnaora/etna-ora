@@ -1,10 +1,11 @@
 {
-  "generated_at": "2026-08-14T09:13:29.109871+00:00",
-  "source": "NASA FIRMS (VIIRS_SNPP_NRT) — https://firms.modaps.eosdis.nasa.gov",
+  "generated_at": "2026-08-14T09:00:00Z",
+  "source": "NASA FIRMS (VIIRS_SNPP_NRT) — dati mock per test locale",
   "status": "quiete",
-  "notes": "Nessuna anomalia termica rilevata dal satellite nelle ultime 24 ore.",
-  "last_significant_event": null,
+  "notes": "Nessuna anomalia termica significativa rilevata nelle ultime 24 ore.",
+  "last_significant_event": "2026-06-30T03:15:00Z",
   "hotspot_count_24h": 0,
+  "points": [],
   "stale": false,
-  "last_success_at": "2026-08-14T09:13:29.109871+00:00"
+  "last_success_at": "2026-08-14T09:00:00Z"
 }
