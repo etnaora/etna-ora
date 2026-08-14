@@ -596,3 +596,73 @@ FIRMS con lat/lon per ogni hotspot, basterebbe scrivere l'elenco (non solo
 lo stato aggregato) in `hotspot.json` e disegnare un marker per punto in
 `index.html`. Non fatto in questa sessione per restare nello scope delle
 5 richieste; buon prossimo passo se si vuole più precisione.
+
+---
+
+## 14. Sessione 2026-08 (3) — punti FIRMS reali al posto del cerchio
+
+Implementata l'opzione "ideale" annotata a fine § 13.5: la mappa ora mostra
+i **veri punti di rilevazione satellitare NASA FIRMS**, non solo un'area
+indicativa. Il cerchio ampio di § 13.5 **non è stato rimosso**: resta come
+fallback automatico quando non ci sono punti da mostrare (dato mock,
+giornata di vera quiete satellitare, o pipeline non ancora aggiornata).
+
+### 14.1 `fetch_hotspot.py` — due bounding box distinte
+- **`AREA`** (usata per la chiamata a FIRMS): allargata da
+  `14.95,37.70,15.05,37.80` a **`14.90,37.68,15.15,37.82`**, per includere
+  anche l'alta Valle del Bove nel raggio di osservazione, non solo i
+  crateri sommitali.
+- **`NARROW_BOUNDS`**: nuova costante, identica alla vecchia `AREA` stretta
+  di prima. Usata **solo** per filtrare quali punti contano ai fini dello
+  stato (quiete/moderata/alta) — la logica delle soglie (§ 5.3) è
+  **invariata**, cambia solo l'input: prima tutti i punti nella bbox
+  stretta, ora la stessa identica bbox stretta ma isolata da quella più
+  larga usata per il fetch. **Perché la separazione è necessaria**: un
+  incendio boschivo sui fianchi bassi del vulcano (dentro la `AREA` larga,
+  fuori dalla `NARROW_BOUNDS`) non deve poter far scattare un falso stato
+  "alta" — VIIRS non distingue anomalie termiche vulcaniche da quelle di
+  un incendio, la distinzione la facciamo noi via posizione.
+- **`hotspot.json` ha ora un campo `"points"`**: elenco (max 80,
+  `MAX_POINTS_SALVATI`, ordinato per FRP decrescente) di
+  `{lat, lng, frp, confidence, acq_date, acq_time}` per **tutti** i punti
+  nella bbox larga (quindi include anche eventuali bocche in Valle del
+  Bove, anche se non hanno influenza sullo stato aggregato).
+- **Non richiede una nuova API key o un nuovo endpoint**: stesso servizio
+  FIRMS area-CSV già in uso, semplicemente si legge e si salva anche
+  `latitude`/`longitude`/`frp`/`confidence`/`acq_date`/`acq_time` di ogni
+  riga invece di scartarle dopo aver calcolato solo l'aggregato.
+
+### 14.2 `index.html` — rendering punti + fallback
+`placeCraterMarker(hotspot)` ora:
+- se `hotspot.points` non è vuoto → disegna un `L.circleMarker` per punto
+  (classe CSS `hotspot-point`, pulsazione più rapida/marcata di prima),
+  raggio in pixel scalato (contenuto, min 5 / max 15px) sul FRP via
+  `pointRadiusPx()`, popup con FRP/affidabilità/orario di rilevazione
+  (nuove chiavi i18n `hotspot.popup.*` e `hotspot.confidence.*`, IT/EN);
+- altrimenti → ricade sul cerchio `L.circle` di § 13.5 (classe CSS
+  `hotspot-zone`, invariata), con lo stesso centro/raggio di prima
+  (`HOTSPOT_ZONE_CENTER`, `HOTSPOT_ZONE_RADIUS_M`).
+- I layer disegnati (punti o cerchio) sono ora tracciati in un array
+  `hotspotLayers` e ripuliti insieme (`clearHotspotLayers()`) ad ogni
+  refresh, invece di una singola variabile `hotspotZone` — necessario per
+  poter avere N marker invece di uno solo.
+- Richiamata anche da `setLang()` (non solo dal caricamento dati iniziale),
+  così il testo del popup segue la lingua selezionata anche senza
+  ricaricare i dati.
+
+### 14.3 Cosa NON è cambiato
+- Le soglie di stato (`SOGLIA_ALTA_FRP=15`, `SOGLIA_ALTA_COUNT=6`) e la
+  loro logica: invariate, vedi § 5.3.
+- Il fix IPv4, il mirror FIRMS, la gestione `stale`: invariati, vedi § 5.3/5.4.
+- `data/hotspot.json` mock locale: aggiornato allo schema nuovo
+  (`hotspot_count_24h`, `points: []`, `stale`, `last_success_at`) per
+  restare testabile in locale senza chiave FIRMS — con `points` vuoto
+  mostra correttamente il cerchio di fallback.
+
+### 14.4 Prossimo passo naturale, se si vuole ancora più fedeltà
+Il colore di ogni punto oggi è unico (`--accent`, lo stesso della pillola
+di stato). Si potrebbe differenziare il colore/l'intensità del singolo
+punto in base al proprio FRP individuale (non solo alla soglia aggregata),
+per distinguere a colpo d'occhio un'anomalia debole da una forte anche
+quando lo stato generale è "moderata". Non fatto in questa sessione,
+annotato come possibile rifinitura.
