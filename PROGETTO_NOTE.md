@@ -467,3 +467,40 @@ questa sessione. Nessuna pipeline Python/workflow ancora creata per loro.
    Etna con parametri fissi (bounding box, layer), sul modello di
    `ashImageUrl()` in `index.html`
 
+### 12.5 Correzioni dopo il primo test in produzione (stesso giorno)
+
+**Push rifiutato tra workflow concorrenti (bug reale, osservato in
+produzione)**: `update-comunicati.yml` è fallito con
+`! [rejected] main -> main (fetch first)` perché nel frattempo un altro
+workflow (probabilmente `update-feed.yml`, che scrive sullo stesso
+`data/feed.json`) aveva già pushato. Lo sfasamento dei cron (già presente,
+vedi §5) riduce la probabilità ma non la azzera, perché GitHub Actions può
+ritardare l'avvio di un run di qualche minuto sotto carico. **Fix**: tutti e
+tre i workflow (`update-comunicati.yml`, `update-feed.yml`,
+`update-hotspot.yml`) ora hanno uno step di commit con **retry**: se il
+push viene rifiutato, fanno `git pull --rebase origin main` e riprovano,
+fino a 5 volte con una breve pausa casuale (3-13s) tra un tentativo e
+l'altro. Se dopo 5 tentativi fallisce ancora, il job fallisce visibilmente
+(email di notifica) invece di perdere l'aggiornamento in silenzio.
+
+**Contenuto dei 4 nuovi tab oscurato su richiesta esplicita**: i modali
+`gasModal`/`aeroportoModal`/`scientificoModal`/`satelliteModal`, che nella
+prima versione mostravano già una spiegazione + link alle fonti ufficiali,
+ora mostrano solo titolo + badge "🛠 coming soon", **senza alcun
+riferimento a fonti o dettagli**, finché ogni funzionalità non sarà
+sviluppata e testata. Le fonti individuate in §12.4 restano valide come
+piano per l'implementazione futura, semplicemente non sono più esposte
+nell'interfaccia nel frattempo. Chiavi i18n `gas.*`/`aeroporto.*`/
+`scientifico.*`/`satellite.*` (title/body/link) rimosse dal dizionario e
+sostituite da un'unica chiave condivisa `comingSoon.badge`.
+
+**Riordino e rinomina pulsanti del dock**: ordine dall'alto verso il basso
+ora `ricaduta cenere → gas in atmosfera → dati scientifici al suolo → foto
+satellitari → aeroporto Catania`. Nota tecnica per chi tocca `#topicDock`:
+il container usa `flex-direction: column-reverse`, quindi **l'ordine dei
+`<button>` nel sorgente HTML è l'ordine visivo dal basso verso l'alto**
+(il primo `<button>` nel codice appare più in basso). L'etichetta del tab
+scientifico è stata rinominata da "Dati scientifici" a **"Dati scientifici
+al suolo"** (`topic.scientifico` in entrambe le lingue) — il titolo del
+modale (ora comunque nascosto dietro "coming soon") non è stato aggiornato
+di conseguenza, da allineare quando si svilupperà quel tab.

@@ -333,11 +333,27 @@
 
 <div class="topic-dock" id="topicDock" style="--topic-expand-w:210px;">
 
-  <button class="topic-btn" data-topic="cenere" style="--topic-accent:var(--sulfur);" onclick="openAshModal()" aria-haspopup="dialog">
+  <button class="topic-btn" data-topic="aeroporto" style="--topic-accent:#7FB6D9;" onclick="openModalById('aeroportoModal')" aria-haspopup="dialog">
     <span class="topic-icon" aria-hidden="true">
-      <svg viewBox="0 0 24 24"><path d="M6 15a4 4 0 0 1 .4-7.97A5.5 5.5 0 0 1 17 8.5 4 4 0 0 1 16.5 16H7"/><path d="M9 19v.01M12 19v.01M15 19v.01M9 22v.01M15 22v.01"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M10.5 20.5 12 17l1.5 3.5-1.5-1-1.5 1zM3 15l7-2.2M21 15l-7-2.2M12 3v9.8M12 3l3 2 .3 4.4L21 15l-9-2.2L3 15l5.7-4.8L9 5.8 12 3z"/></svg>
     </span>
-    <span class="topic-label" data-i18n="topic.cenere">Ricaduta cenere</span>
+    <span class="topic-label" data-i18n="topic.aeroporto">Aeroporto Catania</span>
+    <span class="topic-dot"></span>
+  </button>
+
+  <button class="topic-btn" data-topic="satellite" style="--topic-accent:var(--ember);" onclick="openModalById('satelliteModal')" aria-haspopup="dialog">
+    <span class="topic-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><path d="m14.5 3.5-3 3 6 6 3-3zM7 11l6 6-2 2a4.24 4.24 0 0 1-6-6zM3 21l3.5-3.5M17 3l1.5 1.5M20.5 6.5 22 8"/></svg>
+    </span>
+    <span class="topic-label" data-i18n="topic.satellite">Foto satellitari</span>
+    <span class="topic-dot"></span>
+  </button>
+
+  <button class="topic-btn" data-topic="scientifico" style="--topic-accent:var(--mist);" onclick="openModalById('scientificoModal')" aria-haspopup="dialog">
+    <span class="topic-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><path d="M2 12h4l2-7 3 14 2.5-10L15 15l1.5-3H22"/></svg>
+    </span>
+    <span class="topic-label" data-i18n="topic.scientifico">Dati scientifici al suolo</span>
     <span class="topic-dot"></span>
   </button>
 
@@ -349,27 +365,11 @@
     <span class="topic-dot"></span>
   </button>
 
-  <button class="topic-btn" data-topic="aeroporto" style="--topic-accent:#7FB6D9;" onclick="openModalById('aeroportoModal')" aria-haspopup="dialog">
+  <button class="topic-btn" data-topic="cenere" style="--topic-accent:var(--sulfur);" onclick="openAshModal()" aria-haspopup="dialog">
     <span class="topic-icon" aria-hidden="true">
-      <svg viewBox="0 0 24 24"><path d="M10.5 20.5 12 17l1.5 3.5-1.5-1-1.5 1zM3 15l7-2.2M21 15l-7-2.2M12 3v9.8M12 3l3 2 .3 4.4L21 15l-9-2.2L3 15l5.7-4.8L9 5.8 12 3z"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M6 15a4 4 0 0 1 .4-7.97A5.5 5.5 0 0 1 17 8.5 4 4 0 0 1 16.5 16H7"/><path d="M9 19v.01M12 19v.01M15 19v.01M9 22v.01M15 22v.01"/></svg>
     </span>
-    <span class="topic-label" data-i18n="topic.aeroporto">Aeroporto Catania</span>
-    <span class="topic-dot"></span>
-  </button>
-
-  <button class="topic-btn" data-topic="scientifico" style="--topic-accent:var(--mist);" onclick="openModalById('scientificoModal')" aria-haspopup="dialog">
-    <span class="topic-icon" aria-hidden="true">
-      <svg viewBox="0 0 24 24"><path d="M2 12h4l2-7 3 14 2.5-10L15 15l1.5-3H22"/></svg>
-    </span>
-    <span class="topic-label" data-i18n="topic.scientifico">Dati scientifici</span>
-    <span class="topic-dot"></span>
-  </button>
-
-  <button class="topic-btn" data-topic="satellite" style="--topic-accent:var(--ember);" onclick="openModalById('satelliteModal')" aria-haspopup="dialog">
-    <span class="topic-icon" aria-hidden="true">
-      <svg viewBox="0 0 24 24"><path d="m14.5 3.5-3 3 6 6 3-3zM7 11l6 6-2 2a4.24 4.24 0 0 1-6-6zM3 21l3.5-3.5M17 3l1.5 1.5M20.5 6.5 22 8"/></svg>
-    </span>
-    <span class="topic-label" data-i18n="topic.satellite">Foto satellitari</span>
+    <span class="topic-label" data-i18n="topic.cenere">Ricaduta cenere</span>
     <span class="topic-dot"></span>
   </button>
 
@@ -434,93 +434,40 @@
 <!-- ============================================================
      Nuovi tab "topic" — scheletro sessione 2026-08.
      Nessuna pipeline dati live ancora collegata (vedi PROGETTO_NOTE.md
-     §12 per il piano completo di ognuno). Per ora ogni modale mostra un
-     badge "in sviluppo" onesto e link diretti alle fonti ufficiali già
-     verificate, così il contenuto è comunque reale e utile oggi stesso,
-     senza inventare dati o fingere un aggiornamento automatico che non
-     esiste ancora.
+     §12 per il piano completo, incluse le fonti dati individuate per
+     ognuno). Su richiesta esplicita, il contenuto resta volutamente
+     "oscurato" — solo un avviso "coming soon", senza anticipare fonti o
+     dettagli — finché ogni funzionalità non sarà sviluppata e testata.
      ============================================================ -->
 
 <div class="modal-backdrop" id="gasModal">
-  <div class="modal" style="width:min(560px,92vw);">
-    <div class="dev-badge" data-i18n="dev.badge">🛠 in sviluppo</div>
-    <h3 data-i18n="gas.title">Diffusione di gas in atmosfera</h3>
-    <div class="topic-modal-body" data-i18n-html="gas.body">
-      Mostreremo qui l'anidride solforosa (SO₂) e gli altri gas vulcanici dispersi in atmosfera. Il dato "certificato" più solido — quello della rete geochimica FLAME dell'INGV — viene però pubblicato dall'INGV con cadenza <strong>settimanale</strong>, non in tempo reale: non esiste un feed pubblico giornaliero altrettanto affidabile, quindi non lo simuleremo. Nel frattempo, ecco le fonti ufficiali dove trovare il dato oggi stesso.
-    </div>
-    <ul class="source-list">
-      <li>
-        <a href="https://www.ct.ingv.it/index.php/monitoraggio-e-sorveglianza/prodotti-del-monitoraggio/bollettini-settimanali-multidisciplinari" target="_blank" rel="noopener" data-i18n="gas.link1">Bollettini settimanali multidisciplinari INGV ↗</a>
-        <span class="src-note" data-i18n="gas.link1note">Flusso SO₂ (rete FLAME) e CO₂ dal suolo (rete EtnaGas), dato ufficiale INGV</span>
-      </li>
-      <li>
-        <a href="https://sacs.aeronomie.be" target="_blank" rel="noopener" data-i18n="gas.link2">SACS — Support to Aviation Control Service ↗</a>
-        <span class="src-note" data-i18n="gas.link2note">Monitoraggio satellitare quasi in tempo reale di SO₂ e cenere, progetto ESA/BIRA-IASB</span>
-      </li>
-    </ul>
+  <div class="modal" style="width:min(420px,90vw);">
+    <h3 data-i18n="topic.gas">Gas in atmosfera</h3>
+    <div class="dev-badge" data-i18n="comingSoon.badge">🛠 coming soon</div>
     <button class="close" onclick="document.getElementById('gasModal').classList.remove('open')" data-i18n="btn.close">Chiudi</button>
   </div>
 </div>
 
 <div class="modal-backdrop" id="aeroportoModal">
-  <div class="modal" style="width:min(560px,92vw);">
-    <div class="dev-badge" data-i18n="dev.badge">🛠 in sviluppo</div>
-    <h3 data-i18n="aeroporto.title">Impatto sull'aviazione — aeroporto di Catania</h3>
-    <div class="topic-modal-body" data-i18n-html="aeroporto.body">
-      Mostreremo qui il codice colore aviazione ufficiale (VAAC Toulouse, ente ICAO) quando la cenere vulcanica dell'Etna interessa lo spazio aereo. <strong>Non è lo stesso dato dello stato voli "aperto/chiuso" pubblicato da SAC</strong> — quel dato non è raggiungibile in modo automatico e gratuito — ma è la fonte ufficiale standard con cui l'aviazione civile valuta il rischio cenere, ed è un ottimo indicatore indiretto. Per lo stato esatto del proprio volo, il riferimento resta sempre la compagnia aerea o SAC.
-    </div>
-    <ul class="source-list">
-      <li>
-        <a href="https://vaac.meteo.fr/volcanoes/etna/" target="_blank" rel="noopener" data-i18n="aeroporto.link1">Bollettini VAAC Toulouse per l'Etna ↗</a>
-        <span class="src-note" data-i18n="aeroporto.link1note">Codice colore aviazione e avvisi di cenere in quota, ente ICAO ufficiale</span>
-      </li>
-      <li>
-        <a href="https://www.aeroporto.catania.it/" target="_blank" rel="noopener" data-i18n="aeroporto.link2">Aeroporto di Catania — sito ufficiale SAC ↗</a>
-        <span class="src-note" data-i18n="aeroporto.link2note">Stato reale di voli, arrivi e partenze</span>
-      </li>
-    </ul>
+  <div class="modal" style="width:min(420px,90vw);">
+    <h3 data-i18n="topic.aeroporto">Aeroporto Catania</h3>
+    <div class="dev-badge" data-i18n="comingSoon.badge">🛠 coming soon</div>
     <button class="close" onclick="document.getElementById('aeroportoModal').classList.remove('open')" data-i18n="btn.close">Chiudi</button>
   </div>
 </div>
 
 <div class="modal-backdrop" id="scientificoModal">
-  <div class="modal" style="width:min(560px,92vw);">
-    <div class="dev-badge" data-i18n="dev.badge">🛠 in sviluppo</div>
-    <h3 data-i18n="scientifico.title">Deformazione del suolo e tremore vulcanico</h3>
-    <div class="topic-modal-body" data-i18n-html="scientifico.body">
-      Mostreremo qui grafici e tabelle su deformazione del suolo (reti GPS/clinometriche) e tremore vulcanico. Un vero calcolo del tremore in tempo reale richiede l'elaborazione di forme d'onda sismiche grezze (libreria ObsPy) — è il pezzo tecnicamente più complesso del progetto, rimandato deliberatamente. Nel frattempo, il dato certificato disponibile è quello del bollettino settimanale INGV.
-    </div>
-    <ul class="source-list">
-      <li>
-        <a href="https://www.ct.ingv.it/index.php/monitoraggio-e-sorveglianza/segnali-in-tempo-reale/tremore-vulcanico" target="_blank" rel="noopener" data-i18n="scientifico.link1">Tremore vulcanico in tempo reale — INGV ↗</a>
-        <span class="src-note" data-i18n="scientifico.link1note">Grafico ufficiale INGV, aggiornato quasi in tempo reale</span>
-      </li>
-      <li>
-        <a href="https://www.ct.ingv.it/index.php/monitoraggio-e-sorveglianza/prodotti-del-monitoraggio/bollettini-settimanali-multidisciplinari" target="_blank" rel="noopener" data-i18n="scientifico.link2">Bollettini settimanali multidisciplinari INGV ↗</a>
-        <span class="src-note" data-i18n="scientifico.link2note">Deformazione del suolo, sismicità e tremore, dato ufficiale INGV</span>
-      </li>
-    </ul>
+  <div class="modal" style="width:min(420px,90vw);">
+    <h3 data-i18n="topic.scientifico">Dati scientifici al suolo</h3>
+    <div class="dev-badge" data-i18n="comingSoon.badge">🛠 coming soon</div>
     <button class="close" onclick="document.getElementById('scientificoModal').classList.remove('open')" data-i18n="btn.close">Chiudi</button>
   </div>
 </div>
 
 <div class="modal-backdrop" id="satelliteModal">
-  <div class="modal" style="width:min(560px,92vw);">
-    <div class="dev-badge" data-i18n="dev.badge">🛠 in sviluppo</div>
-    <h3 data-i18n="satellite.title">Foto satellitari — termiche e reali</h3>
-    <div class="topic-modal-body" data-i18n-html="satellite.body">
-      Mostreremo qui le immagini satellitari più recenti del vulcano, sia nello spettro termico (per individuare colate laviche e anomalie) sia nel visibile. Solo fonti ufficiali NASA/ESA, con lo stesso approccio "URL diretta, zero backend" già usato per la ricaduta cenere.
-    </div>
-    <ul class="source-list">
-      <li>
-        <a href="https://worldview.earthdata.nasa.gov/?v=13.9,36.9,16.1,38.9&l=VIIRS_SNPP_CorrectedReflectance_TrueColor,VIIRS_SNPP_Thermal_Anomalies_375m_All,Coastlines&t=" target="_blank" rel="noopener" data-i18n="satellite.link1">NASA Worldview — Etna, vero colore e anomalie termiche ↗</a>
-        <span class="src-note" data-i18n="satellite.link1note">Immagini satellitari NASA aggiornate quotidianamente</span>
-      </li>
-      <li>
-        <a href="https://firms.modaps.eosdis.nasa.gov/map/#z:8;c:15.0,37.75;d:2025-01-01..2025-01-02" target="_blank" rel="noopener" data-i18n="satellite.link2">NASA FIRMS — mappa hotspot termici ↗</a>
-        <span class="src-note" data-i18n="satellite.link2note">Stessa fonte usata per lo stato attuale del sito</span>
-      </li>
-    </ul>
+  <div class="modal" style="width:min(420px,90vw);">
+    <h3 data-i18n="topic.satellite">Foto satellitari</h3>
+    <div class="dev-badge" data-i18n="comingSoon.badge">🛠 coming soon</div>
     <button class="close" onclick="document.getElementById('satelliteModal').classList.remove('open')" data-i18n="btn.close">Chiudi</button>
   </div>
 </div>
@@ -545,7 +492,7 @@
       'topic.cenere': 'Ricaduta cenere',
       'topic.gas': 'Gas in atmosfera',
       'topic.aeroporto': 'Aeroporto Catania',
-      'topic.scientifico': 'Dati scientifici',
+      'topic.scientifico': 'Dati scientifici al suolo',
       'topic.satellite': 'Foto satellitari',
       'feed.label': 'Ultimo aggiornamento · fonte INGV Osservatorio Etneo',
       'feed.loading': 'Caricamento…',
@@ -564,31 +511,7 @@
       'ash.disclaimer': `Simulazione giornaliera INGV della possibile dispersione e ricaduta al suolo dei prodotti piroclastici, basata su un ipotetico scenario eruttivo e sui venti reali del giorno. <strong>È un modello standard, generato ogni giorno indipendentemente da un'eruzione in corso</strong> — non è una previsione garantita, ma un'indicazione utile per capire la tendenza dei venti in quota.`,
       'ash.imgError': `Immagine non ancora disponibile per questa fascia oraria (può volerci qualche minuto dopo l'orario di aggiornamento).`,
       'ash.sourceLink': 'Fonte ufficiale INGV, tutti gli orari del giorno ↗',
-      'dev.badge': '🛠 in sviluppo',
-      'gas.title': 'Diffusione di gas in atmosfera',
-      'gas.body': `Mostreremo qui l'anidride solforosa (SO₂) e gli altri gas vulcanici dispersi in atmosfera. Il dato "certificato" più solido — quello della rete geochimica FLAME dell'INGV — viene però pubblicato dall'INGV con cadenza <strong>settimanale</strong>, non in tempo reale: non esiste un feed pubblico giornaliero altrettanto affidabile, quindi non lo simuleremo. Nel frattempo, ecco le fonti ufficiali dove trovare il dato oggi stesso.`,
-      'gas.link1': 'Bollettini settimanali multidisciplinari INGV ↗',
-      'gas.link1note': 'Flusso SO₂ (rete FLAME) e CO₂ dal suolo (rete EtnaGas), dato ufficiale INGV',
-      'gas.link2': 'SACS — Support to Aviation Control Service ↗',
-      'gas.link2note': 'Monitoraggio satellitare quasi in tempo reale di SO₂ e cenere, progetto ESA/BIRA-IASB',
-      'aeroporto.title': `Impatto sull'aviazione — aeroporto di Catania`,
-      'aeroporto.body': `Mostreremo qui il codice colore aviazione ufficiale (VAAC Toulouse, ente ICAO) quando la cenere vulcanica dell'Etna interessa lo spazio aereo. <strong>Non è lo stesso dato dello stato voli "aperto/chiuso" pubblicato da SAC</strong> — quel dato non è raggiungibile in modo automatico e gratuito — ma è la fonte ufficiale standard con cui l'aviazione civile valuta il rischio cenere, ed è un ottimo indicatore indiretto. Per lo stato esatto del proprio volo, il riferimento resta sempre la compagnia aerea o SAC.`,
-      'aeroporto.link1': `Bollettini VAAC Toulouse per l'Etna ↗`,
-      'aeroporto.link1note': 'Codice colore aviazione e avvisi di cenere in quota, ente ICAO ufficiale',
-      'aeroporto.link2': 'Aeroporto di Catania — sito ufficiale SAC ↗',
-      'aeroporto.link2note': 'Stato reale di voli, arrivi e partenze',
-      'scientifico.title': 'Deformazione del suolo e tremore vulcanico',
-      'scientifico.body': `Mostreremo qui grafici e tabelle su deformazione del suolo (reti GPS/clinometriche) e tremore vulcanico. Un vero calcolo del tremore in tempo reale richiede l'elaborazione di forme d'onda sismiche grezze (libreria ObsPy) — è il pezzo tecnicamente più complesso del progetto, rimandato deliberatamente. Nel frattempo, il dato certificato disponibile è quello del bollettino settimanale INGV.`,
-      'scientifico.link1': 'Tremore vulcanico in tempo reale — INGV ↗',
-      'scientifico.link1note': 'Grafico ufficiale INGV, aggiornato quasi in tempo reale',
-      'scientifico.link2': 'Bollettini settimanali multidisciplinari INGV ↗',
-      'scientifico.link2note': 'Deformazione del suolo, sismicità e tremore, dato ufficiale INGV',
-      'satellite.title': 'Foto satellitari — termiche e reali',
-      'satellite.body': `Mostreremo qui le immagini satellitari più recenti del vulcano, sia nello spettro termico (per individuare colate laviche e anomalie) sia nel visibile. Solo fonti ufficiali NASA/ESA, con lo stesso approccio "URL diretta, zero backend" già usato per la ricaduta cenere.`,
-      'satellite.link1': 'NASA Worldview — Etna, vero colore e anomalie termiche ↗',
-      'satellite.link1note': 'Immagini satellitari NASA aggiornate quotidianamente',
-      'satellite.link2': 'NASA FIRMS — mappa hotspot termici ↗',
-      'satellite.link2note': 'Stessa fonte usata per lo stato attuale del sito',
+      'comingSoon.badge': '🛠 coming soon',
     },
     en: {
       'tagline': 'real-time monitoring of the volcano',
@@ -600,7 +523,7 @@
       'topic.cenere': 'Ashfall forecast',
       'topic.gas': 'Gas in the atmosphere',
       'topic.aeroporto': 'Catania airport',
-      'topic.scientifico': 'Scientific data',
+      'topic.scientifico': 'Ground-level scientific data',
       'topic.satellite': 'Satellite photos',
       'feed.label': 'Latest update · source: INGV Osservatorio Etneo',
       'feed.loading': 'Loading…',
@@ -619,31 +542,7 @@
       'ash.disclaimer': `Daily INGV simulation of the possible dispersion and fallout of pyroclastic products, based on a hypothetical eruptive scenario and the actual winds of the day. <strong>It is a standard model, generated every day regardless of whether an eruption is under way</strong> — it is not a guaranteed forecast, but a useful indication of upper-level wind trends.`,
       'ash.imgError': 'Image not yet available for this time slot (it can take a few minutes after the update time).',
       'ash.sourceLink': 'Official INGV source, all times of day ↗',
-      'dev.badge': '🛠 in development',
-      'gas.title': 'Gas dispersion in the atmosphere',
-      'gas.body': `Here we will show sulphur dioxide (SO₂) and other volcanic gases dispersed in the atmosphere. The most solid "certified" figure — from INGV's FLAME geochemical network — is published by INGV on a <strong>weekly</strong> basis, not in real time: there is no equally reliable public daily feed, so we won't fake one. In the meantime, here are the official sources where you can find the data today.`,
-      'gas.link1': 'INGV weekly multidisciplinary bulletins ↗',
-      'gas.link1note': 'SO₂ flux (FLAME network) and soil CO₂ (EtnaGas network), official INGV data',
-      'gas.link2': 'SACS — Support to Aviation Control Service ↗',
-      'gas.link2note': 'Near-real-time satellite monitoring of SO₂ and ash, ESA/BIRA-IASB project',
-      'aeroporto.title': 'Impact on aviation — Catania airport',
-      'aeroporto.body': `Here we will show the official aviation colour code (VAAC Toulouse, an ICAO body) when Etna's volcanic ash affects airspace. <strong>This is not the same as the open/closed flight status published by SAC</strong> — that data can't be fetched automatically for free — but it's the standard official source civil aviation uses to assess ash risk, and a good indirect indicator. For your exact flight status, always check with your airline or SAC.`,
-      'aeroporto.link1': 'VAAC Toulouse bulletins for Etna ↗',
-      'aeroporto.link1note': 'Aviation colour code and ash-in-airspace advisories, official ICAO body',
-      'aeroporto.link2': 'Catania airport — official SAC website ↗',
-      'aeroporto.link2note': 'Real flight, arrival and departure status',
-      'scientifico.title': 'Ground deformation and volcanic tremor',
-      'scientifico.body': `Here we will show charts and tables on ground deformation (GPS/tilt networks) and volcanic tremor. A genuine real-time tremor calculation requires processing raw seismic waveforms (ObsPy library) — it's the technically most complex piece of the project, deliberately postponed. In the meantime, the certified data available is from the INGV weekly bulletin.`,
-      'scientifico.link1': 'Volcanic tremor in real time — INGV ↗',
-      'scientifico.link1note': 'Official INGV chart, updated near real-time',
-      'scientifico.link2': 'INGV weekly multidisciplinary bulletins ↗',
-      'scientifico.link2note': 'Ground deformation, seismicity and tremor, official INGV data',
-      'satellite.title': 'Satellite photos — thermal and true colour',
-      'satellite.body': `Here we will show the most recent satellite images of the volcano, both in the thermal spectrum (to spot lava flows and anomalies) and in true colour. Official NASA/ESA sources only, with the same "direct URL, zero backend" approach already used for the ashfall forecast.`,
-      'satellite.link1': 'NASA Worldview — Etna, true colour and thermal anomalies ↗',
-      'satellite.link1note': 'NASA satellite imagery updated daily',
-      'satellite.link2': 'NASA FIRMS — thermal hotspot map ↗',
-      'satellite.link2note': 'Same source used for the site\u2019s current status',
+      'comingSoon.badge': '🛠 coming soon',
     },
   };
 

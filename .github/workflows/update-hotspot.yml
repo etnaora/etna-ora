@@ -40,14 +40,28 @@ jobs:
       # sito continuava a mostrare in buona fede l'ultimo dato vecchio come
       # se fosse attuale. "if: always()" garantisce che il commit avvenga
       # comunque, pubblicando sempre lo stato più onesto disponibile.
-      - name: Commit se ci sono cambiamenti
+      - name: Commit e push (con retry anti-collisione)
         if: always()
         run: |
           git config user.name "etna-bot"
           git config user.email "actions@users.noreply.github.com"
           git add data/hotspot.json
-          git diff --cached --quiet || git commit -m "Aggiorna hotspot termico [automatico]"
-          git push
+          if git diff --cached --quiet; then
+            echo "Nessuna modifica da pubblicare."
+            exit 0
+          fi
+          git commit -m "Aggiorna hotspot termico [automatico]"
+          for i in 1 2 3 4 5; do
+            if git push; then
+              echo "Push riuscito al tentativo $i."
+              exit 0
+            fi
+            echo "Push rifiutato (probabile collisione, es. run manuale + schedulato sovrapposti), tentativo $i/5: pull --rebase e riprovo tra qualche secondo..."
+            sleep $((RANDOM % 10 + 3))
+            git pull --rebase origin main
+          done
+          echo "Push fallito dopo 5 tentativi." >&2
+          exit 1
 
       # Fa comunque fallire visibilmente il job (email/notifica GitHub) se
       # il fetch non è riuscito, così l'informazione arriva sia sul sito

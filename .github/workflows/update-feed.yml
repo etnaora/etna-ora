@@ -28,10 +28,26 @@ jobs:
       - name: Aggiorna data/feed.json
         run: python3 scripts/fetch_terremoti.py
 
-      - name: Commit se ci sono cambiamenti
+      # Fix 2026-08: stesso problema di collisione descritto in
+      # update-comunicati.yml (entrambi scrivono su feed.json) — stesso fix.
+      - name: Commit e push (con retry anti-collisione)
         run: |
           git config user.name "etna-bot"
           git config user.email "actions@users.noreply.github.com"
           git add data/feed.json
-          git diff --cached --quiet || git commit -m "Aggiorna feed sismico [automatico]"
-          git push
+          if git diff --cached --quiet; then
+            echo "Nessuna modifica da pubblicare."
+            exit 0
+          fi
+          git commit -m "Aggiorna feed sismico [automatico]"
+          for i in 1 2 3 4 5; do
+            if git push; then
+              echo "Push riuscito al tentativo $i."
+              exit 0
+            fi
+            echo "Push rifiutato (probabile collisione con un altro workflow), tentativo $i/5: pull --rebase e riprovo tra qualche secondo..."
+            sleep $((RANDOM % 10 + 3))
+            git pull --rebase origin main
+          done
+          echo "Push fallito dopo 5 tentativi." >&2
+          exit 1
