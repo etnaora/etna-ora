@@ -6,8 +6,8 @@
       "id": "ecv",
       "name": "Crateri Sommitali",
       "position": "Versante sud, stazione arrivo funivia — 2505 m",
-      "lat": 37.7510,
-      "lng": 14.9934,
+      "lat": 37.7230,
+      "lng": 14.9958,
       "source": "INGV Osservatorio Etneo",
       "stream_type": "iframe_ingv",
       "stream_url": "https://www.ct.ingv.it/sezioniesterne/webcam/Webcam.php?Vulcano=Ecv"
@@ -25,9 +25,9 @@
     {
       "id": "ent",
       "name": "Versante Nord — Piano Provenzana",
-      "position": "Osservatorio Vulcanologico, 2900 m",
-      "lat": 37.8050,
-      "lng": 15.0200,
+      "position": "Osservatorio Vulcanologico di Pizzi Deneri, 2818 m",
+      "lat": 37.7695,
+      "lng": 15.0164,
       "source": "INGV Osservatorio Etneo",
       "stream_type": "iframe_ingv",
       "stream_url": "https://www.ct.ingv.it/sezioniesterne/webcam/Webcam.php?Vulcano=Ent"
@@ -36,8 +36,8 @@
       "id": "env",
       "name": "Versante Sud — Rifugio Sapienza",
       "position": "Nicolosi, 1900 m",
-      "lat": 37.6975,
-      "lng": 14.9925,
+      "lat": 37.7000,
+      "lng": 14.9958,
       "source": "INGV Osservatorio Etneo",
       "stream_type": "iframe_ingv",
       "stream_url": "https://www.ct.ingv.it/sezioniesterne/webcam/Webcam.php?Vulcano=Env"

@@ -170,10 +170,12 @@
   }
   .wordmark h1{
     margin:0; font:inherit; font-size:20px; color:inherit;
+    text-shadow:0 1px 4px rgba(10,9,7,0.55);
   }
   .tagline{
-    font-family:var(--font-body); font-weight:400; font-size:11px;
-    letter-spacing:0.01em; color:var(--ash-muted); text-transform:none;
+    font-family:var(--font-body); font-weight:500; font-size:12.5px;
+    letter-spacing:0.01em; color:var(--ash); opacity:0.88; text-transform:none;
+    text-shadow:0 1px 4px rgba(10,9,7,0.55);
   }
   .status-pill{
     justify-self:center;
@@ -217,28 +219,49 @@
   }
   .cam-marker:hover{transform:scale(1.15); border-color:var(--ember);}
 
-  .crater-marker{
-    width:16px;height:16px;border-radius:50%;
-    background:var(--accent);
-    box-shadow:0 0 0 0 color-mix(in srgb, var(--accent) 60%, transparent);
-    animation:craterpulse 2.4s ease-out infinite;
+  /* ---------- zona termica (ex "crater-marker") ----------
+     Non più un pallino puntuale (si sovrapponeva esattamente alla webcam
+     ECV, creando confusione quando cambiava colore con lo stato). Ora è un
+     cerchio geografico (L.circle, raggio in metri) che copre l'area
+     sommitale E la parte alta della Valle del Bove, dove possono aprirsi
+     nuove bocche attive a quote più basse dei crateri sommitali — non
+     solo un punto, ma un'idea di zona. Colore/opacità pilotati da JS
+     (stesso --accent dinamico), qui solo l'animazione di pulsazione:
+     Leaflet imposta fill-opacity/stroke-opacity come attributi SVG di
+     presentazione, che una regola CSS con lo stesso selettore sovrascrive
+     automaticamente (non serve !important). */
+  .hotspot-zone{
+    animation:hotspotPulse 3.2s ease-in-out infinite;
+    transition:stroke .5s ease, fill .5s ease;
   }
-  @keyframes craterpulse{
-    0%{box-shadow:0 0 0 0 color-mix(in srgb, var(--accent) 55%, transparent);}
-    70%{box-shadow:0 0 0 22px transparent;}
-    100%{box-shadow:0 0 0 0 transparent;}
+  @keyframes hotspotPulse{
+    0%{fill-opacity:0.22; stroke-opacity:0.85;}
+    50%{fill-opacity:0.07; stroke-opacity:0.3;}
+    100%{fill-opacity:0.22; stroke-opacity:0.85;}
   }
 
   /* ---------- webcam modal ---------- */
   .modal-backdrop{
     position:fixed; inset:0; background:rgba(10,9,7,0.7);
-    display:none; align-items:center; justify-content:center; z-index:2000;
+    display:none; z-index:2000;
     backdrop-filter:blur(3px);
+    overflow-y:auto; -webkit-overflow-scrolling:touch;
+    padding:32px 16px;
   }
+  /* .modal-backdrop.open usa flex + margin:auto sul figlio (non
+     align-items/justify-content): centra il modale quando è più basso
+     del viewport, ma permette lo scroll del backdrop quando il modale è
+     più alto del viewport (es. su mobile a tastiera aperta o con
+     contenuto lungo) — altrimenti il tasto "chiudi" può restare
+     irraggiungibile fuori schermo, senza alcun modo di chiudere il
+     modale se non ricaricando la pagina. Vale per QUALSIASI modale
+     .modal-backdrop presente o futuro, non serve replicare la fix. */
   .modal-backdrop.open{display:flex;}
   .modal{
     width:min(560px,90vw); background:var(--basalt-panel);
     border:1px solid var(--hairline); border-radius:14px; padding:22px;
+    margin:auto;
+    max-height:none;
   }
   .modal h3{font-family:var(--font-display); font-size:22px; margin:0 0 4px;}
   .modal .meta{font-family:var(--font-mono); font-size:11px; color:var(--ash-muted); margin-bottom:14px;}
@@ -302,6 +325,7 @@
 
   @media (max-width:640px){
     .wordmark{font-size:16px;}
+    .tagline{font-size:11px;}
     .status-pill{font-size:11px; padding:9px 14px; gap:7px;}
     .status-pill .prefix{display:none;}
   }
@@ -581,8 +605,8 @@
     zoomControl:false,
     attributionControl:true,
     center:[37.755,15.005],
-    zoom:12,
-    minZoom:10,
+    zoom:10,
+    minZoom:9,
     maxZoom:16,
   });
 
@@ -625,14 +649,27 @@
     if(hotspot.status === 'moderata'){ accent = '#E8541E'; key = 'status.moderata'; }
     if(hotspot.status === 'alta'){ accent = '#FFD166'; key = 'status.alta'; }
     root.style.setProperty('--accent', accent);
+    window.currentAccent = accent; // riusato da placeCraterMarker per il cerchio
     label.textContent = t(key) + (hotspot.stale ? t('status.staleSuffix') : '');
   }
 
-  let craterMarker = null;
+  // Centro spostato leggermente a est-sudest rispetto ai crateri sommitali
+  // (37.7538,14.9958) per includere nel raggio anche l'alta Valle del Bove,
+  // dove possono comparire nuove bocche attive a quote più basse.
+  const HOTSPOT_ZONE_CENTER = [37.7480, 15.0100];
+  const HOTSPOT_ZONE_RADIUS_M = 3600;
+
+  let hotspotZone = null;
   function placeCraterMarker(hotspot){
-    if(craterMarker) map.removeLayer(craterMarker);
-    craterMarker = L.marker([37.751,14.9934], {
-      icon: L.divIcon({className:'', html:'<div class="crater-marker"></div>', iconSize:[16,16]})
+    if(hotspotZone) map.removeLayer(hotspotZone);
+    const accent = window.currentAccent || '#5C7A8A';
+    hotspotZone = L.circle(HOTSPOT_ZONE_CENTER, {
+      radius: HOTSPOT_ZONE_RADIUS_M,
+      color: accent,
+      weight: 2,
+      fillColor: accent,
+      fillOpacity: 0.16,
+      className: 'hotspot-zone'
     }).addTo(map).bindPopup(hotspot.notes || '');
   }
 

@@ -504,3 +504,95 @@ scientifico è stata rinominata da "Dati scientifici" a **"Dati scientifici
 al suolo"** (`topic.scientifico` in entrambe le lingue) — il titolo del
 modale (ora comunque nascosto dietro "coming soon") non è stato aggiornato
 di conseguenza, da allineare quando si svilupperà quel tab.
+
+---
+
+## 13. Sessione 2026-08 (2) — leggibilità, mappa, bug modali, geografia
+
+Cinque richieste, tutte completate in questa sessione.
+
+### 13.1 Tagline poco leggibile
+`.tagline` (sottotitolo "monitoraggio in tempo reale del vulcano" accanto
+al wordmark) usava `--ash-muted` a piena densità direttamente sopra la
+mappa (nessun pannello sotto), risultando quasi invisibile su certe zone
+chiare dei tile. Ora: `color:var(--ash)` con `opacity:0.88`,
+`font-weight:500`, `font-size` 11px→12.5px (10px→11px su mobile), più
+`text-shadow` (aggiunta anche a `.wordmark h1` per coerenza) per leggibilità
+su sfondo variabile. Resta più piccola del titolo come richiesto.
+
+### 13.2 Vista iniziale mappa più ampia
+`zoom` iniziale 12→10, `minZoom` 10→9 (stesso `center`). Zoom di dettaglio
+al click su una webcam (`flyToPoint`, default `zoom=14`) invariato.
+
+### 13.3 Bug: modali non scrollabili, tasto chiudi irraggiungibile
+**Causa**: `.modal-backdrop` centrava il contenuto con
+`align-items:center; justify-content:center` ma non aveva `overflow-y`,
+quindi se il modale era più alto del viewport (frequente su mobile, es.
+tab "ricaduta cenere" con selettore fasce orarie + immagine), la parte
+superiore/il tasto chiudi finivano fuori schermo senza alcun modo di
+scrollare — unica via d'uscita, ricaricare la pagina. **Fix**: rimossi
+`align-items`/`justify-content` dal backdrop, aggiunto `overflow-y:auto` +
+padding verticale sul backdrop, e `margin:auto` sul `.modal` stesso (pattern
+flex+margin:auto, evita il "flexbug" di clipping che si ha centrando con
+`align-items` quando il contenuto supera l'altezza del contenitore). **Vale
+per tutti i modali esistenti E futuri** che usano `.modal-backdrop`/`.modal`
+— non serve rifare questa fix per i prossimi tab (gas, aeroportuale,
+scientifico, satellitare) quando verranno sviluppati.
+
+### 13.4 Webcam mal posizionate
+- **`ecv`** ("Crateri Sommitali"): il campo `position` dice "stazione
+  arrivo funivia — 2505 m" ma le coordinate erano quelle dei crateri
+  sommitali stessi (~3300 m) — **identiche, non a caso, a quelle del
+  cerchio termico**, causa diretta anche del punto 13.5. Spostata alla
+  stima geografica della stazione di arrivo della funivia/area Montagnola
+  (~2500 m), coerente col proprio campo `position`.
+- **`ent`** ("Piano Provenzana" nel campo `name`, ma "Osservatorio
+  Vulcanologico, 2900 m" nel campo `position`): le coordinate corrispondevano
+  a nessuno dei due luoghi reali. Ricerca web ha confermato le coordinate
+  ufficiose dell'Osservatorio di Pizzi Deneri (2818 m, versante nord,
+  ~2 km dai crateri sommitali): **37.7695, 15.0164** — ora usate. **Attenzione,
+  incongruenza NON risolta**: il `name` del campo dice ancora "Piano
+  Provenzana", che è in realtà tutt'altro luogo (stazione sciistica a
+  ~1800 m, diversi km più in basso e più a nord rispetto a Pizzi Deneri).
+  Le coordinate ora puntano a Pizzi Deneri (coerenti col `position`
+  "Osservatorio Vulcanologico, 2900 m"), ma se la webcam è fisicamente a
+  Piano Provenzana andrebbe corretto il `name`, non le coordinate — da
+  verificare con l'utente quale dei due è corretto.
+- **`env`** (Rifugio Sapienza): coordinate raffinate su valore noto e
+  documentato (37.7000, 14.9958).
+- **`epvh`** (Milo, versante est) ed **`emov`** (Montagnola): **non
+  toccate**, nessuna fonte sufficientemente affidabile trovata per
+  affinarle oltre la stima già presente. Se si trova una fonte ufficiale
+  INGV con le coordinate esatte dell'intera rete webcam (vedi anche § 6,
+  "terza telecamera/ubicazioni verificate"), è il momento buono per
+  sistemare anche queste due.
+- **Nota generale**: nessuna di queste coordinate è "da rilievo ufficiale"
+  — sono stime ragionate da fonti geografiche pubbliche (guide
+  escursionistiche, siti di enti locali), adeguate alla filosofia
+  "scenografica non strumentale" del progetto (vedi § 1), non a un uso
+  scientifico/di precisione.
+
+### 13.5 Cerchio termico al posto del pallino crateri
+Il marker che si accendeva del colore di stato (`--accent`, pilotato da
+`hotspot.status`) era un pallino da 16px posizionato **esattamente sulle
+stesse coordinate della webcam `ecv`** (vedi 13.4) — da qui la confusione
+segnalata ("sembra che si accenda una webcam"). Sostituito con un
+`L.circle` (non più un `L.marker` con div-icon): cerchio geografico reale
+(raggio in metri, si ridimensiona correttamente con lo zoom), centrato
+leggermente a est-sudest dei crateri sommitali per includere anche l'alta
+Valle del Bove (dove possono aprirsi nuove bocche a quote più basse),
+raggio 3600 m. Colore/opacità di riempimento pilotati da JS (stesso
+`--accent`), pulsazione via CSS (`fill-opacity`/`stroke-opacity` animate:
+funziona senza `!important` perché le regole CSS con selettore di classe
+hanno priorità sugli attributi di presentazione SVG che Leaflet imposta di
+default). Centro e raggio sono costanti in cima allo script
+(`HOTSPOT_ZONE_CENTER`, `HOTSPOT_ZONE_RADIUS_M`) per essere facili da
+ritoccare.
+
+**Idea "vera" scartata per ora (non tecnicamente impossibile, solo
+rimandata)**: geolocalizzare i singoli punti hotspot NASA FIRMS invece del
+cerchio approssimativo. È fattibile: `fetch_hotspot.py` già scarica il CSV
+FIRMS con lat/lon per ogni hotspot, basterebbe scrivere l'elenco (non solo
+lo stato aggregato) in `hotspot.json` e disegnare un marker per punto in
+`index.html`. Non fatto in questa sessione per restare nello scope delle
+5 richieste; buon prossimo passo se si vuole più precisione.
