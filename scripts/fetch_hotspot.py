@@ -72,10 +72,24 @@ urllib3_cn.allowed_gai_family = _forza_ipv4
 # Configurazione
 # ---------------------------------------------------------------------------
 
-# Bounding box stretta intorno ai crateri sommitali (poche centinaia di
-# metri di raggio reale, ma allargata per sicurezza sulla precisione del
-# sensore satellitare): west, south, east, north
-AREA = "14.95,37.70,15.05,37.80"
+# Bounding box usata per la CHIAMATA a FIRMS e per i punti mostrati in
+# mappa: allargata rispetto alla versione precedente per includere anche
+# l'alta Valle del Bove, dove possono aprirsi nuove bocche attive a quote
+# più basse dei crateri sommitali (richiesta utente 2026-08, sessione 2).
+# west, south, east, north
+AREA = "14.90,37.68,15.15,37.82"
+
+# Bounding box STRETTA intorno ai crateri sommitali, usata SOLO per decidere
+# lo stato (quiete/moderata/alta): tenerla separata dalla AREA più larga
+# evita che un incendio boschivo sui fianchi bassi del vulcano (dentro la
+# AREA larga ma fuori da quest'area) faccia scattare un falso stato "alta".
+# west, south, east, north — identica alla vecchia AREA, invariata.
+NARROW_BOUNDS = (14.95, 37.70, 15.05, 37.80)
+
+# Quanti punti al massimo salviamo in hotspot.json per il rendering in
+# mappa (ordinati per FRP decrescente): tiene il file piccolo e veloce da
+# scaricare anche in giornate con centinaia di rilevazioni.
+MAX_POINTS_SALVATI = 80
 
 SOURCE = "VIIRS_SNPP_NRT"   # sensore VIIRS, dati quasi in tempo reale
 DAY_RANGE = 1                # solo le ultime 24 ore, ci basta per lo stato attuale
@@ -146,8 +160,49 @@ def fetch_hotspots(map_key: str) -> list[dict]:
     raise ultimo_errore
 
 
+def _dentro_narrow_bounds(row: dict) -> bool:
+    """True se il punto ricade nella bounding box stretta (crateri
+    sommitali), usata solo per la classificazione dello stato."""
+    try:
+        lat = float(row.get("latitude", 0) or 0)
+        lng = float(row.get("longitude", 0) or 0)
+    except ValueError:
+        return False
+    west, south, east, north = NARROW_BOUNDS
+    return west <= lng <= east and south <= lat <= north
+
+
+def _punto_da_row(row: dict) -> dict:
+    """Converte una riga CSV FIRMS in un punto compatto per hotspot.json.
+    Campi CSV rilevanti (VIIRS NRT): latitude, longitude, frp, confidence,
+    acq_date, acq_time, daynight."""
+    try:
+        frp = round(float(row.get("frp", 0) or 0), 1)
+    except ValueError:
+        frp = 0.0
+    return {
+        "lat": round(float(row["latitude"]), 5),
+        "lng": round(float(row["longitude"]), 5),
+        "frp": frp,
+        "confidence": row.get("confidence", ""),
+        "acq_date": row.get("acq_date", ""),
+        "acq_time": row.get("acq_time", ""),
+    }
+
+
 def build_status(rows: list[dict], now: datetime) -> dict:
-    if not rows:
+    # Solo i punti nella bbox stretta (crateri sommitali) contano per lo
+    # stato — vedi commento su NARROW_BOUNDS sopra.
+    rows_stato = [r for r in rows if _dentro_narrow_bounds(r)]
+
+    # Tutti i punti nella bbox larga (crateri + Valle del Bove) vengono
+    # invece salvati per essere disegnati in mappa, non solo usati per lo
+    # stato aggregato — ordinati per FRP decrescente e tagliati a
+    # MAX_POINTS_SALVATI per tenere il file leggero.
+    punti = sorted((_punto_da_row(r) for r in rows), key=lambda p: p["frp"], reverse=True)
+    punti = punti[:MAX_POINTS_SALVATI]
+
+    if not rows_stato:
         return {
             "generated_at": now.isoformat(),
             "source": "NASA FIRMS (VIIRS_SNPP_NRT) — https://firms.modaps.eosdis.nasa.gov",
@@ -155,12 +210,13 @@ def build_status(rows: list[dict], now: datetime) -> dict:
             "notes": "Nessuna anomalia termica rilevata dal satellite nelle ultime 24 ore.",
             "last_significant_event": None,
             "hotspot_count_24h": 0,
+            "points": punti,
             "stale": False,
             "last_success_at": now.isoformat(),
         }
 
-    max_frp = max(float(r.get("frp", 0) or 0) for r in rows)
-    count = len(rows)
+    max_frp = max(float(r.get("frp", 0) or 0) for r in rows_stato)
+    count = len(rows_stato)
 
     if max_frp >= SOGLIA_ALTA_FRP or count >= SOGLIA_ALTA_COUNT:
         status = "alta"
@@ -177,7 +233,8 @@ def build_status(rows: list[dict], now: datetime) -> dict:
         "status": status,
         "notes": notes,
         "last_significant_event": now.isoformat() if status != "quiete" else None,
-        "hotspot_count_24h": len(rows),
+        "hotspot_count_24h": count,
+        "points": punti,
         "stale": False,
         "last_success_at": now.isoformat(),
     }
