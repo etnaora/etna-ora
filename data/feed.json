@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-14T17:04:02.875409+00:00",
+  "generated_at": "2026-08-14T17:51:19.092280+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
@@ -205,14 +205,6 @@
       "type": "sismicita",
       "title": "Evento sismico Ml 1.3",
       "summary": "Localizzato: 3 km SW Zafferana Etnea (CT).",
-      "level": "basso"
-    },
-    {
-      "id": "eq-46725472",
-      "timestamp": "2026-07-31T17:27:39.880000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.4",
-      "summary": "Localizzato: 3 km W Zafferana Etnea (CT).",
       "level": "basso"
     },
     {
