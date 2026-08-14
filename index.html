@@ -239,6 +239,20 @@
     50%{fill-opacity:0.07; stroke-opacity:0.3;}
     100%{fill-opacity:0.22; stroke-opacity:0.85;}
   }
+  /* Punti FIRMS reali (quando disponibili): stessa logica di
+     override via CSS degli attributi SVG di presentazione, pulsazione
+     più rapida e più marcata rispetto alla zona di fallback, per
+     distinguerli visivamente come dato puntuale reale e non area
+     indicativa. */
+  .hotspot-point{
+    animation:hotspotPointPulse 2.2s ease-in-out infinite;
+    transition:stroke .4s ease, fill .4s ease;
+  }
+  @keyframes hotspotPointPulse{
+    0%{fill-opacity:0.85; stroke-opacity:1;}
+    50%{fill-opacity:0.35; stroke-opacity:0.5;}
+    100%{fill-opacity:0.85; stroke-opacity:1;}
+  }
 
   /* ---------- webcam modal ---------- */
   .modal-backdrop{
@@ -536,6 +550,14 @@
       'ash.imgError': `Immagine non ancora disponibile per questa fascia oraria (può volerci qualche minuto dopo l'orario di aggiornamento).`,
       'ash.sourceLink': 'Fonte ufficiale INGV, tutti gli orari del giorno ↗',
       'comingSoon.badge': '🛠 coming soon',
+      'hotspot.popup.title': 'Anomalia termica satellitare',
+      'hotspot.popup.frp': 'Potenza radiativa (FRP): ',
+      'hotspot.popup.confidence': 'Affidabilità: ',
+      'hotspot.popup.time': 'Rilevata: ',
+      'hotspot.confidence.l': 'bassa',
+      'hotspot.confidence.n': 'nominale',
+      'hotspot.confidence.h': 'alta',
+      'hotspot.zone.popup': 'Zona sommitale e alta Valle del Bove — nessun punto satellitare singolo disponibile, area indicativa.',
     },
     en: {
       'tagline': 'real-time monitoring of the volcano',
@@ -567,6 +589,14 @@
       'ash.imgError': 'Image not yet available for this time slot (it can take a few minutes after the update time).',
       'ash.sourceLink': 'Official INGV source, all times of day ↗',
       'comingSoon.badge': '🛠 coming soon',
+      'hotspot.popup.title': 'Satellite thermal anomaly',
+      'hotspot.popup.frp': 'Fire radiative power (FRP): ',
+      'hotspot.popup.confidence': 'Confidence: ',
+      'hotspot.popup.time': 'Detected: ',
+      'hotspot.confidence.l': 'low',
+      'hotspot.confidence.n': 'nominal',
+      'hotspot.confidence.h': 'high',
+      'hotspot.zone.popup': 'Summit area and upper Valle del Bove — no individual satellite point available, indicative area only.',
     },
   };
 
@@ -592,6 +622,7 @@
     // ricostruisce i blocchi generati via JS (non toccati dagli attributi
     // data-i18n sopra), riusando l'ultimo dato ricevuto se già caricato
     if(window.lastHotspot) renderStatus(window.lastHotspot);
+    if(window.lastHotspot) placeCraterMarker(window.lastHotspot);
     if(window.lastFeedItems) renderFeed(window.lastFeedItems);
     if(window.lastCam) renderCamMeta(window.lastCam);
   }
@@ -659,18 +690,65 @@
   const HOTSPOT_ZONE_CENTER = [37.7480, 15.0100];
   const HOTSPOT_ZONE_RADIUS_M = 3600;
 
-  let hotspotZone = null;
+  // Raggio in pixel di ogni punto FIRMS, scalato (in modo contenuto) sul
+  // FRP (potenza radiativa, MW): più alto = punto più grande, ma con un
+  // minimo/massimo per restare leggibile anche con FRP molto diversi tra loro.
+  function pointRadiusPx(frp){
+    return Math.max(5, Math.min(15, 5 + Math.sqrt(Math.max(0, frp || 0)) * 1.6));
+  }
+
+  function confidenceLabel(code){
+    const key = 'hotspot.confidence.' + String(code || '').toLowerCase();
+    const label = t(key);
+    return label === key ? (code || '—') : label;
+  }
+
+  let hotspotLayers = [];
+  function clearHotspotLayers(){
+    hotspotLayers.forEach(layer => map.removeLayer(layer));
+    hotspotLayers = [];
+  }
+
+  // hotspot.points (se presente e non vuoto): elenco di rilevazioni reali
+  // NASA FIRMS nell'area sommitale + alta Valle del Bove, scritto da
+  // fetch_hotspot.py. Se assente o vuoto (dato mock, pipeline non ancora
+  // aggiornata, o semplicemente giornata di vera quiete satellitare) si
+  // ricade sul cerchio ampio indicativo di prima.
   function placeCraterMarker(hotspot){
-    if(hotspotZone) map.removeLayer(hotspotZone);
+    clearHotspotLayers();
     const accent = window.currentAccent || '#5C7A8A';
-    hotspotZone = L.circle(HOTSPOT_ZONE_CENTER, {
-      radius: HOTSPOT_ZONE_RADIUS_M,
-      color: accent,
-      weight: 2,
-      fillColor: accent,
-      fillOpacity: 0.16,
-      className: 'hotspot-zone'
-    }).addTo(map).bindPopup(hotspot.notes || '');
+    const points = Array.isArray(hotspot.points) ? hotspot.points : [];
+
+    if(points.length){
+      points.forEach(p=>{
+        const marker = L.circleMarker([p.lat, p.lng], {
+          radius: pointRadiusPx(p.frp),
+          color: accent,
+          weight: 1.5,
+          fillColor: accent,
+          fillOpacity: 0.6,
+          className: 'hotspot-point'
+        }).addTo(map);
+        const quando = [p.acq_date, p.acq_time].filter(Boolean).join(' · ');
+        marker.bindPopup(
+          `<strong>${t('hotspot.popup.title')}</strong><br>`
+          + `${t('hotspot.popup.frp')}${p.frp ?? '—'} MW<br>`
+          + `${t('hotspot.popup.confidence')}${confidenceLabel(p.confidence)}`
+          + (quando ? `<br>${t('hotspot.popup.time')}${quando} UTC` : '')
+        );
+        hotspotLayers.push(marker);
+      });
+    } else {
+      const zone = L.circle(HOTSPOT_ZONE_CENTER, {
+        radius: HOTSPOT_ZONE_RADIUS_M,
+        color: accent,
+        weight: 2,
+        fillColor: accent,
+        fillOpacity: 0.16,
+        className: 'hotspot-zone'
+      }).addTo(map).bindPopup(hotspot.notes || t('hotspot.zone.popup'));
+      hotspotLayers.push(zone);
+    }
   }
 
   // ---------- webcam ----------
