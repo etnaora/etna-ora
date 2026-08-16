@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-08-16T13:08:22.082076+00:00",
+  "generated_at": "2026-08-16T13:50:51.120116+00:00",
   "source": "NASA FIRMS (VIIRS_SNPP_NRT) — https://firms.modaps.eosdis.nasa.gov",
   "status": "alta",
   "notes": "Anomalia termica significativa rilevata dal satellite (34 hotspot, FRP massimo 54.4 MW).",
-  "last_significant_event": "2026-08-16T13:08:22.082076+00:00",
+  "last_significant_event": "2026-08-16T13:50:51.120116+00:00",
   "hotspot_count_24h": 34,
   "points": [
     {
@@ -488,5 +488,5 @@
     }
   ],
   "stale": false,
-  "last_success_at": "2026-08-16T13:08:22.082076+00:00"
+  "last_success_at": "2026-08-16T13:50:51.120116+00:00"
 }
