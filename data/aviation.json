@@ -1,0 +1,15 @@
+{
+  "advisory_id": "ETNA.87",
+  "advisory_url": "https://vaac.meteo.fr/advisory/2026/211060_20260815072511/211060_20260815072511/",
+  "dtg": "2026-08-15T07:25:00+00:00",
+  "advisory_nr": "2026/87",
+  "aviation_colour_code": "orange",
+  "eruption_details_raw": "ERUPTION AT 20260808/0018Z ERUPTION ENDED, ASH CLOUD ONGOING",
+  "eruption_ongoing": false,
+  "remark_raw": "NON SIGNIFICATIV ERUPTION, QVA WILL NOT BE PROVIDED",
+  "next_advisory_raw": "NO LATER THAN 20260815/1300Z",
+  "raw_text": "VA ADVISORY\nDTG: 20260815/0725Z\nVAAC: TOULOUSE\nVOLCANO: ETNA 211060\n(dato mock per test locale)",
+  "generated_at": "2026-08-15T07:30:00+00:00",
+  "last_success_at": "2026-08-15T07:30:00+00:00",
+  "stale": false
+}

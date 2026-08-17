@@ -1,0 +1,17 @@
+{
+  "bulletin_date": "2026-08-11",
+  "bulletin_url": "https://www.ct.ingv.it/index.php/monitoraggio-e-sorveglianza/prodotti-del-monitoraggio/bollettini-settimanali-multidisciplinari/1154-bollettino-Settimanale-sul-monitoraggio-vulcanico-geochimico-e-sismico-del-vulcano-Etna-del-2026-08-11/file",
+  "sections": {
+    "vulcanologiche": "Attività eruttiva ai crateri sommitali con emissione di cenere e colate laviche (dato mock per test locale)",
+    "sismologia": "Sismicità in aumento in concomitanza con l'attività eruttiva (dato mock per test locale)",
+    "infrasuono": "Attività infrasonica elevata (dato mock per test locale)",
+    "deformazioni": "Le reti di monitoraggio hanno registrato variazioni significative (dato mock per test locale)",
+    "geochimica": "Flusso di SO2 su un livello alto. Flusso di CO2 dal suolo (Rete EtnaGas): valori medi. Rapporto isotopico He nei siti periferici: su valori alti (dato mock per test locale)",
+    "satellitare": "Attività termica da satellite di livello molto alto in corrispondenza dell'attività eruttiva in corso (dato mock per test locale)",
+    "altre_osservazioni": null,
+    "so2_estratto": "Flusso di SO2 su un livello alto"
+  },
+  "generated_at": "2026-08-11T10:00:00+00:00",
+  "last_success_at": "2026-08-11T10:00:00+00:00",
+  "stale": false
+}
