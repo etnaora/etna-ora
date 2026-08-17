@@ -666,3 +666,387 @@ punto in base al proprio FRP individuale (non solo alla soglia aggregata),
 per distinguere a colpo d'occhio un'anomalia debole da una forte anche
 quando lo stato generale è "moderata". Non fatto in questa sessione,
 annotato come possibile rifinitura.
+
+---
+
+## 15. Sessione 2026-08 (4) — zoom automatico, stati unificati, bug orario UTC
+
+Tre correzioni, **solo su `index.html`** (nessuna modifica a `fetch_hotspot.py`
+o ai JSON in questa sessione).
+
+### 15.1 Zoom-out automatico alla chiusura del modale webcam
+Il bottone "Chiudi" di `#camModal` ora richiama anche `flyToInitialView()`,
+non solo la chiusura del modale. Nuove costanti in cima allo script:
+`MAP_INITIAL_CENTER`/`MAP_INITIAL_ZOOM` (stessi valori passati a `L.map()`,
+centralizzati per non doverli duplicare). Riguarda solo la webcam: gli
+altri modali (cenere, gas, ecc.) non spostano la mappa all'apertura, quindi
+non serve applicare lo stesso fly-back alla chiusura.
+
+### 15.2 Stati "moderata" e "alta" uniti in un unico stato mostrato
+**Perché**: due livelli distinti (attività/allerta) sopra la quiete
+rischiavano di confondere più che informare — la soglia tra i due non è
+mai stata comunicata chiaramente in interfaccia. **Cosa è cambiato, e cosa
+no**: `fetch_hotspot.py` continua a scrivere `"status"` a 3 valori
+(`quiete`/`moderata`/`alta`, soglie invariate, § 5.3/14.1) — **non
+toccato**, per non perdere granularità del dato grezzo se servirà in
+futuro. Il **frontend** (`index.html`, `renderStatus()`) ora mostra solo
+due stati:
+- `quiete` → colore `--mist` (invariato)
+- `moderata` **o** `alta` → un solo stato mostrato, **"attività vulcanica
+  in corso"** (`status.attiva`, IT/EN), colore **`--alert:#C2410C`**
+  (arancione scuro, vicino al rosso — nuova variabile CSS, non riusa
+  `--ember` che resta per altri usi decorativi: icona satellite, tag
+  tremore, hover webcam).
+
+Le vecchie chiavi i18n `status.moderata`/`status.alta` sono state rimosse
+(sostituite da `status.attiva`) in entrambe le lingue.
+
+### 15.3 "Ultimo aggiornamento" sempre visibile accanto allo stato
+Sotto la pillola di stato è comparsa una riga più piccola,
+`ultimo aggiornamento: gg/mm/aaaa, hh:mm UTC` (`status.updated`,
+IT/EN — markup: nuovo contenitore `.status-wrap` che avvolge
+`.status-pill` esistente + il nuovo `.status-updated`). Usa
+**`hotspot.last_success_at`** (fallback su `generated_at` se assente),
+**non** `generated_at` da solo: `last_success_at` è il timestamp
+dell'ultimo fetch **riuscito**, che `write_stale_fallback()` non
+sovrascrive mai in caso di errore (§ 14 non toccato, il campo esisteva
+già). Risultato: la data/ora mostrata è onesta indipendentemente dal buon
+esito o meno dell'ultimo job — se il job fallisce, il suffisso
+"· dato non aggiornato" (già esistente, § 5.4) compare accanto allo stato
+E la data resta congelata all'ultimo successo reale, invece di scrivere
+"generated_at" del run fallito (che avrebbe fatto sembrare il dato più
+fresco di quanto sia).
+
+### 15.4 Bug: "37 UTC" nei popup dei punti hotspot
+**Causa**: il campo `acq_time` di FIRMS è in formato `HHMM` **senza zeri
+iniziali** (es. `"37"` = 00:37, non le "ore 37"; `"5"` = 00:05;
+`"1205"` = 12:05) — veniva concatenato così com'era, crudo, nel popup.
+**Fix**: prima di mostrarlo, il valore viene portato a 4 cifre
+(`padStart(4,'0')`) e poi formattato `hh:mm` (`raw.slice(0,2) + ':' +
+raw.slice(2,4)`). Il dato salvato in `hotspot.json` da `fetch_hotspot.py`
+resta grezzo (invariato) — la formattazione avviene solo in fase di
+visualizzazione in `index.html`.
+
+### 15.5 Cosa NON è cambiato / non toccato in questa sessione
+- `scripts/fetch_hotspot.py`: nessuna modifica.
+- `data/hotspot.json`, `data/webcam.json`: nessuna modifica.
+- Soglie `SOGLIA_ALTA_FRP`/`SOGLIA_ALTA_COUNT`: invariate.
+- **Nota sulla "quiete" durante l'eruzione in corso (ago. 2026)**: durante
+  questa sessione risultava `status: quiete` con zero hotspot rilevati pur
+  in presenza di un'eruzione reale confermata da INGV (colate laviche,
+  emissione di cenere, aeroporto di Catania chiuso). Verificato che **non
+  è un bug della pipeline**: anche un sito indipendente che legge la
+  stessa fonte (NASA FIRMS VIIRS) riportava 0 hotspot nello stesso
+  momento, quasi certamente per la spessa coltre di cenere/nubi che
+  ostacola la rilevazione termica satellitare durante un'eruzione
+  esplosiva — un limite noto del rilevamento da satellite, non risolvibile
+  lato nostro codice. Da qui la scelta fatta in § 15.2/15.3: se il dato
+  satellitare non basta a dare un quadro affidabile, meglio essere
+  minimali ma onesti (due soli stati, data di ultimo aggiornamento sempre
+  in vista) piuttosto che dare un falso senso di precisione a tre livelli.
+
+---
+
+## 16. Sessione 2026-08 (5) — primo tab con dati reali: avviso aeronautico VAAC
+
+Primo dei 4 tab "coming soon" a diventare reale, seguendo l'ordine
+consigliato in § 12.5 punto 1 ("il più a valore immediato"). **Nuovi file**
+(nessun file esistente di pipeline toccato): `scripts/fetch_aviation.py`,
+`.github/workflows/update-aviation.yml`, `data/aviation.json` (mock locale).
+Modificato solo `index.html` (modale `#aeroportoModal` + JS + i18n).
+
+### 16.1 Fonte e formato
+VAAC Toulouse pubblica per ogni avviso un file di testo semplice a formato
+fisso (non serve fare scraping HTML fragile del contenuto): dalla pagina
+`https://vaac.meteo.fr/volcanoes/etna/` si trova la cartella dell'avviso
+più recente (slug tipo `211060_20260815072511`, codice volcano ICAO
+dell'Etna + timestamp), e la stessa cartella contiene sempre un file
+`<slug>_vaa.txt` con il testo canonico. Lo script:
+1. scarica la pagina indice e trova **tutti** gli slug che contengono il
+   codice `211060` (Etna, per scartare eventuali avvisi di altri vulcani
+   che compaiono nella stessa pagina/lista limitrofa);
+2. sceglie quello con il timestamp più alto (non si fida dell'ordine con
+   cui compaiono nella pagina, potrebbe cambiare);
+3. scarica direttamente il `.txt` corrispondente e ne estrae i campi via
+   regex riga-per-riga (`DTG`, `ADVISORY NR`, `AVIATION COLOUR CODE`,
+   `ERUPTION DETAILS`, `RMK`, `NXT ADVISORY`).
+
+**Verificato con dati reali** (non solo con un mock inventato): durante
+questa sessione l'Etna era in eruzione reale con codice colore RED, poi
+sceso ad ORANGE lo stesso giorno con "ERUPTION ENDED, ASH CLOUD ONGOING" —
+entrambi i formati testuali sono stati testati contro il parser e
+funzionano correttamente, inclusa la deduzione `eruption_ongoing`
+(`true`/`false`/`null` se il testo non è chiaro).
+
+### 16.2 Schema `data/aviation.json`
+```json
+{
+  "advisory_id": "ETNA.87",
+  "advisory_url": "https://vaac.meteo.fr/advisory/2026/.../.../",
+  "dtg": "2026-08-15T07:25:00+00:00",
+  "advisory_nr": "2026/87",
+  "aviation_colour_code": "orange",
+  "eruption_details_raw": "testo originale VAAC, invariato",
+  "eruption_ongoing": false,
+  "remark_raw": "testo originale VAAC, invariato",
+  "next_advisory_raw": "testo originale VAAC, invariato",
+  "raw_text": "l'intero avviso .txt, per riferimento/debug",
+  "generated_at": "...", "last_success_at": "...", "stale": false
+}
+```
+`aviation_colour_code` è sempre uno tra `red`/`orange`/`yellow`/`green`/
+`unknown` (normalizzato minuscolo; `unknown` anche se VAAC pubblicasse un
+valore imprevisto — non blocchiamo tutto per un campo fuori standard).
+I campi `_raw` sono **testo originale non tradotto** (l'avviso VAAC è
+sempre in inglese, per definizione — è uno standard ICAO internazionale):
+mostrato così com'è in pagina, non tradotto in IT, scelta deliberata per
+non rischiare di alterare il significato di un avviso di sicurezza aerea.
+
+### 16.3 Fallback stale — stesso pattern di `fetch_hotspot.py`
+Se VAAC non è raggiungibile, `write_stale_fallback()` mantiene l'ultimo
+avviso noto ma scrive `"stale": true` (stessa logica, stesso motivo,
+niente di nuovo rispetto a § 5.4/14 — vedi lì per la spiegazione estesa).
+Il workflow `update-aviation.yml` fa il commit "if: always()" per lo
+stesso identico motivo di `update-hotspot.yml`.
+
+### 16.4 `index.html` — modale aeroporto ora reale
+Il badge "🛠 coming soon" è sparito solo da `#aeroportoModal` (gli altri
+3 — gas, dati scientifici, satelliti — restano "coming soon", non
+toccati). Contenuto mostrato: pallino colorato + codice colore aviazione
+(rosso/arancione/giallo/verde, con una riga esplicativa di cosa
+significa ciascuno — non tutti sanno cosa vuol dire "codice arancione"),
+stato eruzione (in corso/conclusa/non specificato), nota testuale VAAC se
+presente, id avviso + **stesso `formatUpdatedAt()`/`status.updated`
+riusati da § 15.3** per la data di ultimo aggiornamento (coerenza tra i
+due tab, stesso linguaggio "ultimo aggiornamento" + eventuale
+"· dato non aggiornato" se stale). `renderAviation()` viene richiamata sia
+al caricamento dati sia da `setLang()` (come gli altri blocchi dinamici),
+e tollera `aviation.json` mancante/non ancora pubblicato mostrando
+`aviation.noData` invece di rompersi — il `fetch` di `aviation.json` nel
+`Promise.all` ha un `.catch(()=>null)` dedicato apposta per questo, per
+non far fallire anche webcam/hotspot/feed se questo singolo file non
+esiste ancora la prima volta che il workflow non è ancora girato.
+
+### 16.5 Prossimi passi (roadmap aggiornata)
+Con l'aviazione fatta, i prossimi in ordine (§ 12.5 originale, invariato):
+1. ~~Tab aeroporto~~ ✅ fatto in questa sessione
+2. `scripts/fetch_gas.py` + `update-gas.yml` — riusa il pattern di
+   `fetch_comunicati.py` (scraping bollettino INGV settimanale), estrae il
+   dato FLAME
+3. Tab scientifico — stessa pipeline di (2), campo diverso dello stesso
+   bollettino
+4. Tab satellitare — URL diretti NASA Worldview/FIRMS, sul modello di
+   `ashImageUrl()`
+
+---
+
+## 17. Sessione 2026-08 (6) — tab gas: bollettino settimanale INGV
+
+Secondo tab della roadmap. **Nuovi file**: `scripts/fetch_bollettino.py`,
+`.github/workflows/update-bollettino.yml`, `data/bollettino.json` (mock
+locale). Modificato solo `index.html` (modale `#gasModal` + JS + i18n).
+
+### 17.1 Perché un solo script per gas E dati scientifici
+Il bollettino settimanale INGV è **un unico PDF** con una sezione iniziale
+numerata ("1. SINTESI STATO DI ATTIVITA'") che contiene, punto per punto,
+esattamente i campi utili sia al tab gas sia al futuro tab scientifico:
+1) osservazioni vulcanologiche, 2) sismologia, 3) infrasuono,
+4) deformazioni del suolo, 5) geochimica (SO2/CO2/He), 6) osservazioni
+satellitari, 7) altre osservazioni (non sempre presente). Non avrebbe
+senso scaricare due volte lo stesso PDF con due script diversi: **un solo
+script estrae tutte le sezioni**, il tab gas (questa sessione) ne usa solo
+una (geochimica/SO2), il tab scientifico (prossima sessione) userà le
+altre — già pronte in `data/bollettino.json` da subito, **senza dover
+toccare di nuovo la pipeline** quando si costruirà quel tab.
+
+### 17.2 Come funziona `fetch_bollettino.py`
+1. Scarica la pagina elenco `.../bollettini-settimanali-multidisciplinari`
+   (Joomla DOCman: elenca insieme Etna/Stromboli/Vulcano, settimanali E
+   mensili, tutti mischiati per data);
+2. filtra via regex **solo** i link che contengono
+   `bollettino-Settimanale-...-del-vulcano-Etna-del-{data}` (esclude
+   Stromboli, Vulcano, e i bollettini *mensili* dell'Etna — pattern
+   testato con un mock che replica la struttura reale osservata su
+   `ct.ingv.it`, vedi commit);
+3. sceglie la data più alta tra i match trovati (non si fida dell'ordine
+   di visualizzazione della pagina);
+4. scarica il PDF (verifica la firma `%PDF` prima di procedere, per non
+   tentare di leggere una pagina di errore come fosse un PDF valido);
+5. estrae il testo **solo delle prime 2 pagine** con `pdfplumber` — la
+   sintesi numerata è sempre in pagina 1 su tutti i bollettini controllati,
+   non serve processare le 15-22 pagine del documento completo;
+6. isola le 7 sezioni con una singola regex a più alternative
+   (`HEADER_RE`), gestendo sia il caso normale (confine = inizio della
+   sezione successiva) sia l'ultima sezione trovata quando la 7 manca (che
+   altrimenti "trabocca" nel testo di pagina 2/piè di pagina — tagliata al
+   primo marcatore di piè di pagina o nuovo capitolo, `SPILLOVER_RE`);
+7. dalla sezione geochimica (che contiene anche CO2 suolo/falda e rapporto
+   isotopico He, non solo SO2) isola con una regex dedicata (`SO2_RE`)
+   **solo** la frase sull'SO2, salvata a parte come `so2_estratto` — è
+   quella che il tab gas mostra, senza il resto della sezione geochimica
+   che è più densa di quanto serva a questo tab.
+
+**Testato con 6 varianti di testo reale** raccolte da bollettini INGV
+pubblicati tra febbraio e agosto 2026 (formulazioni della sezione SO2
+diverse tra loro: "su un livello medio", "su un livello medio ed in
+incremento", con/senza punteggiatura tra una sotto-voce e l'altra) — non
+solo un mock inventato a tavolino.
+
+### 17.3 Schema `data/bollettino.json`
+```json
+{
+  "bulletin_date": "2026-08-11",
+  "bulletin_url": "https://www.ct.ingv.it/.../file",
+  "sections": {
+    "vulcanologiche": "...", "sismologia": "...", "infrasuono": "...",
+    "deformazioni": "...", "geochimica": "...", "satellitare": "...",
+    "altre_osservazioni": null,
+    "so2_estratto": "Flusso di SO2 su un livello alto"
+  },
+  "generated_at": "...", "last_success_at": "...", "stale": false
+}
+```
+Ogni campo di `sections` può essere `null` se quella settimana la voce non
+è stata riconosciuta (formato leggermente diverso, sezione assente) — il
+resto del bollettino resta comunque utilizzabile, non tutto o niente.
+
+### 17.4 `index.html` — modale gas
+Il badge "🛠 coming soon" è sparito solo da `#gasModal` (dati scientifici e
+satelliti restano "coming soon"). Contenuto: frase SO2 estratta, settimana
+di riferimento del bollettino, **stessi `formatUpdatedAt()`/
+`status.updated`/`escapeHtml()` già introdotti per aviazione** (§ 16.4 —
+riuso diretto, nessun codice duplicato), link al bollettino completo su
+`ct.ingv.it` (href impostato dinamicamente da `renderGas()` sull'URL
+specifico dell'ultimo bollettino trovato, non un link fisso alla pagina
+indice). `bollettino.json` nel `Promise.all` ha lo stesso `.catch(()=>null)`
+di `aviation.json`, per lo stesso motivo (non deve poter rompere
+webcam/hotspot/feed se manca).
+
+### 17.5 Cosa NON è cambiato
+- `fetch_hotspot.py`, `fetch_aviation.py`, `fetch_comunicati.py`,
+  `fetch_terremoti.py`: nessuna modifica.
+- Fallback stale: stesso pattern identico a hotspot/aviation (§ 5.4/16.3).
+
+### 17.6 Prossimi passi (roadmap aggiornata)
+1. ~~Tab aeroporto~~ ✅
+2. ~~Tab gas~~ ✅ fatto in questa sessione
+3. **Tab dati scientifici — dato già pronto**, `data/bollettino.json` ha
+   già `sections.sismologia`/`.infrasuono`/`.deformazioni`/`.satellitare`
+   popolati dallo stesso script di questa sessione: serve "solo" scrivere
+   il modale HTML/JS (`renderScientifico()`, sullo stesso modello di
+   `renderGas()`), **non serve toccare `fetch_bollettino.py`**.
+4. Tab satellitare — URL diretti NASA Worldview/FIRMS, sul modello di
+   `ashImageUrl()`
+
+---
+
+## 18. Sessione 2026-08 (7) — tab dati scientifici: nessuna nuova pipeline
+
+Terzo tab della roadmap. **Nessun file di pipeline toccato** — esattamente
+come previsto in § 17.6: `data/bollettino.json` conteneva già tutto il
+necessario da quando è stato scritto `fetch_bollettino.py` nella sessione
+precedente. Modificato solo `index.html` (modale `#scientificoModal` +
+`renderScientifico()` + i18n).
+
+### 18.1 Cosa mostra il tab
+Quattro sezioni dal bollettino settimanale INGV, ciascuna con etichetta +
+testo: **sismologia**, **infrasuono**, **deformazioni del suolo**,
+**osservazioni satellitari** (l'area termica in area sommitale osservata
+da satellite — complementare, non sovrapposta, ai punti FIRMS già mostrati
+in mappa: quella è quasi in tempo reale, questa è la lettura settimanale
+aggregata di INGV). La sezione "geochimica" non compare qui: è già
+mostrata (nella sua parte SO2) nel tab gas, § 17 — non la duplichiamo.
+"Altre osservazioni" (7) non è incluso nel tab: è la sezione meno
+strutturata/più raramente presente del bollettino (spesso su temi molto
+specifici, es. analisi granulometrica della cenere), lasciata fuori per
+tenere il tab leggibile — resta comunque nei dati (`sections.altre_osservazioni`)
+se in futuro si vuole aggiungerla.
+
+### 18.2 `renderScientifico(bollettino)`
+Stesso identico bollettino già scaricato per il tab gas (nessuna chiamata
+di rete aggiuntiva, nessun nuovo file JSON): la funzione filtra le 4
+sezioni non vuote (`campi.filter(...)`) e mostra solo quelle
+effettivamente presenti quella settimana — se ad esempio "infrasuono"
+risultasse `null` (sezione non riconosciuta nel PDF quella settimana, vedi
+§ 17.3), il tab la ometterebbe silenziosamente invece di mostrare un campo
+vuoto o un errore. Se **tutte e 4** risultano assenti, mostra
+`scientific.noData` invece di un modale vuoto. Riusa senza modifiche
+`formatUpdatedAt()`, `escapeHtml()`, `status.updated`/`status.staleSuffix`,
+e la chiave i18n `gas.bulletinWeek` (stesso testo "Dal bollettino della
+settimana del", non serve duplicarla con un nome diverso). Richiamata sia
+nel caricamento dati iniziale sia da `setLang()`, come tutti gli altri
+blocchi dinamici.
+
+### 18.3 Prossimi passi (roadmap aggiornata)
+1. ~~Tab aeroporto~~ ✅
+2. ~~Tab gas~~ ✅
+3. ~~Tab dati scientifici~~ ✅ fatto in questa sessione
+4. **Tab satellitare** — ultimo della lista. A differenza dei tre
+   precedenti non richiede scraping: si può costruire con URL diretti a
+   immagini satellitari pubbliche (NASA Worldview, GIBS) parametrizzati
+   per data/area/livello di zoom sull'Etna, sul modello già in uso in
+   `ashImageUrl()` per le mappe di ricaduta cenere (stessa idea, fonte
+   diversa) — probabile che non serva nessun nuovo script Python né
+   nessun nuovo workflow GitHub Actions, solo `index.html`.
+
+---
+
+## 19. Sessione 2026-08 (8) — tab satellitare: roadmap completata
+
+Quarto e ultimo tab della roadmap originale (§ 12.5). **Nessun nuovo file
+Python, nessun nuovo workflow**, esattamente come previsto in § 18.3: a
+differenza di aviazione/gas/scientifico, non serve scraping — l'immagine
+si costruisce con un URL diretto, verificato contro la documentazione
+ufficiale NASA GIBS (non inventato). Modificato solo `index.html`
+(modale `#satelliteModal` + JS + i18n + bottone dock).
+
+### 19.1 Fonte: NASA GIBS Snapshot API
+`https://wvs.earthdata.nasa.gov/api/v1/snapshot` — stesso servizio dietro
+NASA Worldview, pensato apposta per generare "ritagli" statici di immagini
+satellitari via URL parametrizzato (data, bounding box, livello,
+dimensioni), documentato pubblicamente su `nasa-gibs.github.io/gibs-api-docs`.
+Nessuna chiave API richiesta, nessun limite di utilizzo pubblicato per
+questo tipo di richieste sporadiche.
+
+**Attenzione all'ordine del bounding box**: l'API GIBS vuole
+`south,west,north,east` (verificato sull'esempio ufficiale della
+documentazione), **diverso** dall'ordine `west,south,east,north` usato
+altrove in questo stesso file per Leaflet/FIRMS (§ 13.4/14.1) — commentato
+esplicitamente nel codice per non fare confusione in futuro.
+
+Layer usati:
+- `VIIRS_SNPP_CorrectedReflectance_TrueColor` — immagine vero colore,
+  risoluzione ~375 m (stesso sensore VIIRS già usato per i punti hotspot,
+  § 14 — coerenza di fonte in tutto il sito)
+- `VIIRS_SNPP_Thermal_Anomalies_375m_All` — overlay opzionale (checkbox,
+  disattivo di default) che sovrappone le anomalie termiche rilevate dallo
+  stesso sensore, per un confronto visivo diretto "cosa vede la mappa vs
+  cosa vede la foto satellitare quello stesso giorno"
+- `Coastlines` — sempre incluso, per orientarsi (costa siciliana)
+
+### 19.2 UX: perché si parte da "ieri" e non da "oggi"
+Il passaggio del satellite sull'Italia avviene a metà giornata UTC e GIBS
+pubblica con qualche ora di ritardo: aprire il tab e mostrare subito
+l'immagine di "oggi" avrebbe una probabilità concreta di restituire
+un'immagine vuota/non ancora pronta al primo tentativo, specialmente se
+qualcuno consulta il sito la mattina (ora italiana). Il selettore giorni
+parte quindi da **ieri** (quasi sempre disponibile) con altri 3 giorni
+precedenti selezionabili — stesso pattern a bottoni di `ashSlots` (§ 12.2),
+riusato con le stesse classi CSS (`.ash-slots`, `.ash-slot`,
+`.ash-image-wrap`) invece di duplicarle con un nome diverso.
+
+### 19.3 Gestione immagine mancante
+Stesso pattern di `#ashImage` (§ 12.2): `onerror`/`onload` sull'`<img>`
+mostrano/nascondono un messaggio esplicito (`satellite.imgError`) invece
+di lasciare un'icona di immagine rotta — importante qui più che altrove,
+dato che "nessuna immagine per oggi" è un esito **atteso e frequente**
+(nuvole, satellite non passato, dato non ancora pubblicato), non un errore
+di rete da segnalare come guasto.
+
+### 19.4 Roadmap — completata
+Con questo tab si chiude la lista di 4 elencata in § 12.5:
+aeroporto ✅ (§ 16) → gas ✅ (§ 17) → dati scientifici ✅ (§ 18) →
+satellitare ✅ (questa sessione). Prossimi sviluppi non hanno più un
+ordine "consigliato" prestabilito: da definire in base a cosa interessa
+di più in questo momento (es. il suite "check-sicurezza"/registro
+subappaltatori per il lavoro, o rifiniture del sito già esistente).
