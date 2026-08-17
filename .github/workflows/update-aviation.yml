@@ -1,0 +1,64 @@
+name: Aggiorna avviso aeronautico Etna (VAAC Toulouse)
+
+on:
+  schedule:
+    # Ogni 30 minuti: VAAC pubblica un nuovo avviso ogni poche ore in
+    # condizioni normali, ma può arrivare a uno ogni 3-6h durante un
+    # episodio attivo (vedi PROGETTO_NOTE.md §12.4) — un controllo più
+    # ravvicinato non costa nulla e ci fa vedere prima un nuovo avviso.
+    - cron: "*/30 * * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  update-aviation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Imposta Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Installa dipendenze
+        run: pip install requests beautifulsoup4
+
+      - name: Aggiorna data/aviation.json
+        id: fetch
+        run: python3 scripts/fetch_aviation.py
+        continue-on-error: true
+
+      # Stesso motivo di update-hotspot.yml: "if: always()" garantisce che
+      # il marcatore "stale" scritto dallo script in caso di fallimento
+      # venga comunque pubblicato, invece di lasciare il sito a mostrare in
+      # buona fede un avviso vecchio come se fosse quello attuale.
+      - name: Commit e push (con retry anti-collisione)
+        if: always()
+        run: |
+          git config user.name "etna-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/aviation.json
+          if git diff --cached --quiet; then
+            echo "Nessuna modifica da pubblicare."
+            exit 0
+          fi
+          git commit -m "Aggiorna avviso aeronautico VAAC [automatico]"
+          for i in 1 2 3 4 5; do
+            if git push; then
+              echo "Push riuscito al tentativo $i."
+              exit 0
+            fi
+            echo "Push rifiutato (probabile collisione, es. run manuale + schedulato sovrapposti), tentativo $i/5: pull --rebase e riprovo tra qualche secondo..."
+            sleep $((RANDOM % 10 + 3))
+            git pull --rebase origin main
+          done
+          echo "Push fallito dopo 5 tentativi." >&2
+          exit 1
+
+      - name: Segnala il job come fallito se il fetch non è riuscito
+        if: steps.fetch.outcome == 'failure'
+        run: exit 1
