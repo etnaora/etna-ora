@@ -55,8 +55,9 @@
     --ash:#EDE6DB;
     --ash-muted:#9C948A;
     --mist:#5C7A8A;      /* stato quieto */
-    --ember:#E8541E;     /* stato attivo / magma */
+    --ember:#E8541E;     /* decorativo: satellite/tremore, non più usato per lo status pill */
     --sulfur:#FFD166;    /* stato di allerta massima, uso minimo */
+    --alert:#C2410C;     /* stato "attività vulcanica in corso" (ex moderata+alta, unificati) — arancione scuro vicino al rosso */
     --hairline: rgba(237,230,219,0.12);
     --accent: var(--mist); /* cambia dinamicamente via JS in base ai dati */
     --font-display: 'Fraunces', serif;
@@ -177,8 +178,10 @@
     letter-spacing:0.01em; color:var(--ash); opacity:0.88; text-transform:none;
     text-shadow:0 1px 4px rgba(10,9,7,0.55);
   }
+  .status-wrap{
+    justify-self:center; display:flex; flex-direction:column; align-items:center; gap:6px;
+  }
   .status-pill{
-    justify-self:center;
     display:flex; align-items:center; gap:10px;
     font-family:var(--font-mono); font-size:13px; letter-spacing:0.04em;
     color:var(--ash); text-transform:uppercase;
@@ -186,6 +189,12 @@
     padding:11px 22px; border-radius:100px; border:1px solid var(--hairline);
     box-shadow:0 4px 18px rgba(0,0,0,0.25);
     pointer-events:auto;
+  }
+  .status-updated{
+    font-family:var(--font-mono); font-size:10.5px; letter-spacing:0.03em;
+    color:var(--ash-muted); text-transform:none;
+    text-shadow:0 1px 3px rgba(10,9,7,0.6);
+    pointer-events:none;
   }
   .status-pill .prefix{color:var(--ash-muted); font-weight:400;}
   .status-pill .value{font-weight:600; color:var(--accent);}
@@ -342,6 +351,7 @@
     .tagline{font-size:11px;}
     .status-pill{font-size:11px; padding:9px 14px; gap:7px;}
     .status-pill .prefix{display:none;}
+    .status-updated{font-size:9.5px;}
   }
 </style>
 </head>
@@ -351,7 +361,10 @@
 
 <div class="topbar">
   <div class="wordmark"><h1>Etna, ora</h1><span class="tagline" data-i18n="tagline">monitoraggio in tempo reale del vulcano</span></div>
-  <div class="status-pill"><span class="status-dot" id="statusDot"></span><span class="prefix" data-i18n="status.prefix">status attuale:</span> <span class="value" id="statusLabel">quiete</span></div>
+  <div class="status-wrap">
+    <div class="status-pill"><span class="status-dot" id="statusDot"></span><span class="prefix" data-i18n="status.prefix">status attuale:</span> <span class="value" id="statusLabel">quiete</span></div>
+    <div class="status-updated" id="statusUpdated"></div>
+  </div>
   <div class="topbar-right" style="display:flex; align-items:center;">
     <div class="lang-toggle" role="group" aria-label="Lingua / Language">
       <button class="lang-btn" id="langBtnIt" onclick="setLang('it')">IT</button>
@@ -379,7 +392,7 @@
     <span class="topic-dot"></span>
   </button>
 
-  <button class="topic-btn" data-topic="satellite" style="--topic-accent:var(--ember);" onclick="openModalById('satelliteModal')" aria-haspopup="dialog">
+  <button class="topic-btn" data-topic="satellite" style="--topic-accent:var(--ember);" onclick="openSatelliteModal()" aria-haspopup="dialog">
     <span class="topic-icon" aria-hidden="true">
       <svg viewBox="0 0 24 24"><path d="m14.5 3.5-3 3 6 6 3-3zM7 11l6 6-2 2a4.24 4.24 0 0 1-6-6zM3 21l3.5-3.5M17 3l1.5 1.5M20.5 6.5 22 8"/></svg>
     </span>
@@ -432,7 +445,7 @@
     <div style="margin-top:10px; font-size:12px;">
       <a id="camFallbackLink" href="#" target="_blank" rel="noopener" style="color:var(--ash-muted);" data-i18n="cam.fallback">Se l'immagine non appare, apri la webcam ufficiale INGV in una nuova scheda ↗</a>
     </div>
-    <button class="close" onclick="document.getElementById('camModal').classList.remove('open')" data-i18n="btn.close">Chiudi</button>
+    <button class="close" onclick="document.getElementById('camModal').classList.remove('open'); flyToInitialView();" data-i18n="btn.close">Chiudi</button>
   </div>
 </div>
 
@@ -479,33 +492,67 @@
      ============================================================ -->
 
 <div class="modal-backdrop" id="gasModal">
-  <div class="modal" style="width:min(420px,90vw);">
+  <div class="modal" style="width:min(480px,90vw);">
     <h3 data-i18n="topic.gas">Gas in atmosfera</h3>
-    <div class="dev-badge" data-i18n="comingSoon.badge">🛠 coming soon</div>
+    <div class="meta" style="font-family:var(--font-body); font-size:13px; color:var(--ash); line-height:1.6; margin-bottom:12px;" data-i18n="gas.disclaimer">
+      Sintesi del flusso di anidride solforosa (SO2) dal Bollettino Settimanale INGV — un dato aggiornato settimanalmente, non in tempo reale.
+    </div>
+    <div id="gasBody"></div>
+    <div style="margin-top:10px; font-size:12px;">
+      <a id="gasSourceLink" href="https://www.ct.ingv.it/index.php/monitoraggio-e-sorveglianza/prodotti-del-monitoraggio/bollettini-settimanali-multidisciplinari" target="_blank" rel="noopener" style="color:var(--ash-muted);" data-i18n="gas.sourceLink">Bollettino completo INGV ↗</a>
+    </div>
     <button class="close" onclick="document.getElementById('gasModal').classList.remove('open')" data-i18n="btn.close">Chiudi</button>
   </div>
 </div>
 
 <div class="modal-backdrop" id="aeroportoModal">
-  <div class="modal" style="width:min(420px,90vw);">
+  <div class="modal" style="width:min(480px,90vw);">
     <h3 data-i18n="topic.aeroporto">Aeroporto Catania</h3>
-    <div class="dev-badge" data-i18n="comingSoon.badge">🛠 coming soon</div>
+    <div class="meta" style="font-family:var(--font-body); font-size:13px; color:var(--ash); line-height:1.6; margin-bottom:12px;" data-i18n-html="aviation.disclaimer">
+      Avviso ufficiale per l'aviazione emesso dal VAAC di Tolosa (Météo-France), l'ente incaricato del monitoraggio delle ceneri vulcaniche per il traffico aereo nell'area euro-mediterranea. <strong>Non sostituisce le comunicazioni ufficiali di SAC/aeroporto di Catania</strong> sullo stato dei voli.
+    </div>
+    <div id="aviationBody"></div>
+    <div style="margin-top:10px; font-size:12px;">
+      <a id="aviationSourceLink" href="https://vaac.meteo.fr/volcanoes/etna/" target="_blank" rel="noopener" style="color:var(--ash-muted);" data-i18n="aviation.sourceLink">Fonte ufficiale VAAC Toulouse, storico avvisi ↗</a>
+    </div>
     <button class="close" onclick="document.getElementById('aeroportoModal').classList.remove('open')" data-i18n="btn.close">Chiudi</button>
   </div>
 </div>
 
 <div class="modal-backdrop" id="scientificoModal">
-  <div class="modal" style="width:min(420px,90vw);">
+  <div class="modal" style="width:min(480px,90vw);">
     <h3 data-i18n="topic.scientifico">Dati scientifici al suolo</h3>
-    <div class="dev-badge" data-i18n="comingSoon.badge">🛠 coming soon</div>
+    <div class="meta" style="font-family:var(--font-body); font-size:13px; color:var(--ash); line-height:1.6; margin-bottom:12px;" data-i18n="scientific.disclaimer">
+      Sintesi di sismologia, infrasuono, deformazioni del suolo e osservazioni satellitari dal Bollettino Settimanale INGV — un dato aggiornato settimanalmente, non in tempo reale.
+    </div>
+    <div id="scientificoBody"></div>
+    <div style="margin-top:10px; font-size:12px;">
+      <a id="scientificoSourceLink" href="https://www.ct.ingv.it/index.php/monitoraggio-e-sorveglianza/prodotti-del-monitoraggio/bollettini-settimanali-multidisciplinari" target="_blank" rel="noopener" style="color:var(--ash-muted);" data-i18n="gas.sourceLink">Bollettino completo INGV ↗</a>
+    </div>
     <button class="close" onclick="document.getElementById('scientificoModal').classList.remove('open')" data-i18n="btn.close">Chiudi</button>
   </div>
 </div>
 
 <div class="modal-backdrop" id="satelliteModal">
-  <div class="modal" style="width:min(420px,90vw);">
+  <div class="modal" style="width:min(640px,92vw);">
     <h3 data-i18n="topic.satellite">Foto satellitari</h3>
-    <div class="dev-badge" data-i18n="comingSoon.badge">🛠 coming soon</div>
+    <div class="meta" style="font-family:var(--font-body); font-size:13px; color:var(--ash); line-height:1.6; margin-bottom:4px;" data-i18n-html="satellite.disclaimer">
+      Immagine satellitare NASA (VIIRS, vero colore, risoluzione ~375 m) dell'area dell'Etna, via Global Imagery Browse Services. <strong>Nuvole o l'assenza del passaggio satellitare quel giorno possono rendere l'immagine parzialmente o del tutto coperta</strong> — non è un difetto del sito, è un limite dell'osservazione da satellite.
+    </div>
+    <div class="ash-slots" id="satelliteDays"></div>
+    <label style="display:flex; align-items:center; gap:7px; font-family:var(--font-body); font-size:12.5px; color:var(--ash-muted); margin:2px 0 12px;">
+      <input type="checkbox" id="satelliteThermalToggle" onchange="refreshSatelliteImage()">
+      <span data-i18n="satellite.thermalToggle">Sovrapponi le anomalie termiche rilevate (NASA FIRMS)</span>
+    </label>
+    <div class="ash-image-wrap">
+      <img id="satelliteImage" src="" alt="Immagine satellitare Etna" loading="lazy" onload="document.getElementById('satelliteImageError').style.display='none'" onerror="document.getElementById('satelliteImageError').style.display='block'">
+    </div>
+    <div id="satelliteImageError" style="display:none; font-size:12px; color:var(--ash-muted); margin-top:8px;" data-i18n="satellite.imgError">
+      Immagine non disponibile per questa data (nuvole, passaggio satellitare mancante, o dato non ancora pubblicato).
+    </div>
+    <div style="margin-top:10px; font-size:12px;">
+      <a id="satelliteSourceLink" href="https://worldview.earthdata.nasa.gov/" target="_blank" rel="noopener" style="color:var(--ash-muted);" data-i18n="satellite.sourceLink">Esplora su NASA Worldview ↗</a>
+    </div>
     <button class="close" onclick="document.getElementById('satelliteModal').classList.remove('open')" data-i18n="btn.close">Chiudi</button>
   </div>
 </div>
@@ -524,9 +571,10 @@
       'tagline': 'monitoraggio in tempo reale del vulcano',
       'status.prefix': 'status attuale:',
       'status.quiete': 'quiete',
-      'status.moderata': 'attività',
-      'status.alta': 'allerta',
+      'status.attiva': 'attività vulcanica in corso',
       'status.staleSuffix': ' · dato non aggiornato',
+      'status.updated': 'ultimo aggiornamento: ',
+      'status.updated.unknown': 'non ancora disponibile',
       'topic.cenere': 'Ricaduta cenere',
       'topic.gas': 'Gas in atmosfera',
       'topic.aeroporto': 'Aeroporto Catania',
@@ -558,14 +606,44 @@
       'hotspot.confidence.n': 'nominale',
       'hotspot.confidence.h': 'alta',
       'hotspot.zone.popup': 'Zona sommitale e alta Valle del Bove — nessun punto satellitare singolo disponibile, area indicativa.',
+      'aviation.disclaimer': 'Avviso ufficiale per l\'aviazione emesso dal VAAC di Tolosa (Météo-France), l\'ente incaricato del monitoraggio delle ceneri vulcaniche per il traffico aereo nell\'area euro-mediterranea. <strong>Non sostituisce le comunicazioni ufficiali di SAC/aeroporto di Catania</strong> sullo stato dei voli.',
+      'aviation.colourCode': 'Codice colore aviazione: ',
+      'aviation.colour.red': 'rosso — eruzione in corso, forte impatto potenziale',
+      'aviation.colour.orange': 'arancione — attività in aumento o in diminuzione',
+      'aviation.colour.yellow': 'giallo — vulcano in stato di agitazione sopra i livelli di fondo',
+      'aviation.colour.green': 'verde — attività vulcanica di fondo',
+      'aviation.colour.unknown': 'non disponibile',
+      'aviation.eruption.ongoing': 'Eruzione in corso secondo l\'ultimo avviso.',
+      'aviation.eruption.ended': 'Eruzione conclusa secondo l\'ultimo avviso (la nube di cenere può comunque persistere).',
+      'aviation.eruption.unknown': 'Stato dell\'eruzione non specificato nell\'ultimo avviso.',
+      'aviation.remark': 'Nota VAAC: ',
+      'aviation.sourceLink': 'Fonte ufficiale VAAC Toulouse, storico avvisi ↗',
+      'aviation.noData': 'Nessun avviso disponibile al momento.',
+      'gas.disclaimer': 'Sintesi del flusso di anidride solforosa (SO2) dal Bollettino Settimanale INGV — un dato aggiornato settimanalmente, non in tempo reale.',
+      'gas.so2Label': 'SO2 (rete FLAME): ',
+      'gas.bulletinWeek': 'Dal bollettino della settimana del ',
+      'gas.sourceLink': 'Bollettino completo INGV ↗',
+      'gas.noData': 'Nessun dato disponibile al momento.',
+      'scientific.disclaimer': 'Sintesi di sismologia, infrasuono, deformazioni del suolo e osservazioni satellitari dal Bollettino Settimanale INGV — un dato aggiornato settimanalmente, non in tempo reale.',
+      'scientific.sismologia': 'Sismologia',
+      'scientific.infrasuono': 'Infrasuono',
+      'scientific.deformazioni': 'Deformazioni del suolo',
+      'scientific.satellitare': 'Osservazioni satellitari',
+      'scientific.noData': 'Nessun dato disponibile al momento.',
+      'satellite.disclaimer': 'Immagine satellitare NASA (VIIRS, vero colore, risoluzione ~375 m) dell\'area dell\'Etna, via Global Imagery Browse Services. <strong>Nuvole o l\'assenza del passaggio satellitare quel giorno possono rendere l\'immagine parzialmente o del tutto coperta</strong> — non è un difetto del sito, è un limite dell\'osservazione da satellite.',
+      'satellite.thermalToggle': 'Sovrapponi le anomalie termiche rilevate (NASA FIRMS)',
+      'satellite.imgError': 'Immagine non disponibile per questa data (nuvole, passaggio satellitare mancante, o dato non ancora pubblicato).',
+      'satellite.sourceLink': 'Esplora su NASA Worldview ↗',
+      'satellite.yesterday': 'ieri',
     },
     en: {
       'tagline': 'real-time monitoring of the volcano',
       'status.prefix': 'current status:',
       'status.quiete': 'calm',
-      'status.moderata': 'active',
-      'status.alta': 'alert',
+      'status.attiva': 'volcanic activity in progress',
       'status.staleSuffix': ' · data not up to date',
+      'status.updated': 'last update: ',
+      'status.updated.unknown': 'not yet available',
       'topic.cenere': 'Ashfall forecast',
       'topic.gas': 'Gas in the atmosphere',
       'topic.aeroporto': 'Catania airport',
@@ -597,6 +675,35 @@
       'hotspot.confidence.n': 'nominal',
       'hotspot.confidence.h': 'high',
       'hotspot.zone.popup': 'Summit area and upper Valle del Bove — no individual satellite point available, indicative area only.',
+      'aviation.disclaimer': 'Official aviation advisory issued by the Toulouse VAAC (Météo-France), the body responsible for monitoring volcanic ash for air traffic in the euro-Mediterranean area. <strong>It does not replace official communications from Catania airport/SAC</strong> on flight status.',
+      'aviation.colourCode': 'Aviation colour code: ',
+      'aviation.colour.red': 'red — eruption in progress, high potential impact',
+      'aviation.colour.orange': 'orange — activity increasing or decreasing',
+      'aviation.colour.yellow': 'yellow — volcano showing signs of elevated unrest above background level',
+      'aviation.colour.green': 'green — background volcanic activity',
+      'aviation.colour.unknown': 'not available',
+      'aviation.eruption.ongoing': 'Eruption ongoing according to the latest advisory.',
+      'aviation.eruption.ended': 'Eruption ended according to the latest advisory (the ash cloud may still persist).',
+      'aviation.eruption.unknown': 'Eruption status not specified in the latest advisory.',
+      'aviation.remark': 'VAAC note: ',
+      'aviation.sourceLink': 'Official VAAC Toulouse source, advisory archive ↗',
+      'aviation.noData': 'No advisory available at the moment.',
+      'gas.disclaimer': 'Sulphur dioxide (SO2) flux summary from the INGV Weekly Bulletin — updated weekly, not in real time.',
+      'gas.so2Label': 'SO2 (FLAME network): ',
+      'gas.bulletinWeek': 'From the bulletin for the week of ',
+      'gas.sourceLink': 'Full INGV bulletin ↗',
+      'gas.noData': 'No data available at the moment.',
+      'scientific.disclaimer': 'Summary of seismology, infrasound, ground deformation and satellite observations from the INGV Weekly Bulletin — updated weekly, not in real time.',
+      'scientific.sismologia': 'Seismology',
+      'scientific.infrasuono': 'Infrasound',
+      'scientific.deformazioni': 'Ground deformation',
+      'scientific.satellitare': 'Satellite observations',
+      'scientific.noData': 'No data available at the moment.',
+      'satellite.disclaimer': 'NASA satellite imagery (VIIRS, true colour, ~375 m resolution) of the Etna area, via Global Imagery Browse Services. <strong>Clouds or a missing satellite pass that day can leave the image partially or fully obscured</strong> — that\'s a limit of satellite observation, not a site fault.',
+      'satellite.thermalToggle': 'Overlay detected thermal anomalies (NASA FIRMS)',
+      'satellite.imgError': 'Image not available for this date (clouds, missing satellite pass, or data not yet published).',
+      'satellite.sourceLink': 'Explore on NASA Worldview ↗',
+      'satellite.yesterday': 'yesterday',
     },
   };
 
@@ -625,6 +732,9 @@
     if(window.lastHotspot) placeCraterMarker(window.lastHotspot);
     if(window.lastFeedItems) renderFeed(window.lastFeedItems);
     if(window.lastCam) renderCamMeta(window.lastCam);
+    if(window.lastAviation !== undefined) renderAviation(window.lastAviation);
+    if(window.lastBollettino !== undefined) renderGas(window.lastBollettino);
+    if(window.lastBollettino !== undefined) renderScientifico(window.lastBollettino);
   }
 
   function openModalById(id){
@@ -632,11 +742,14 @@
   }
 
   // ---------- mappa ----------
+  const MAP_INITIAL_CENTER = [37.755,15.005];
+  const MAP_INITIAL_ZOOM = 10;
+
   const map = L.map('map', {
     zoomControl:false,
     attributionControl:true,
-    center:[37.755,15.005],
-    zoom:10,
+    center:MAP_INITIAL_CENTER,
+    zoom:MAP_INITIAL_ZOOM,
     minZoom:9,
     maxZoom:16,
   });
@@ -649,6 +762,9 @@
   function flyToPoint(lat,lng,zoom=14){
     map.flyTo([lat,lng], zoom, {duration:1.4, easeLinearity:0.25});
   }
+  function flyToInitialView(){
+    map.flyTo(MAP_INITIAL_CENTER, MAP_INITIAL_ZOOM, {duration:1.2, easeLinearity:0.25});
+  }
 
   // ---------- caricamento dati (mock locali in /data) ----------
   const cacheBuster = () => '?v=' + Date.now();
@@ -656,13 +772,22 @@
     fetch('data/webcam.json' + cacheBuster(), {cache:'no-store'}).then(r=>r.json()),
     fetch('data/hotspot.json' + cacheBuster(), {cache:'no-store'}).then(r=>r.json()),
     fetch('data/feed.json' + cacheBuster(), {cache:'no-store'}).then(r=>r.json()),
-  ]).then(([webcam, hotspot, feed])=>{
+    // .catch(()=>null): a differenza degli altri tre, se aviation.json manca
+    // o non è ancora valido (pipeline appena introdotta) non deve far
+    // fallire l'intero Promise.all e bloccare anche webcam/hotspot/feed.
+    fetch('data/aviation.json' + cacheBuster(), {cache:'no-store'}).then(r=>r.json()).catch(()=>null),
+    // stesso motivo per bollettino.json (pipeline gas/scientifico)
+    fetch('data/bollettino.json' + cacheBuster(), {cache:'no-store'}).then(r=>r.json()).catch(()=>null),
+  ]).then(([webcam, hotspot, feed, aviation, bollettino])=>{
     window.lastHotspot = hotspot;
     window.lastFeedItems = feed.items;
     renderStatus(hotspot);
     renderWebcams(webcam.cameras);
     renderFeed(feed.items);
     placeCraterMarker(hotspot);
+    renderAviation(aviation);
+    renderGas(bollettino);
+    renderScientifico(bollettino);
     setLang(currentLang); // applica la lingua salvata anche ai blocchi appena renderizzati
   }).catch(err=>{
     console.error('Errore caricamento dati locali', err);
@@ -673,15 +798,41 @@
   // fetch da NASA FIRMS è fallito e questo è l'ultimo dato buono noto, non
   // quello di adesso — lo dichiariamo in etichetta invece di mostrarlo come
   // fresco.
+  // Formatta una data ISO in "gg/mm/aaaa, hh:mm UTC" — sempre in UTC
+  // esplicito (non l'orario locale del browser) per evitare ambiguità,
+  // dato che tutte le fonti (INGV, FIRMS) pubblicano in UTC.
+  function formatUpdatedAt(iso){
+    if(!iso) return null;
+    const d = new Date(iso);
+    if(isNaN(d.getTime())) return null;
+    const pad = n => String(n).padStart(2,'0');
+    return `${pad(d.getUTCDate())}/${pad(d.getUTCMonth()+1)}/${d.getUTCFullYear()}, ${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())} UTC`;
+  }
+
   function renderStatus(hotspot){
     const root = document.documentElement;
     const label = document.getElementById('statusLabel');
+    const updated = document.getElementById('statusUpdated');
+    // Due soli stati mostrati in interfaccia: "quiete" oppure "attività
+    // vulcanica in corso" (che ingloba i precedenti "moderata" e "alta" —
+    // separarli in due livelli diversi creava confusione, non aggiungeva
+    // informazione utile a chi consulta il sito). Il dato grezzo
+    // hotspot.status resta a 3 valori lato backend (vedi fetch_hotspot.py),
+    // così non perdiamo granularità se in futuro servirà di nuovo.
     let accent = '#5C7A8A', key = 'status.quiete';
-    if(hotspot.status === 'moderata'){ accent = '#E8541E'; key = 'status.moderata'; }
-    if(hotspot.status === 'alta'){ accent = '#FFD166'; key = 'status.alta'; }
+    if(hotspot.status === 'moderata' || hotspot.status === 'alta'){
+      accent = '#C2410C'; key = 'status.attiva';
+    }
     root.style.setProperty('--accent', accent);
-    window.currentAccent = accent; // riusato da placeCraterMarker per il cerchio
+    window.currentAccent = accent; // riusato da placeCraterMarker per il cerchio/punti
     label.textContent = t(key) + (hotspot.stale ? t('status.staleSuffix') : '');
+
+    // Orario dell'ultimo aggiornamento RIUSCITO (non quando è stato scritto
+    // il file, che su un fallback resta lo stesso anche se il job fallisce):
+    // sempre visibile, job riuscito o no, per non trasmettere mai
+    // l'impressione di un dato più fresco di quanto sia davvero.
+    const ts = formatUpdatedAt(hotspot.last_success_at || hotspot.generated_at);
+    updated.textContent = t('status.updated') + (ts || t('status.updated.unknown'));
   }
 
   // Centro spostato leggermente a est-sudest rispetto ai crateri sommitali
@@ -729,7 +880,16 @@
           fillOpacity: 0.6,
           className: 'hotspot-point'
         }).addTo(map);
-        const quando = [p.acq_date, p.acq_time].filter(Boolean).join(' · ');
+        // acq_time (FIRMS) è in formato HHMM ma SENZA zeri iniziali
+        // (es. "37" = 00:37, "5" = 00:05, "1205" = 12:05): usato così
+        // com'era veniva mostrato crudo ("37 UTC"), da qui il bug segnalato.
+        // Va prima riportato a 4 cifre e poi formattato come hh:mm.
+        let oraFormattata = '';
+        if(p.acq_time !== undefined && p.acq_time !== null && p.acq_time !== ''){
+          const raw = String(p.acq_time).padStart(4,'0');
+          oraFormattata = `${raw.slice(0,2)}:${raw.slice(2,4)}`;
+        }
+        const quando = [p.acq_date, oraFormattata].filter(Boolean).join(' · ');
         marker.bindPopup(
           `<strong>${t('hotspot.popup.title')}</strong><br>`
           + `${t('hotspot.popup.frp')}${p.frp ?? '—'} MW<br>`
@@ -749,6 +909,101 @@
       }).addTo(map).bindPopup(hotspot.notes || t('hotspot.zone.popup'));
       hotspotLayers.push(zone);
     }
+  }
+
+  // ---------- dati scientifici (stesso bollettino del tab gas) ----------
+  function renderScientifico(bollettino){
+    const body = document.getElementById('scientificoBody');
+    if(!body) return;
+    const s = bollettino && bollettino.sections ? bollettino.sections : null;
+    const campi = [
+      ['sismologia', s && s.sismologia],
+      ['infrasuono', s && s.infrasuono],
+      ['deformazioni', s && s.deformazioni],
+      ['satellitare', s && s.satellitare],
+    ].filter(([,testo]) => !!testo);
+
+    if(!bollettino || !campi.length){
+      body.innerHTML = `<div style="font-family:var(--font-body); font-size:13px; color:var(--ash-muted);">${t('scientific.noData')}</div>`;
+      return;
+    }
+    const updated = formatUpdatedAt(bollettino.last_success_at || bollettino.generated_at);
+    body.innerHTML = campi.map(([chiave, testo]) => `
+      <div style="margin-bottom:10px;">
+        <div style="font-family:var(--font-body); font-size:12px; font-weight:600; color:var(--ash-muted); text-transform:uppercase; letter-spacing:0.03em; margin-bottom:3px;">${t('scientific.' + chiave)}</div>
+        <div style="font-family:var(--font-body); font-size:13.5px; color:var(--ash); line-height:1.55;">${escapeHtml(testo)}</div>
+      </div>
+    `).join('')
+    + (bollettino.bulletin_date ? `<div style="font-family:var(--font-body); font-size:12px; color:var(--ash-muted); margin-bottom:8px;">${t('gas.bulletinWeek')}${escapeHtml(bollettino.bulletin_date)}</div>` : '')
+    + `<div style="font-family:var(--font-mono); font-size:11px; color:var(--ash-muted);">${t('status.updated')}${updated || t('status.updated.unknown')}${bollettino.stale ? t('status.staleSuffix') : ''}</div>`;
+
+    const link = document.getElementById('scientificoSourceLink');
+    if(link && bollettino.bulletin_url) link.href = bollettino.bulletin_url;
+  }
+
+  // ---------- gas (bollettino settimanale INGV) ----------
+  function renderGas(bollettino){
+    window.lastBollettino = bollettino;
+    const body = document.getElementById('gasBody');
+    if(!body) return;
+    const so2 = bollettino && bollettino.sections ? bollettino.sections.so2_estratto : null;
+    if(!bollettino || !so2){
+      body.innerHTML = `<div style="font-family:var(--font-body); font-size:13px; color:var(--ash-muted);">${t('gas.noData')}</div>`;
+      return;
+    }
+    const updated = formatUpdatedAt(bollettino.last_success_at || bollettino.generated_at);
+    body.innerHTML = `
+      <div style="font-family:var(--font-body); font-size:13.5px; color:var(--ash); line-height:1.6; margin-bottom:8px;">
+        <strong>${t('gas.so2Label')}</strong>${escapeHtml(so2)}
+      </div>
+      ${bollettino.bulletin_date ? `<div style="font-family:var(--font-body); font-size:12px; color:var(--ash-muted); margin-bottom:8px;">${t('gas.bulletinWeek')}${escapeHtml(bollettino.bulletin_date)}</div>` : ''}
+      <div style="font-family:var(--font-mono); font-size:11px; color:var(--ash-muted);">
+        ${t('status.updated')}${updated || t('status.updated.unknown')}${bollettino.stale ? t('status.staleSuffix') : ''}
+      </div>
+    `;
+    const link = document.getElementById('gasSourceLink');
+    if(link && bollettino.bulletin_url) link.href = bollettino.bulletin_url;
+  }
+
+  // ---------- avviso aeronautico VAAC Toulouse ----------
+  function escapeHtml(s){
+    return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  function aviationColourMeta(code){
+    switch(code){
+      case 'red':    return {hex:'#D93025', key:'aviation.colour.red'};
+      case 'orange': return {hex:'#C2410C', key:'aviation.colour.orange'};
+      case 'yellow': return {hex:'#FFD166', key:'aviation.colour.yellow'};
+      case 'green':  return {hex:'#5C7A8A', key:'aviation.colour.green'};
+      default:       return {hex:'#9C948A', key:'aviation.colour.unknown'};
+    }
+  }
+
+  function renderAviation(aviation){
+    window.lastAviation = aviation;
+    const body = document.getElementById('aviationBody');
+    if(!body) return;
+    if(!aviation || !aviation.aviation_colour_code){
+      body.innerHTML = `<div style="font-family:var(--font-body); font-size:13px; color:var(--ash-muted);">${t('aviation.noData')}</div>`;
+      return;
+    }
+    const meta = aviationColourMeta(aviation.aviation_colour_code);
+    const eruptionKey = aviation.eruption_ongoing === true ? 'aviation.eruption.ongoing'
+      : aviation.eruption_ongoing === false ? 'aviation.eruption.ended'
+      : 'aviation.eruption.unknown';
+    const updated = formatUpdatedAt(aviation.last_success_at || aviation.generated_at);
+    body.innerHTML = `
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+        <span style="width:14px; height:14px; border-radius:50%; background:${meta.hex}; box-shadow:0 0 0 3px color-mix(in srgb, ${meta.hex} 25%, transparent); flex-shrink:0;"></span>
+        <strong style="font-family:var(--font-body); font-size:14px; color:var(--ash);">${t('aviation.colourCode')}${t(meta.key)}</strong>
+      </div>
+      <div style="font-family:var(--font-body); font-size:12.5px; color:var(--ash-muted); margin-bottom:8px;">${t(eruptionKey)}</div>
+      ${aviation.remark_raw ? `<div style="font-family:var(--font-body); font-size:12.5px; color:var(--ash); line-height:1.5; margin-bottom:8px;">${t('aviation.remark')}${escapeHtml(aviation.remark_raw)}</div>` : ''}
+      <div style="font-family:var(--font-mono); font-size:11px; color:var(--ash-muted);">
+        ${aviation.advisory_id ? escapeHtml(aviation.advisory_id) + ' · ' : ''}${t('status.updated')}${updated || t('status.updated.unknown')}${aviation.stale ? t('status.staleSuffix') : ''}
+      </div>
+    `;
   }
 
   // ---------- webcam ----------
@@ -841,6 +1096,85 @@
 
     selectAshSlot(dateStr, defaultSlot);
     document.getElementById('ashModal').classList.add('open');
+  }
+
+  // ---------- foto satellitari (NASA GIBS, snapshot diretto per data) ----------
+  // Bounding box "south,west,north,east" (ordine richiesto dall'API GIBS
+  // Snapshot, diverso dall'ordine "west,south,east,north" usato altrove in
+  // questo file per Leaflet/FIRMS — attenzione a non confonderli):
+  // copre l'Etna e l'area circostante, coerente con la vista iniziale
+  // della mappa principale.
+  const SATELLITE_BBOX = '37.55,14.75,37.95,15.25';
+  const SATELLITE_LAYER_BASE = 'VIIRS_SNPP_CorrectedReflectance_TrueColor';
+  const SATELLITE_LAYER_THERMAL = 'VIIRS_SNPP_Thermal_Anomalies_375m_All';
+  const SATELLITE_WIDTH = 820;
+  const SATELLITE_HEIGHT = 700;
+
+  function satelliteDateStr(d){
+    const y = d.getUTCFullYear();
+    const m = String(d.getUTCMonth()+1).padStart(2,'0');
+    const day = String(d.getUTCDate()).padStart(2,'0');
+    return `${y}-${m}-${day}`;
+  }
+
+  function satelliteImageUrl(dateStr, showThermal){
+    const layers = showThermal
+      ? `${SATELLITE_LAYER_BASE},${SATELLITE_LAYER_THERMAL},Coastlines`
+      : `${SATELLITE_LAYER_BASE},Coastlines`;
+    const params = new URLSearchParams({
+      REQUEST: 'GetSnapshot',
+      TIME: dateStr,
+      BBOX: SATELLITE_BBOX,
+      CRS: 'EPSG:4326',
+      LAYERS: layers,
+      FORMAT: 'image/jpeg',
+      WIDTH: SATELLITE_WIDTH,
+      HEIGHT: SATELLITE_HEIGHT,
+    });
+    return `https://wvs.earthdata.nasa.gov/api/v1/snapshot?${params.toString()}`;
+  }
+
+  let satelliteSelectedDate = null;
+
+  function refreshSatelliteImage(){
+    if(!satelliteSelectedDate) return;
+    const showThermal = document.getElementById('satelliteThermalToggle').checked;
+    document.getElementById('satelliteImageError').style.display = 'none';
+    document.getElementById('satelliteImage').src = satelliteImageUrl(satelliteSelectedDate, showThermal);
+  }
+
+  function selectSatelliteDay(dateStr){
+    satelliteSelectedDate = dateStr;
+    document.querySelectorAll('.satellite-day').forEach(btn=>{
+      btn.classList.toggle('active', btn.dataset.date === dateStr);
+    });
+    refreshSatelliteImage();
+  }
+
+  function openSatelliteModal(){
+    const now = new Date();
+    // Si parte da "ieri", non da "oggi": l'immagine del giorno corrente
+    // è spesso incompleta o non ancora pubblicata (il passaggio del
+    // satellite sull'Italia avviene a metà giornata UTC, e GIBS pubblica
+    // con qualche ora di ritardo) — partire da un giorno che sappiamo
+    // avere quasi certamente un'immagine valida evita di mostrare un
+    // errore al primo apertura del tab.
+    const giorni = [];
+    for(let i=1; i<=4; i++){
+      const d = new Date(now);
+      d.setUTCDate(d.getUTCDate() - i);
+      const label = i === 1 ? t('satellite.yesterday') : `${String(d.getUTCDate()).padStart(2,'0')}/${String(d.getUTCMonth()+1).padStart(2,'0')}`;
+      giorni.push({data: satelliteDateStr(d), label});
+    }
+
+    const daysEl = document.getElementById('satelliteDays');
+    daysEl.innerHTML = giorni.map(({data, label})=>
+      `<button class="ash-slot satellite-day" data-date="${data}" onclick="selectSatelliteDay('${data}')">${label}</button>`
+    ).join('');
+
+    document.getElementById('satelliteThermalToggle').checked = false;
+    selectSatelliteDay(giorni[0].data);
+    document.getElementById('satelliteModal').classList.add('open');
   }
 
   function renderCamMeta(cam){
