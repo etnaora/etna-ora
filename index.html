@@ -85,6 +85,13 @@
     transition:width .28s cubic-bezier(.4,0,.2,1), border-color .2s ease, background .2s ease;
   }
   .topic-btn:hover, .topic-btn:focus-visible{
+    /* --topic-expand-w viene impostata per-pulsante da JS
+       (fitTopicDockButtons(), in fondo allo script) misurando la reale
+       larghezza dell'etichetta: prima era un unico valore fisso (210px)
+       uguale per tutti, che lasciava un margine nero vistoso sulle
+       etichette corte e tagliava quelle lunghe ("Dati scientifici al
+       suolo"). Il fallback 210px resta solo per il caso limite in cui JS
+       non sia ancora girato. */
     width:var(--topic-expand-w, 210px);
     border-color:rgba(237,230,219,0.28);
     background:rgba(20,18,15,0.85);
@@ -191,9 +198,12 @@
     pointer-events:auto;
   }
   .status-updated{
-    font-family:var(--font-mono); font-size:10.5px; letter-spacing:0.03em;
-    color:var(--ash-muted); text-transform:none;
-    text-shadow:0 1px 3px rgba(10,9,7,0.6);
+    /* Uniformata alla .tagline (stesso font-body, colore --ash con opacità
+       0.88, peso 500, 12.5px): prima usava --ash-muted + font-mono a
+       10.5px, troppo trasparente/piccola rispetto al resto della topbar. */
+    font-family:var(--font-body); font-weight:500; font-size:12.5px; letter-spacing:0.01em;
+    color:var(--ash); opacity:0.88; text-transform:none;
+    text-shadow:0 1px 4px rgba(10,9,7,0.55);
     pointer-events:none;
   }
   .status-pill .prefix{color:var(--ash-muted); font-weight:400;}
@@ -351,7 +361,7 @@
     .tagline{font-size:11px;}
     .status-pill{font-size:11px; padding:9px 14px; gap:7px;}
     .status-pill .prefix{display:none;}
-    .status-updated{font-size:9.5px;}
+    .status-updated{font-size:11px;}
   }
 </style>
 </head>
@@ -382,7 +392,7 @@
   </div>
 </noscript>
 
-<div class="topic-dock" id="topicDock" style="--topic-expand-w:210px;">
+<div class="topic-dock" id="topicDock">
 
   <button class="topic-btn" data-topic="aeroporto" style="--topic-accent:#7FB6D9;" onclick="openModalById('aeroportoModal')" aria-haspopup="dialog">
     <span class="topic-icon" aria-hidden="true">
@@ -408,7 +418,7 @@
     <span class="topic-dot"></span>
   </button>
 
-  <button class="topic-btn" data-topic="gas" style="--topic-accent:#B9A0E8;" onclick="openModalById('gasModal')" aria-haspopup="dialog">
+  <button class="topic-btn" data-topic="gas" style="--topic-accent:#B9A0E8;" onclick="openGasModal()" aria-haspopup="dialog">
     <span class="topic-icon" aria-hidden="true">
       <svg viewBox="0 0 24 24"><path d="M4 20c1.5-2 1.5-4 0-6M9 20c1.5-3 1.5-6 0-9M14 20c1.5-4 1.5-8 0-12M19 20c1.5-5 1.5-9.5 0-14"/></svg>
     </span>
@@ -501,6 +511,28 @@
     <div style="margin-top:10px; font-size:12px;">
       <a id="gasSourceLink" href="https://www.ct.ingv.it/index.php/monitoraggio-e-sorveglianza/prodotti-del-monitoraggio/bollettini-settimanali-multidisciplinari" target="_blank" rel="noopener" style="color:var(--ash-muted);" data-i18n="gas.sourceLink">Bollettino completo INGV ↗</a>
     </div>
+
+    <!-- Immagini satellitari SO2 (NASA GIBS, sensore OMPS) — stesso pattern
+         "snapshot diretto per data" già usato nel tab satellitare, layer
+         diverso. Copre un'area più ampia della sola Etna (Sicilia + Mediterraneo
+         centrale) perché una nube di SO2 si disperde ben oltre il vulcano. -->
+    <div style="margin-top:16px; padding-top:14px; border-top:1px solid var(--hairline);">
+      <div style="font-family:var(--font-body); font-size:12px; font-weight:600; color:var(--ash-muted); text-transform:uppercase; letter-spacing:0.03em; margin-bottom:6px;" data-i18n="gas.so2ImagesTitle">Diffusione SO2 da satellite</div>
+      <div style="font-family:var(--font-body); font-size:12.5px; color:var(--ash-muted); line-height:1.5; margin-bottom:8px;" data-i18n-html="gas.so2ImagesDisclaimer">
+        Mappa satellitare NASA (sensore OMPS, strato limite planetario) della concentrazione di SO2 sul Mediterraneo centrale. <strong>L'assenza di colore in un dato giorno è il caso più comune</strong> e non significa nessuna emissione, solo che non ha superato la soglia rilevabile da satellite.
+      </div>
+      <div class="ash-slots" id="gasSo2Days"></div>
+      <div class="ash-image-wrap">
+        <img id="gasSo2Image" src="" alt="Mappa SO2 satellitare" loading="lazy" onload="document.getElementById('gasSo2ImageError').style.display='none'" onerror="document.getElementById('gasSo2ImageError').style.display='block'">
+      </div>
+      <div id="gasSo2ImageError" style="display:none; font-size:12px; color:var(--ash-muted); margin-top:8px;" data-i18n="gas.so2ImgError">
+        Nessun dato SO2 disponibile per questa data.
+      </div>
+      <div style="margin-top:8px; font-size:12px;">
+        <a href="https://sacs.aeronomie.be" target="_blank" rel="noopener" style="color:var(--ash-muted);" data-i18n="gas.sacsLink">Mappe SO2/cenere satellitari complete (SACS, ESA/BIRA-IASB) ↗</a>
+      </div>
+    </div>
+
     <button class="close" onclick="document.getElementById('gasModal').classList.remove('open')" data-i18n="btn.close">Chiudi</button>
   </div>
 </div>
@@ -513,6 +545,9 @@
     </div>
     <div id="aviationBody"></div>
     <div style="margin-top:10px; font-size:12px;">
+      <a href="https://www.aeroporto.catania.it/tracking-voli" target="_blank" rel="noopener" style="color:var(--ash-muted);" data-i18n="aviation.officialLink">Stato voli in tempo reale — sito ufficiale Aeroporto di Catania ↗</a>
+    </div>
+    <div style="margin-top:6px; font-size:12px;">
       <a id="aviationSourceLink" href="https://vaac.meteo.fr/volcanoes/etna/" target="_blank" rel="noopener" style="color:var(--ash-muted);" data-i18n="aviation.sourceLink">Fonte ufficiale VAAC Toulouse, storico avvisi ↗</a>
     </div>
     <button class="close" onclick="document.getElementById('aeroportoModal').classList.remove('open')" data-i18n="btn.close">Chiudi</button>
@@ -526,6 +561,20 @@
       Sintesi di sismologia, infrasuono, deformazioni del suolo e osservazioni satellitari dal Bollettino Settimanale INGV — un dato aggiornato settimanalmente, non in tempo reale.
     </div>
     <div id="scientificoBody"></div>
+
+    <!-- Grafico sismicità recente: dati REALI già disponibili lato client
+         (window.lastFeedItems, lo stesso feed usato dal cassetto in basso),
+         non dal bollettino settimanale — nessuna nuova chiamata di rete,
+         nessuna nuova pipeline. Fonte diversa e più fresca (quasi in tempo
+         reale) rispetto alle 4 sezioni testuali sopra: va dichiarato per
+         chiarezza, come già si fa altrove nel sito (punti FIRMS vs
+         osservazioni satellitari settimanali). -->
+    <div style="margin-top:16px; padding-top:14px; border-top:1px solid var(--hairline);">
+      <div style="font-family:var(--font-body); font-size:12px; font-weight:600; color:var(--ash-muted); text-transform:uppercase; letter-spacing:0.03em; margin-bottom:6px;" data-i18n="scientific.chartTitle">Sismicità recente</div>
+      <div style="font-family:var(--font-body); font-size:12.5px; color:var(--ash-muted); line-height:1.5; margin-bottom:8px;" data-i18n="scientific.chartCaption">Magnitudo (Ml) degli eventi sismici più recenti nell'area etnea — dal feed sismico di questa pagina, non dal bollettino settimanale: un dato quasi in tempo reale, più fresco delle sezioni qui sopra.</div>
+      <div id="scientificoChart"></div>
+    </div>
+
     <div style="margin-top:10px; font-size:12px;">
       <a id="scientificoSourceLink" href="https://www.ct.ingv.it/index.php/monitoraggio-e-sorveglianza/prodotti-del-monitoraggio/bollettini-settimanali-multidisciplinari" target="_blank" rel="noopener" style="color:var(--ash-muted);" data-i18n="gas.sourceLink">Bollettino completo INGV ↗</a>
     </div>
@@ -553,6 +602,17 @@
     <div style="margin-top:10px; font-size:12px;">
       <a id="satelliteSourceLink" href="https://worldview.earthdata.nasa.gov/" target="_blank" rel="noopener" style="color:var(--ash-muted);" data-i18n="satellite.sourceLink">Esplora su NASA Worldview ↗</a>
     </div>
+
+    <!-- Sentinel-2: risoluzione 10m contro i ~375m di VIIRS sopra, ma senza
+         una API "snapshot" pubblica e senza chiave equivalente a quella
+         NASA GIBS (serve un account Copernicus Data Space per un embed
+         diretto) — invece di un embed fragile/non verificabile, link
+         diretto al Copernicus Browser ufficiale ESA, già centrato sull'Etna. -->
+    <div style="margin-top:14px; padding-top:12px; border-top:1px solid var(--hairline); font-size:12px;">
+      <div style="font-family:var(--font-body); font-size:12.5px; color:var(--ash-muted); line-height:1.5; margin-bottom:6px;" data-i18n="satellite.sentinelBody">Per un dettaglio molto più fine (10 m contro i ~375 m di questa pagina), esplora l'Etna su Sentinel-2 nel Copernicus Browser ufficiale dell'ESA.</div>
+      <a href="https://browser.dataspace.copernicus.eu/?zoom=11&lat=37.75&lng=15.00&themeId=DEFAULT-THEME" target="_blank" rel="noopener" style="color:var(--ash-muted);" data-i18n="satellite.sentinelLink">Esplora l'Etna su Copernicus Browser (Sentinel-2, 10 m) ↗</a>
+    </div>
+
     <button class="close" onclick="document.getElementById('satelliteModal').classList.remove('open')" data-i18n="btn.close">Chiudi</button>
   </div>
 </div>
@@ -624,17 +684,27 @@
       'gas.bulletinWeek': 'Dal bollettino della settimana del ',
       'gas.sourceLink': 'Bollettino completo INGV ↗',
       'gas.noData': 'Nessun dato disponibile al momento.',
+      'gas.so2ImagesTitle': 'Diffusione SO2 da satellite',
+      'gas.so2ImagesDisclaimer': 'Mappa satellitare NASA (sensore OMPS, strato limite planetario) della concentrazione di SO2 sul Mediterraneo centrale. <strong>L\'assenza di colore in un dato giorno è il caso più comune</strong> e non significa nessuna emissione, solo che non ha superato la soglia rilevabile da satellite.',
+      'gas.so2ImgError': 'Nessun dato SO2 disponibile per questa data.',
+      'gas.sacsLink': 'Mappe SO2/cenere satellitari complete (SACS, ESA/BIRA-IASB) ↗',
       'scientific.disclaimer': 'Sintesi di sismologia, infrasuono, deformazioni del suolo e osservazioni satellitari dal Bollettino Settimanale INGV — un dato aggiornato settimanalmente, non in tempo reale.',
       'scientific.sismologia': 'Sismologia',
       'scientific.infrasuono': 'Infrasuono',
       'scientific.deformazioni': 'Deformazioni del suolo',
       'scientific.satellitare': 'Osservazioni satellitari',
       'scientific.noData': 'Nessun dato disponibile al momento.',
+      'scientific.chartTitle': 'Sismicità recente',
+      'scientific.chartCaption': `Magnitudo (Ml) degli eventi sismici più recenti nell'area etnea — dal feed sismico di questa pagina, non dal bollettino settimanale: un dato quasi in tempo reale, più fresco delle sezioni qui sopra.`,
+      'scientific.chartNoData': 'Nessun evento sismico con magnitudo nota nella finestra attuale del feed.',
       'satellite.disclaimer': 'Immagine satellitare NASA (VIIRS, vero colore, risoluzione ~375 m) dell\'area dell\'Etna, via Global Imagery Browse Services. <strong>Nuvole o l\'assenza del passaggio satellitare quel giorno possono rendere l\'immagine parzialmente o del tutto coperta</strong> — non è un difetto del sito, è un limite dell\'osservazione da satellite.',
       'satellite.thermalToggle': 'Sovrapponi le anomalie termiche rilevate (NASA FIRMS)',
       'satellite.imgError': 'Immagine non disponibile per questa data (nuvole, passaggio satellitare mancante, o dato non ancora pubblicato).',
       'satellite.sourceLink': 'Esplora su NASA Worldview ↗',
       'satellite.yesterday': 'ieri',
+      'satellite.sentinelBody': `Per un dettaglio molto più fine (10 m contro i ~375 m di questa pagina), esplora l'Etna su Sentinel-2 nel Copernicus Browser ufficiale dell'ESA.`,
+      'satellite.sentinelLink': 'Esplora l\'Etna su Copernicus Browser (Sentinel-2, 10 m) ↗',
+      'aviation.officialLink': 'Stato voli in tempo reale — sito ufficiale Aeroporto di Catania ↗',
     },
     en: {
       'tagline': 'real-time monitoring of the volcano',
@@ -693,17 +763,27 @@
       'gas.bulletinWeek': 'From the bulletin for the week of ',
       'gas.sourceLink': 'Full INGV bulletin ↗',
       'gas.noData': 'No data available at the moment.',
+      'gas.so2ImagesTitle': 'SO2 dispersion from satellite',
+      'gas.so2ImagesDisclaimer': 'NASA satellite map (OMPS sensor, planetary boundary layer) of SO2 concentration over the central Mediterranean. <strong>No colour showing on a given day is the most common case</strong> — it doesn\'t mean there\'s no emission, only that it didn\'t cross the threshold detectable from satellite.',
+      'gas.so2ImgError': 'No SO2 data available for this date.',
+      'gas.sacsLink': 'Full SO2/ash satellite maps (SACS, ESA/BIRA-IASB) ↗',
       'scientific.disclaimer': 'Summary of seismology, infrasound, ground deformation and satellite observations from the INGV Weekly Bulletin — updated weekly, not in real time.',
       'scientific.sismologia': 'Seismology',
       'scientific.infrasuono': 'Infrasound',
       'scientific.deformazioni': 'Ground deformation',
       'scientific.satellitare': 'Satellite observations',
       'scientific.noData': 'No data available at the moment.',
+      'scientific.chartTitle': 'Recent seismicity',
+      'scientific.chartCaption': `Magnitude (Ml) of the most recent seismic events in the Etna area — from this page's seismic feed, not the weekly bulletin: a near real-time figure, fresher than the sections above.`,
+      'scientific.chartNoData': 'No seismic event with a known magnitude in the current feed window.',
       'satellite.disclaimer': 'NASA satellite imagery (VIIRS, true colour, ~375 m resolution) of the Etna area, via Global Imagery Browse Services. <strong>Clouds or a missing satellite pass that day can leave the image partially or fully obscured</strong> — that\'s a limit of satellite observation, not a site fault.',
       'satellite.thermalToggle': 'Overlay detected thermal anomalies (NASA FIRMS)',
       'satellite.imgError': 'Image not available for this date (clouds, missing satellite pass, or data not yet published).',
       'satellite.sourceLink': 'Explore on NASA Worldview ↗',
       'satellite.yesterday': 'yesterday',
+      'satellite.sentinelBody': 'For much finer detail (10 m vs. the ~375 m on this page), explore Etna on Sentinel-2 in ESA\'s official Copernicus Browser.',
+      'satellite.sentinelLink': 'Explore Etna on Copernicus Browser (Sentinel-2, 10 m) ↗',
+      'aviation.officialLink': 'Real-time flight status — official Catania Airport website ↗',
     },
   };
 
@@ -735,10 +815,85 @@
     if(window.lastAviation !== undefined) renderAviation(window.lastAviation);
     if(window.lastBollettino !== undefined) renderGas(window.lastBollettino);
     if(window.lastBollettino !== undefined) renderScientifico(window.lastBollettino);
+    if(window.lastFeedItems) renderSeismicChart(window.lastFeedItems);
+
+    // ricalcola le larghezze del dock: IT/EN hanno etichette di lunghezza
+    // diversa, quindi va rifatto ad ogni cambio lingua, non solo al load
+    fitTopicDockButtons();
   }
 
   function openModalById(id){
     document.getElementById(id).classList.add('open');
+  }
+
+  // ---------- dock: larghezza di espansione calcolata sul testo reale ----------
+  // Prima era un'unica larghezza fissa (210px, var CSS su #topicDock) per
+  // tutti e 5 i pulsanti: con etichette corte lasciava un margine nero
+  // vistoso, con la più lunga ("Dati scientifici al suolo") il testo veniva
+  // tagliato/illeggibile. Ora ogni pulsante misura la propria etichetta e
+  // imposta --topic-expand-w di conseguenza — richiamata anche da setLang(),
+  // perché IT/EN hanno lunghezze diverse per lo stesso pulsante.
+  function fitTopicDockButtons(){
+    const ICON_W = 44;       // larghezza fissa dell'icona (.topic-icon)
+    const RIGHT_PAD = 16;    // padding-right del .topic-label
+    const BREATHING_ROOM = 6; // margine per evitare tagli da arrotondamento/subpixel
+    document.querySelectorAll('.topic-btn').forEach(btn=>{
+      const label = btn.querySelector('.topic-label');
+      if(!label) return;
+      // scrollWidth del .topic-label (non del .topic-btn, che ha
+      // overflow:hidden): misura il contenuto reale anche da collassato,
+      // perché è l'elemento con white-space:nowrap a portare il vincolo,
+      // non il suo contenitore.
+      const w = ICON_W + label.scrollWidth + RIGHT_PAD + BREATHING_ROOM;
+      btn.style.setProperty('--topic-expand-w', w + 'px');
+    });
+  }
+
+  // ---------- grafico sismicità recente (tab "dati scientifici al suolo") ----------
+  // Usa window.lastFeedItems, lo stesso feed già scaricato per il cassetto
+  // in basso — nessuna nuova chiamata di rete, nessuna nuova pipeline.
+  // Richiede il campo "magnitude" (numerico) sugli item type=sismicita:
+  // gli item più vecchi/mock che non lo hanno vengono semplicemente
+  // esclusi dal grafico, non fanno fallire nulla.
+  function renderSeismicChart(feedItems){
+    const el = document.getElementById('scientificoChart');
+    if(!el) return;
+    const eventi = (feedItems || [])
+      .filter(it => it.type === 'sismicita' && typeof it.magnitude === 'number')
+      .sort((a,b) => new Date(a.timestamp) - new Date(b.timestamp));
+
+    if(!eventi.length){
+      el.innerHTML = `<div style="font-family:var(--font-body); font-size:12px; color:var(--ash-muted);">${t('scientific.chartNoData')}</div>`;
+      return;
+    }
+
+    const W = 460, H = 130, PAD_X = 16, PAD_TOP = 12, PAD_BOTTOM = 22;
+    const maxMag = Math.max(3, ...eventi.map(e => e.magnitude));
+    const plotH = H - PAD_TOP - PAD_BOTTOM;
+    const stepX = eventi.length > 1 ? (W - PAD_X*2) / eventi.length : (W - PAD_X*2);
+    const barW = Math.min(18, stepX * 0.55);
+
+    const bars = eventi.map((e,i) => {
+      const cx = PAD_X + stepX*i + stepX/2;
+      const barH = Math.max(2, (e.magnitude / maxMag) * plotH);
+      const y = PAD_TOP + (plotH - barH);
+      const color = e.magnitude >= 3.0 ? 'var(--alert)' : (e.magnitude >= 2.0 ? 'var(--sulfur)' : 'var(--mist)');
+      const label = `Ml ${e.magnitude.toFixed(1)} — ${formatTime(e.timestamp)}`;
+      return `<rect x="${(cx-barW/2).toFixed(1)}" y="${y.toFixed(1)}" width="${barW.toFixed(1)}" height="${barH.toFixed(1)}" rx="2" fill="${color}" opacity="0.9"><title>${escapeHtml(label)}</title></rect>`;
+    }).join('');
+
+    const baseline = H - PAD_BOTTOM;
+    const lastLabel = escapeHtml(formatTime(eventi[eventi.length-1].timestamp));
+    const firstLabel = escapeHtml(formatTime(eventi[0].timestamp));
+
+    el.innerHTML = `
+      <svg viewBox="0 0 ${W} ${H}" style="width:100%; height:auto; display:block;" role="img" aria-label="${t('scientific.chartTitle')}">
+        <line x1="${PAD_X}" y1="${baseline}" x2="${W-PAD_X}" y2="${baseline}" stroke="var(--hairline)" stroke-width="1"/>
+        ${bars}
+        <text x="${PAD_X}" y="${H-6}" font-family="IBM Plex Mono, monospace" font-size="9" fill="var(--ash-muted)">${firstLabel}</text>
+        <text x="${W-PAD_X}" y="${H-6}" font-family="IBM Plex Mono, monospace" font-size="9" fill="var(--ash-muted)" text-anchor="end">${lastLabel}</text>
+      </svg>
+    `;
   }
 
   // ---------- mappa ----------
@@ -965,6 +1120,67 @@
     if(link && bollettino.bulletin_url) link.href = bollettino.bulletin_url;
   }
 
+  // ---------- diffusione SO2 da satellite (tab gas) ----------
+  // Stesso pattern "snapshot diretto NASA GIBS per data" già in uso per il
+  // tab satellitare (§19 di PROGETTO_NOTE.md), layer diverso: OMPS SO2
+  // strato limite planetario invece di VIIRS vero colore. Bounding box
+  // volutamente più larga della sola Etna (Sicilia + Mediterraneo centrale)
+  // perché una nube di SO2 si disperde ben oltre il vulcano.
+  const GAS_SO2_BBOX = '35.00,10.00,40.00,18.00'; // south,west,north,east — stesso ordine richiesto dall'API GIBS Snapshot, vedi nota su SATELLITE_BBOX più sotto
+  const GAS_SO2_LAYER = 'OMPS_NOAA20_SO2_Planetary_Boundary_Layer'; // layer NASA GIBS verificato (gibs.earthdata.nasa.gov) — sensore OMPS su NOAA-20
+  const GAS_SO2_WIDTH = 640;
+  const GAS_SO2_HEIGHT = 400;
+
+  function gasSo2ImageUrl(dateStr){
+    const params = new URLSearchParams({
+      REQUEST: 'GetSnapshot',
+      TIME: dateStr,
+      BBOX: GAS_SO2_BBOX,
+      CRS: 'EPSG:4326',
+      LAYERS: `${GAS_SO2_LAYER},Coastlines`,
+      FORMAT: 'image/png',
+      WIDTH: GAS_SO2_WIDTH,
+      HEIGHT: GAS_SO2_HEIGHT,
+    });
+    return `https://wvs.earthdata.nasa.gov/api/v1/snapshot?${params.toString()}`;
+  }
+
+  let gasSo2SelectedDate = null;
+
+  function refreshGasSo2Image(){
+    if(!gasSo2SelectedDate) return;
+    document.getElementById('gasSo2ImageError').style.display = 'none';
+    document.getElementById('gasSo2Image').src = gasSo2ImageUrl(gasSo2SelectedDate);
+  }
+
+  function selectGasSo2Day(dateStr){
+    gasSo2SelectedDate = dateStr;
+    document.querySelectorAll('.gas-so2-day').forEach(btn=>{
+      btn.classList.toggle('active', btn.dataset.date === dateStr);
+    });
+    refreshGasSo2Image();
+  }
+
+  function openGasModal(){
+    const now = new Date();
+    // stessa logica "parti da ieri" del tab satellitare (§19.2): GIBS
+    // pubblica con qualche ora di ritardo, "oggi" è spesso vuoto al primo
+    // tentativo.
+    const giorni = [];
+    for(let i=1; i<=4; i++){
+      const d = new Date(now);
+      d.setUTCDate(d.getUTCDate() - i);
+      const label = i === 1 ? t('satellite.yesterday') : `${String(d.getUTCDate()).padStart(2,'0')}/${String(d.getUTCMonth()+1).padStart(2,'0')}`;
+      giorni.push({data: satelliteDateStr(d), label});
+    }
+    const daysEl = document.getElementById('gasSo2Days');
+    daysEl.innerHTML = giorni.map(({data, label})=>
+      `<button class="ash-slot gas-so2-day" data-date="${data}" onclick="selectGasSo2Day('${data}')">${label}</button>`
+    ).join('');
+    selectGasSo2Day(giorni[0].data);
+    document.getElementById('gasModal').classList.add('open');
+  }
+
   // ---------- avviso aeronautico VAAC Toulouse ----------
   function escapeHtml(s){
     return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -1037,6 +1253,7 @@
         </div>
       </div>
     `).join('');
+    renderSeismicChart(items);
   }
 
   function formatTime(ts){
@@ -1200,7 +1417,17 @@
 
   // applica la lingua salvata subito, prima ancora che i dati remoti
   // arrivino, così wordmark/status-pill/modali statici sono già corretti
+  // (chiama anche fitTopicDockButtons() internamente)
   setLang(currentLang);
+
+  // Ricalcola le larghezze del dock quando i web font (IBM Plex Mono) hanno
+  // finito di caricare: la prima chiamata sopra può girare prima che il
+  // font sia pronto, misurando con il font di fallback del browser — di
+  // solito la differenza è minima grazie al margine BREATHING_ROOM, ma
+  // questo elimina anche quel caso limite.
+  if(document.fonts && document.fonts.ready){
+    document.fonts.ready.then(fitTopicDockButtons);
+  }
 </script>
 
 </body>

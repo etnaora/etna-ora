@@ -107,6 +107,13 @@ def fetch_new_events() -> list[dict]:
             "title": f"Evento sismico Ml {mag:.1f}" if mag is not None else "Evento sismico",
             "summary": f"Localizzato: {place}.",
             "level": "alto" if (mag or 0) >= 3.0 else ("medio" if (mag or 0) >= 2.0 else "basso"),
+            # Campo aggiunto per il grafico di sismicità del tab "dati
+            # scientifici al suolo" (index.html, renderSeismicChart()): prima
+            # la magnitudo viveva solo dentro la stringa di "title", non
+            # utilizzabile per un grafico. None se INGV non fornisce "mag"
+            # per quell'evento — il frontend scarta silenziosamente gli
+            # item senza questo campo, non serve garantirlo sempre presente.
+            "magnitude": round(mag, 1) if mag is not None else None,
         })
     return items
 

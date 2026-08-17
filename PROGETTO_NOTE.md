@@ -1050,3 +1050,114 @@ satellitare ✅ (questa sessione). Prossimi sviluppi non hanno più un
 ordine "consigliato" prestabilito: da definire in base a cosa interessa
 di più in questo momento (es. il suite "check-sicurezza"/registro
 subappaltatori per il lavoro, o rifiniture del sito già esistente).
+
+---
+
+## 20. Sessione 2026-08 (9) — estetica topbar/dock + contenuti dei 4 tab
+
+Richieste in due gruppi: estetica (2 punti) e contenuti (4 punti). **Nessun
+nuovo workflow GitHub Actions**, un solo campo nuovo in una pipeline
+esistente (§ 20.5). Modificati `index.html`, `scripts/fetch_terremoti.py`,
+`data/feed.json` (mock).
+
+### 20.1 Sottotitolo di stato troppo trasparente
+`.status-updated` (riga "ultimo aggiornamento: …" sotto la pillola di
+stato) usava `--ash-muted` + `font-mono` a 10.5px — troppo tenue rispetto
+alla `.tagline` accanto al wordmark. Uniformata: stesso `font-body`,
+`color:var(--ash)` con `opacity:0.88`, `font-weight:500`, `font-size`
+12.5px→11px su mobile (prima 9.5px) — identica a `.tagline`.
+
+### 20.2 Pulsanti del dock: larghezza fissa → calcolata sul testo
+Il dock (§ 12.2) usava un'unica `--topic-expand-w:210px` per tutti e 5 i
+pulsanti: margine nero vistoso sulle etichette corte ("Ricaduta cenere"),
+testo tagliato/illeggibile su quella lunga ("Dati scientifici al suolo").
+**Fix**: nuova funzione `fitTopicDockButtons()` (JS, non CSS puro — vedi
+sotto perché) che misura `label.scrollWidth` di ogni `.topic-label` e
+imposta `--topic-expand-w` per-pulsante = icona (44px) + testo reale +
+padding + margine di sicurezza. Richiamata al load, da `setLang()` (IT/EN
+hanno lunghezze diverse per la stessa etichetta) e da `document.fonts.ready`
+(ricalcolo di sicurezza se il primo giro capita prima che IBM Plex Mono sia
+caricato). **Perché non solo CSS**: animare `width` verso `auto`/
+`fit-content` non ha supporto cross-browser affidabile per una transizione
+fluida; misurare via JS e passare un px esplicito a una CSS custom property
+resta la via robusta, coerente con "niente librerie" del progetto.
+
+### 20.3 Tab gas — immagini satellitari SO2
+Nuova sezione nel modale gas, sotto la sintesi testuale esistente: mappa
+satellitare NASA (layer GIBS `OMPS_NOAA20_SO2_Planetary_Boundary_Layer`,
+verificato su gibs.earthdata.nasa.gov — sensore OMPS su NOAA-20, strato
+limite planetario, dove si concentra la SO2 vulcanica), stesso pattern
+"snapshot diretto per data" già in uso per il tab satellitare (§ 19),
+selettore giorno (ieri + 3 precedenti, stesse classi `.ash-slot`
+riusate). Bounding box **più larga** della sola Etna (`35.00,10.00,
+40.00,18.00`, Sicilia + Mediterraneo centrale) perché una nube di SO2 si
+disperde ben oltre il vulcano. Disclaimer esplicito: l'assenza di colore è
+il caso più comune (non un errore). Aggiunto anche link a **SACS**
+(sacs.aeronomie.be, ESA/BIRA-IASB) — fonte già individuata come
+riferimento in § 12.4 ma non ancora esposta in UI, ora linkata come mappa
+di approfondimento completa. Nuova funzione `openGasModal()` (sostituisce
+il generico `openModalById('gasModal')` sul pulsante del dock) per
+inizializzare il selettore giorni prima di aprire il modale, sullo stesso
+modello di `openSatelliteModal()`.
+
+### 20.4 Tab dati scientifici — grafico sismicità recente
+Nuovo grafico SVG (bar chart, disegnato a mano in JS, nessuna libreria) con
+la magnitudo degli eventi sismici più recenti. **Fonte**: non il bollettino
+settimanale (le 4 sezioni testuali esistenti restano invariate), ma
+`window.lastFeedItems` — lo stesso feed sismico già scaricato per il
+cassetto in basso, quindi **nessuna nuova chiamata di rete**. Dichiarato
+esplicitamente in UI che questo grafico è quasi in tempo reale, più fresco
+delle sezioni testuali sopra (stesso principio di trasparenza già applicato
+altrove, es. punti FIRMS vs osservazioni satellitari settimanali, § 18.1).
+`renderSeismicChart()` richiamata da `renderFeed()` (quindi automaticamente
+anche da `setLang()`, che già richiama `renderFeed()`). Barre colorate per
+soglia di magnitudo (`--mist` <2.0, `--sulfur` 2.0–3.0, `--alert` ≥3.0,
+stessa palette già in uso altrove nel sito). Se nessun evento ha il campo
+`magnitude`, mostra `scientific.chartNoData` invece di un grafico vuoto.
+
+### 20.5 Nuovo campo `magnitude` in `fetch_terremoti.py`
+Il grafico di § 20.4 richiede una magnitudo numerica isolata: prima viveva
+solo dentro la stringa `title` ("Evento sismico Ml 2.1"), non utilizzabile
+per un grafico senza fare parsing fragile della stringa. **Fix minimo**:
+aggiunto il campo `"magnitude": round(mag, 1)` (o `null` se INGV non lo
+fornisce per quell'evento) agli item `type=sismicita` scritti da
+`fetch_terremoti.py` — nessun altro campo toccato, nessuna modifica alla
+logica di merge/filtro esistente (§ 5.1, invariata). `data/feed.json` mock
+aggiornato con il campo su tutti gli item sismicita esistenti, più due
+nuovi eventi mock (`f-0005` Ml 1.4, `f-0006` Ml 2.8) solo per rendere il
+grafico leggibile in locale con più di una barra — **dati mock dichiarati
+come tali** nel campo `source` del file, non dati reali inventati.
+
+### 20.6 Tab satellitare — Sentinel-2
+Aggiunta una sezione sotto il contenuto esistente (VIIRS 375m + toggle
+anomalie termiche, invariati): link diretto al **Copernicus Browser**
+ufficiale ESA (`browser.dataspace.copernicus.eu`), centrato sull'Etna via
+URL con parametri `zoom`/`lat`/`lng`/`themeId` (schema verificato sulla
+documentazione ufficiale Copernicus Data Space). **Perché un link e non un
+embed diretto come per VIIRS**: a differenza di NASA GIBS (Snapshot API
+pubblica, senza chiave, usata per VIIRS/SO2), Sentinel-2 via Copernicus
+Data Space richiede una istanza/configurazione WMS con un account per un
+embed diretto — niente di equivalente alla semplicità "URL pubblico senza
+chiave" del resto del sito. Un link diretto e verificato è stata la scelta
+più onesta, coerente con lo stile del sito (mai inventare/promettere un
+dato che non si può davvero garantire). Risoluzione dichiarata in UI: 10m
+contro i ~375m di VIIRS.
+
+### 20.7 Tab aeroporto — link ufficiale
+Aggiunto link diretto a `aeroporto.catania.it/tracking-voli` (pagina
+ufficiale "Tracking voli", con partenze/arrivi in tempo reale), sopra il
+link VAAC Toulouse già esistente. **Nota**: § 12.4 aveva scartato
+`aeroporto.catania.it` come *fonte dati* per la pipeline (SPA Next.js non
+scrapabile senza browser headless) — questo resta vero e non è stato
+toccato: qui si tratta solo di un **link cliccabile** verso il sito
+ufficiale per chi vuole il dettaglio volo-per-volo, non di una nuova fonte
+per `fetch_aviation.py`.
+
+### 20.8 Cosa NON è cambiato
+- `fetch_hotspot.py`, `fetch_aviation.py`, `fetch_comunicati.py`,
+  `fetch_bollettino.py`: nessuna modifica.
+- Le 4 sezioni testuali del tab scientifico e il tab gas testuale: logica
+  invariata, solo contenuto aggiuntivo sotto.
+- Nessun nuovo secret, nessuna nuova chiave API: sia GIBS SO2 sia GIBS
+  VIIRS sono la stessa Snapshot API pubblica senza autenticazione già in
+  uso da § 19.
