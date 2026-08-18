@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://etnaora.github.io/etna-ora/sitemap.xml
+Sitemap: https://etnaora.it/sitemap.xml

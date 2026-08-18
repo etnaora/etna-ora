@@ -73,17 +73,26 @@ grezzo) è tecnicamente più pesante — richiede scaricare forme d'onda e
 processarle con una libreria come ObsPy — e lo affrontiamo come step
 successivo, separato da questo.
 
-## ## SEO — da aggiornare quando si passa al dominio proprio
+## Dominio proprio — etnaora.it
 
-Oggi `index.html` (tag `canonical`, Open Graph, Twitter Card, JSON-LD) e
-`robots.txt`/`sitemap.xml` puntano tutti a `https://etnaora.github.io/etna-ora/`.
-Quando il sito passerà su un dominio proprio (es. `etna-ora.it`), questi
-riferimenti vanno sostituiti ovunque con il nuovo indirizzo — altrimenti
-Google continuerà a considerare l'indirizzo GitHub come quello "ufficiale".
+Il sito è ora raggiungibile su **`https://etnaora.it/`** (dominio proprio,
+GoDaddy). `index.html` (tag `canonical`, Open Graph, JSON-LD),
+`robots.txt` e `sitemap.xml` puntano già tutti al nuovo indirizzo, ed è
+presente un file `CNAME` alla radice del repo (contenuto: `etnaora.it`).
+
+La configurazione DNS su GoDaddy e le impostazioni "Custom domain"/"Enforce
+HTTPS" su GitHub Pages restano un passaggio manuale una tantum, fuori da
+questo repository — vedi `PROGETTO_NOTE.md`, § 21.5, per la checklist
+completa passo-passo (record DNS da creare, ordine delle operazioni,
+verifica finale).
+
+Il vecchio indirizzo `https://etnaora.github.io/etna-ora/` resta comunque
+sempre raggiungibile (GitHub Pages non lo disattiva), semplicemente non è
+più quello canonico/comunicato.
 
 Prima di comprare dominio/hosting
 
 - [ ] Sostituire i placeholder in `privacy.html` e `cookie.html` con dati reali (titolare, email) o generarli via Iubenda free tier
-- [ ] Verificare disponibilità dominio (.it e .com)
-- [ ] Scegliere hosting statico gratuito per il test pubblico (Cloudflare Pages / Netlify / GitHub Pages)
+- [x] Verificare disponibilità dominio (.it e .com) — acquistato `etnaora.it` su GoDaddy
+- [x] Scegliere hosting statico gratuito per il test pubblico (Cloudflare Pages / Netlify / GitHub Pages) — GitHub Pages
 - [ ] Impostare il primo job GitHub Actions per un solo dato (partire dal tremore, poi aggiungere il resto)

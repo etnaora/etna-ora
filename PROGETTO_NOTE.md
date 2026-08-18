@@ -34,10 +34,13 @@ Vincoli permanenti del progetto:
   dall'account personale dell'utente, stesso login)
 - **Repository**: `github.com/etnaora/etna-ora` (pubblico — deve restare
   pubblico, altrimenti GitHub Actions e Pages non sono più gratuiti illimitati)
-- **Sito pubblicato**: `https://etnaora.github.io/etna-ora/` (GitHub Pages,
-  branch `main`, root)
-- **Dominio proprio**: non ancora acquistato. Quando succede, vanno aggiornati
-  a mano tutti i riferimenti elencati nella sezione 9.
+- **Sito pubblicato**: `https://etnaora.it/` (dominio proprio, vedi § 9 —
+  GitHub Pages continua a servire lo stesso repository/branch `main`/root,
+  cambia solo l'indirizzo con cui si raggiunge)
+- **Dominio proprio**: **acquistato** (GoDaddy, `etnaora.it`, sessione
+  2026-08). Vecchio indirizzo `https://etnaora.github.io/etna-ora/` resta
+  sempre raggiungibile come fallback (non si disattiva mai finché Pages è
+  attivo), ma non è più quello ufficiale/comunicato.
 
 ---
 
@@ -301,17 +304,27 @@ con quella cornice (c'è già un disclaimer nel modale).
 
 ---
 
-## 9. Cose da NON dimenticare quando si compra il dominio proprio
+## 9. Dominio proprio — fatto (sessione 2026-08, vedi § 21 per la procedura completa)
 
-Riferimenti oggi puntati a `https://etnaora.github.io/etna-ora/`, da
-aggiornare ovunque quando si passa a un dominio proprio (es. `etna-ora.it`):
-- `index.html`: tag `<link rel="canonical">`, tutti i tag Open Graph
-  (`og:url`), Twitter Card, il JSON-LD schema.org (`"url"`)
-- `robots.txt`: riga `Sitemap:`
-- `sitemap.xml`: tutti i `<loc>`
-- Eventuali link hardcoded rimasti in giro (cercare "etnaora.github.io" nel
-  progetto prima di considerarlo fatto)
-- Registrare il nuovo dominio su **Google Search Console**
+**Aggiornato in questa sessione**, tutti i riferimenti che prima puntavano
+a `https://etnaora.github.io/etna-ora/` ora puntano a `https://etnaora.it/`:
+- `index.html`: tag `<link rel="canonical">`, `og:url`, JSON-LD schema.org
+  (`"url"`) — fatto
+- `robots.txt`: riga `Sitemap:` — fatto
+- `sitemap.xml`: tutti i `<loc>` — fatto
+- File `CNAME` nuovo, alla radice del repo, contenuto `etnaora.it` — fatto
+  (è il meccanismo con cui GitHub Pages sa quale dominio personalizzato
+  servire; lo stesso file che l'interfaccia web di GitHub creerebbe da sola
+  scrivendo il dominio in Settings → Pages)
+
+**Ancora da fare, manuale, fuori da questo repository** (vedi § 21.5 per la
+checklist completa passo-passo):
+- Configurare i record DNS su GoDaddy (4 record A + 1 CNAME per `www`)
+- Impostare il dominio personalizzato nelle impostazioni GitHub Pages del
+  repository e attendere/attivare "Enforce HTTPS"
+- Registrare `etnaora.it` su **Google Search Console** (nuova proprietà,
+  il vecchio indirizzo `etnaora.github.io` era una proprietà diversa — le
+  due non si "trasferiscono" automaticamente)
 
 ---
 
@@ -1161,3 +1174,121 @@ per `fetch_aviation.py`.
 - Nessun nuovo secret, nessuna nuova chiave API: sia GIBS SO2 sia GIBS
   VIIRS sono la stessa Snapshot API pubblica senza autenticazione già in
   uso da § 19.
+
+---
+
+## 21. Sessione 2026-08 (10) — migrazione al dominio proprio etnaora.it
+
+Dominio acquistato su **GoDaddy**: `etnaora.it`. Obiettivo: far puntare il
+sito, oggi servito da GitHub Pages su `etnaora.github.io/etna-ora/`, al
+nuovo dominio, così l'utente può iniziare a farlo circolare "ufficialmente".
+**Parte fatta in questa sessione (nel repository)**: file `CNAME` +
+riferimenti interni. **Parte NON fatta qui** (richiede accesso ai pannelli
+GoDaddy/GitHub, fuori dalla portata di un editor di file): configurazione
+DNS e impostazioni GitHub Pages — vedi § 21.5, checklist passo-passo.
+
+### 21.1 Cosa fa il file `CNAME`
+Nuovo file alla radice del repo, un'unica riga: `etnaora.it`. È il
+meccanismo con cui GitHub Pages sa che, oltre all'indirizzo di default
+`etnaora.github.io/etna-ora/`, deve rispondere anche su `etnaora.it` e
+servire lì la stessa build (stesso branch `main`, root — nessuna modifica
+alla struttura del sito). **Equivalente** a scrivere il dominio nel campo
+"Custom domain" di Settings → Pages sull'interfaccia web di GitHub: quel
+campo, se lo si usa invece di caricare il file a mano, crea esattamente
+questo stesso file con lo stesso contenuto. Va bene fare l'uno o l'altro,
+non entrambi in sequenza diversa (rischio di sovrascriversi a vicenda senza
+danno, ma inutile farlo due volte).
+
+### 21.2 Riferimenti interni aggiornati (SEO/metadata, non funzionali)
+Nessuno di questi cambia il comportamento del sito — servono solo a dire
+correttamente a motori di ricerca e anteprime social qual è l'indirizzo
+"vero" del sito, ora che ne ha uno secondo (evita contenuto duplicato
+agli occhi di Google tra vecchio e nuovo indirizzo):
+- `index.html` riga 10: `<link rel="canonical" href="https://etnaora.it/">`
+- `index.html` riga 16: `<meta property="og:url" content="https://etnaora.it/">`
+- `index.html` riga 31: JSON-LD schema.org, campo `"url"`
+- `robots.txt`: riga `Sitemap: https://etnaora.it/sitemap.xml`
+- `sitemap.xml`: tutti e 3 i `<loc>` (home, privacy, cookie)
+
+**Scelta apex vs www**: usato `https://etnaora.it/` (senza `www`) come
+indirizzo canonico ovunque, coerente con la configurazione DNS consigliata
+in § 21.5 (GitHub reindirizza automaticamente `www.etnaora.it` → `etnaora.it`
+quando entrambi sono configurati correttamente, non il contrario — quindi
+l'apex è la scelta giusta come canonico).
+
+### 21.3 Cosa succede al vecchio indirizzo `etnaora.github.io/etna-ora/`
+Resta sempre raggiungibile e funzionante (GitHub Pages non lo disattiva
+mai finché il sito è pubblicato), semplicemente non è più quello indicato
+come canonico. Non serve e non conviene fare nulla di più per "spegnerlo":
+un eventuale redirect automatico dal vecchio al nuovo indirizzo non è
+supportato nativamente da GitHub Pages con file statici puri, e non è
+comunque necessario — chi arriva dal link vecchio vede comunque il sito
+funzionante.
+
+### 21.4 Perché la parte DNS/GitHub non è "fatta" dentro questo repository
+Aggiungere record DNS su GoDaddy e impostare il dominio in Settings → Pages
+di GitHub sono operazioni che avvengono **fuori dal codice**, sui pannelli
+web di GoDaddy e GitHub — non c'è un file nel repository che le sostituisca
+(il file `CNAME` di § 21.1 è la metà "lato GitHub" della configurazione, ma
+senza i record DNS lato GoDaddy che puntano a GitHub, non ha nessun effetto
+da solo). Vanno fatte a mano dall'utente, una tantum.
+
+### 21.5 Checklist passo-passo (da fare fuori da qui)
+
+**A. Su GoDaddy — pannello DNS del dominio `etnaora.it`**
+Aggiungere questi record (rimuovendo eventuali record A/CNAME preesistenti
+su `@` e `www` lasciati dal parcheggio di default di GoDaddy, e
+disattivando l'eventuale "Domain Forwarding" se già attivo — altrimenti
+confligge con i record appena aggiunti):
+
+| Tipo | Nome | Valore | TTL |
+|---|---|---|---|
+| A | @ | `185.199.108.153` | 600 (o default) |
+| A | @ | `185.199.109.153` | 600 |
+| A | @ | `185.199.110.153` | 600 |
+| A | @ | `185.199.111.153` | 600 |
+| CNAME | www | `etnaora.github.io` | 600 |
+
+Le 4 IP sono quelle ufficiali di GitHub Pages per i domini apex (root,
+senza `www`) — non cambiano da anni ma vale la pena verificarle su
+`docs.github.com` al momento in cui si applicano, GitHub le documenta
+esplicitamente. Il CNAME per `www` punta a `etnaora.github.io` (il dominio
+Pages dell'organization), **senza** `/etna-ora` in coda — un CNAME DNS può
+contenere solo un host, mai un percorso.
+
+**B. Su GitHub — repository `etnaora/etna-ora`**
+1. Se non già fatto in passato: verificare il dominio a livello di
+   organization (Settings dell'org → "Verified domains") — aggiunge un
+   record TXT temporaneo che GitHub chiede di creare su GoDaddy, riduce il
+   rischio che altri rivendichino lo stesso dominio su GitHub Pages.
+2. Nel repository: Settings → Pages → campo "Custom domain" → scrivere
+   `etnaora.it` → Save (se il file `CNAME` di questa sessione è già stato
+   pushato, GitHub dovrebbe già proporlo automaticamente).
+3. Attendere il controllo DNS (spunta verde "DNS check successful" — può
+   richiedere da pochi minuti a qualche ora per la propagazione DNS reale,
+   indipendentemente da cosa dice l'interfaccia).
+4. Una volta verde, spuntare **"Enforce HTTPS"** (compare solo dopo che il
+   controllo DNS è passato — GitHub deve prima emettere un certificato
+   Let's Encrypt per il nuovo dominio, altri minuti/ore).
+
+**C. Verifica**
+- `https://etnaora.it/` deve mostrare il sito.
+- `https://www.etnaora.it/` deve reindirizzare automaticamente a
+  `https://etnaora.it/` (comportamento nativo GitHub Pages quando sia
+  l'apex sia il CNAME `www` sono configurati correttamente — non serve
+  altro codice).
+- Il lucchetto HTTPS deve comparire su entrambi (dopo il punto B.4).
+
+**D. Dopo che tutto funziona**
+- Registrare `https://etnaora.it/` come nuova proprietà su **Google Search
+  Console** (proprietà separata dal vecchio `etnaora.github.io`, non c'è
+  trasferimento automatico) e sottomettere `sitemap.xml`.
+- Aggiornare eventuali link già condivisi altrove (bio social, ecc.) al
+  nuovo indirizzo, quando l'utente inizia a farlo circolare.
+
+### 21.6 Cosa NON è cambiato
+- Nessuna modifica a struttura del sito, pipeline Python, workflow GitHub
+  Actions: il dominio è solo l'indirizzo con cui si raggiunge lo stesso
+  sito, invariato in tutto il resto.
+- `privacy.html`/`cookie.html`: nessun riferimento hardcoded al vecchio
+  dominio trovato al loro interno, nessuna modifica necessaria lì.
