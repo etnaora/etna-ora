@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-08-20T05:02:21.445571+00:00",
+  "generated_at": "2026-08-20T05:54:44.226756+00:00",
   "source": "NASA FIRMS (VIIRS_SNPP_NRT) — https://firms.modaps.eosdis.nasa.gov",
   "status": "alta",
-  "notes": "Anomalia termica significativa rilevata dal satellite (13 hotspot, FRP massimo 15.9 MW).",
-  "last_significant_event": "2026-08-20T05:02:21.445571+00:00",
-  "hotspot_count_24h": 13,
+  "notes": "Anomalia termica significativa rilevata dal satellite (15 hotspot, FRP massimo 15.9 MW).",
+  "last_significant_event": "2026-08-20T05:54:44.226756+00:00",
+  "hotspot_count_24h": 15,
   "points": [
     {
       "lat": 37.74234,
@@ -71,6 +71,22 @@
       "acq_time": "24"
     },
     {
+      "lat": 37.74903,
+      "lng": 15.0414,
+      "frp": 6.3,
+      "confidence": "n",
+      "acq_date": "2026-08-20",
+      "acq_time": "204"
+    },
+    {
+      "lat": 37.75417,
+      "lng": 15.02453,
+      "frp": 6.3,
+      "confidence": "n",
+      "acq_date": "2026-08-20",
+      "acq_time": "204"
+    },
+    {
       "lat": 37.74316,
       "lng": 15.04242,
       "frp": 6.1,
@@ -101,6 +117,22 @@
       "confidence": "n",
       "acq_date": "2026-08-20",
       "acq_time": "24"
+    },
+    {
+      "lat": 37.74134,
+      "lng": 15.06663,
+      "frp": 5.5,
+      "confidence": "n",
+      "acq_date": "2026-08-20",
+      "acq_time": "204"
+    },
+    {
+      "lat": 37.74516,
+      "lng": 15.0541,
+      "frp": 5.5,
+      "confidence": "n",
+      "acq_date": "2026-08-20",
+      "acq_time": "204"
     },
     {
       "lat": 37.74112,
@@ -168,5 +200,5 @@
     }
   ],
   "stale": false,
-  "last_success_at": "2026-08-20T05:02:21.445571+00:00"
+  "last_success_at": "2026-08-20T05:54:44.226756+00:00"
 }
