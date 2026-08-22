@@ -49,6 +49,6 @@
   ],
   "stale": true,
   "last_success_at": "2026-08-22T13:08:15.172404+00:00",
-  "checked_at": "2026-08-22T13:50:19.741452+00:00",
-  "stale_reason": "NASA FIRMS non raggiungibile su nessun host disponibile (HTTPSConnectionPool(host='firms2.modaps.eosdis.nasa.gov', port=443): Max retries exceeded with url: /api/area/csv/72952be493ba7ed231f2d6c7e0744e26/VIIRS_SNPP_NRT/14.90,37.68,15.15,37.82/1 (Caused by ConnectTimeoutError(<HTTPSConnection(host='firms2.modaps.eosdis.nasa.gov', port=443) at 0x7f0cf6d518e0>, 'Connection to firms2.modaps.eosdis.nasa.gov timed out. (connect timeout=20)')))"
+  "checked_at": "2026-08-22T14:14:25.256419+00:00",
+  "stale_reason": "NASA FIRMS non raggiungibile su nessun host disponibile (HTTPSConnectionPool(host='firms2.modaps.eosdis.nasa.gov', port=443): Max retries exceeded with url: /api/area/csv/72952be493ba7ed231f2d6c7e0744e26/VIIRS_SNPP_NRT/14.90,37.68,15.15,37.82/1 (Caused by ConnectTimeoutError(<HTTPSConnection(host='firms2.modaps.eosdis.nasa.gov', port=443) at 0x7f7bc352af60>, 'Connection to firms2.modaps.eosdis.nasa.gov timed out. (connect timeout=20)')))"
 }
