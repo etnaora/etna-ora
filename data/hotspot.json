@@ -1,11 +1,148 @@
 {
-  "generated_at": "2026-08-23T04:08:56.387648+00:00",
+  "generated_at": "2026-08-23T04:59:56.404551+00:00",
   "source": "NASA FIRMS (VIIRS_SNPP_NRT) — https://firms.modaps.eosdis.nasa.gov",
-  "status": "quiete",
-  "notes": "Nessuna anomalia termica rilevata dal satellite nelle ultime 24 ore.",
-  "last_significant_event": null,
-  "hotspot_count_24h": 0,
-  "points": [],
+  "status": "alta",
+  "notes": "Anomalia termica significativa rilevata dal satellite (9 hotspot, FRP massimo 2.1 MW).",
+  "last_significant_event": "2026-08-23T04:59:56.404551+00:00",
+  "hotspot_count_24h": 9,
+  "points": [
+    {
+      "lat": 37.74108,
+      "lng": 15.06808,
+      "frp": 2.9,
+      "confidence": "n",
+      "acq_date": "2026-08-23",
+      "acq_time": "107"
+    },
+    {
+      "lat": 37.74184,
+      "lng": 15.0636,
+      "frp": 2.9,
+      "confidence": "n",
+      "acq_date": "2026-08-23",
+      "acq_time": "107"
+    },
+    {
+      "lat": 37.74514,
+      "lng": 15.06446,
+      "frp": 2.9,
+      "confidence": "n",
+      "acq_date": "2026-08-23",
+      "acq_time": "107"
+    },
+    {
+      "lat": 37.7426,
+      "lng": 15.05904,
+      "frp": 2.7,
+      "confidence": "n",
+      "acq_date": "2026-08-23",
+      "acq_time": "107"
+    },
+    {
+      "lat": 37.74337,
+      "lng": 15.05445,
+      "frp": 2.7,
+      "confidence": "n",
+      "acq_date": "2026-08-23",
+      "acq_time": "107"
+    },
+    {
+      "lat": 37.7459,
+      "lng": 15.05991,
+      "frp": 2.7,
+      "confidence": "n",
+      "acq_date": "2026-08-23",
+      "acq_time": "107"
+    },
+    {
+      "lat": 37.74668,
+      "lng": 15.0553,
+      "frp": 2.7,
+      "confidence": "n",
+      "acq_date": "2026-08-23",
+      "acq_time": "107"
+    },
+    {
+      "lat": 37.74566,
+      "lng": 15.04087,
+      "frp": 2.1,
+      "confidence": "n",
+      "acq_date": "2026-08-23",
+      "acq_time": "107"
+    },
+    {
+      "lat": 37.74897,
+      "lng": 15.04166,
+      "frp": 2.1,
+      "confidence": "n",
+      "acq_date": "2026-08-23",
+      "acq_time": "107"
+    },
+    {
+      "lat": 37.74973,
+      "lng": 15.03714,
+      "frp": 2.1,
+      "confidence": "n",
+      "acq_date": "2026-08-23",
+      "acq_time": "107"
+    },
+    {
+      "lat": 37.74414,
+      "lng": 15.04989,
+      "frp": 1.9,
+      "confidence": "n",
+      "acq_date": "2026-08-23",
+      "acq_time": "107"
+    },
+    {
+      "lat": 37.7449,
+      "lng": 15.04536,
+      "frp": 1.9,
+      "confidence": "n",
+      "acq_date": "2026-08-23",
+      "acq_time": "107"
+    },
+    {
+      "lat": 37.74745,
+      "lng": 15.05071,
+      "frp": 1.9,
+      "confidence": "n",
+      "acq_date": "2026-08-23",
+      "acq_time": "107"
+    },
+    {
+      "lat": 37.74821,
+      "lng": 15.04617,
+      "frp": 1.9,
+      "confidence": "n",
+      "acq_date": "2026-08-23",
+      "acq_time": "107"
+    },
+    {
+      "lat": 37.75381,
+      "lng": 15.03337,
+      "frp": 1.4,
+      "confidence": "n",
+      "acq_date": "2026-08-23",
+      "acq_time": "107"
+    },
+    {
+      "lat": 37.75336,
+      "lng": 14.99489,
+      "frp": 0.5,
+      "confidence": "n",
+      "acq_date": "2026-08-23",
+      "acq_time": "107"
+    },
+    {
+      "lat": 37.75359,
+      "lng": 15.0141,
+      "frp": 0.5,
+      "confidence": "n",
+      "acq_date": "2026-08-23",
+      "acq_time": "107"
+    }
+  ],
   "stale": false,
-  "last_success_at": "2026-08-23T04:08:56.387648+00:00"
+  "last_success_at": "2026-08-23T04:59:56.404551+00:00"
 }
