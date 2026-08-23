@@ -1,8 +1,17 @@
 {
-  "generated_at": "2026-08-23T08:30:34.889596+00:00",
+  "generated_at": "2026-08-23T08:41:51.191145+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
+    {
+      "id": "com-ComunicatoETNA20260823074420pdf",
+      "timestamp": "2026-08-23T07:48:46+00:00",
+      "type": "comunicato",
+      "title": "Invio comunicato generico di attività vulcanica",
+      "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
+      "level": "medio",
+      "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260823074420.pdf"
+    },
     {
       "id": "com-ComunicatoETNA20260821181114pdf",
       "timestamp": "2026-08-21T18:15:52+00:00",
@@ -218,15 +227,6 @@
       "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
       "level": "medio",
       "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260815082043.pdf"
-    },
-    {
-      "id": "com-ComunicatoETNA20260814162900pdf",
-      "timestamp": "2026-08-14T16:32:17+00:00",
-      "type": "comunicato",
-      "title": "Invio comunicato generico di attività vulcanica",
-      "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
-      "level": "medio",
-      "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260814162900.pdf"
     }
   ]
 }
