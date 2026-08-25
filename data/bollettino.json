@@ -1,17 +1,17 @@
 {
-  "bulletin_date": "2026-08-18",
-  "bulletin_url": "https://www.ct.ingv.it/index.php/monitoraggio-e-sorveglianza/prodotti-del-monitoraggio/bollettini-settimanali-multidisciplinari/1156-bollettino-Settimanale-sul-monitoraggio-vulcanico-geochimico-e-sismico-del-vulcano-Etna-del-2026-08-18/file",
+  "bulletin_date": "2026-08-25",
+  "bulletin_url": "https://www.ct.ingv.it/index.php/monitoraggio-e-sorveglianza/prodotti-del-monitoraggio/bollettini-settimanali-multidisciplinari/1158-bollettino-Settimanale-sul-monitoraggio-vulcanico-geochimico-e-sismico-del-vulcano-Etna-del-2026-08-25/file",
   "sections": {
-    "vulcanologiche": "Attività esplosiva ad intensità variabile con emissione di cenere dal cratere Voragine; attività esplosiva di breve durata ed emissioni di cenere dal cratere di Nord-Est. Attività effusiva in Valle del Bove alimentata da diverse bocche eruttive tra i 2750 m e i 1900 m s.l.m",
-    "sismologia": "Elevato rilascio di sismicità da fratturazione lungo la faglia Provenzana-Pernicana. Ampiezza media del tremore vulcanico con valori fortemente variabili, da bassi ad alti in funzione dell’attività eruttiva in corso; centroidi delle sorgenti prevalentemente localizzati nell'area del cratere Voragine",
-    "infrasuono": "Attività infrasonica da bassa ad alta, con fasi più energetiche correlabili all’attività esplosiva ai crateri Voragine e di Nord-Est",
-    "deformazioni": "I segnali delle reti di monitoraggio delle deformazioni del suolo hanno mostrato variazioni correlate all'attività eruttiva tuttora in corso. In generale, si segnala una tendenza alla deflazione alla scala dell'intero edificio vulcanico",
-    "geochimica": "Flusso di SO2 su un livello medio-alto con valori infra-giornalieri tra un livello alto e molto-alto Flusso CO2 dal suolo (Etnagas): su valori medi. Pressione parziale di CO2 disciolta in falda (Rete EtnaAcque): nessun aggiornamento. Rapporto isotopico He nei siti periferici: non ci sono aggiornamenti; l'ultimo dato si attestava su valori alti (09 luglio 2026). INGV - BOLLETTINO SETTIMANALE ETNA DEL 18/08/2026 - Pagina 1 di 22",
-    "satellitare": "L’attività termica osservata da satellite in area sommitale è stata generalmente di livello da alto a molto alto in corrispondenza dell’attività eruttiva iniziata il 06/08/2026",
-    "altre_osservazioni": "La composizione chimica della fase gassosa associata all’attività esplosiva al cratere Voragine evidenzia il contributo della porzioni profonda del sistema di alimentazione magmatico. Sono stati raccolti e analizzati alcuni campioni di cenere vulcanica a distanze crescenti dalla Voragine lungo il fianco meridionale dell'Etna, che risultano formare modesti carichi al suolo ed essere composti da particelle di cenere fini. La composizione chimica dei campioni dei flussi lavici indica l’assenza di ricariche significative di magma profondo",
+    "vulcanologiche": "Attività esplosiva ad intensità variabile con emissione di cenere dal cratere Voragine, Bocca Nuova e dal cratere di Nord-Est. Attività effusiva in Valle del Bove alimentata dalle bocche eruttive a 3060 m s.l.m. e a 1900 m s.l.m.. Attività di degassamento intenso a carico del Cratere di Sud-Est e del Cratere di Nord-Est",
+    "sismologia": "Sismicità più energetica da fratturazione lungo la faglia Provenzana-Pernicana. Ampiezza media del tremore vulcanico con valori fortemente variabili, da bassi ad alti; i centroidi delle sorgenti risultano prevalentemente localizzati nell'area del cratere di Nord-Est",
+    "infrasuono": "Attività infrasonica da bassa a media",
+    "deformazioni": "I segnali delle reti di monitoraggio delle deformazioni del suolo hanno mostrato variazioni correlate all'attività eruttiva",
+    "geochimica": "Flusso di SO2 su un livello medio-alto con valori infra-giornalieri tra un livello alto e molto-alto Flusso CO2 dal suolo (Etnagas): su valori medi. Pressione parziale di CO2 disciolta in falda (Rete EtnaAcque): nessun aggiornamento. Rapporto isotopico He nei siti periferici: non ci sono aggiornamenti; l'ultimo dato si attestava su valori alti (09 luglio 2026)",
+    "satellitare": "L’attività termica osservata da satellite in area sommitale è stata di livello da alto a molto alto in corrispondenza dell’attività effusiva iniziata il 06/08/2026 e da moderato a basso dalla fine dell’attività. INGV - BOLLETTINO SETTIMANALE ETNA DEL 25/08/2026 - Pagina 1 di 19",
+    "altre_osservazioni": "Sono stati raccolti e analizzati due campioni di cenere vulcanica a circa 13 km dalla Voragine, lungo il fianco sud-orientale dell’Etna, caratterizzati da granulometria fine e carichi al suolo più elevati rispetto ai giorni precedenti",
     "so2_estratto": "Flusso di SO2 su un livello medio-alto con valori infra-giornalieri tra un livello alto e molto-alto Flusso CO2 dal suolo (Etnagas): su valori medi"
   },
-  "generated_at": "2026-08-25T12:54:21.825375+00:00",
-  "last_success_at": "2026-08-25T12:54:21.825375+00:00",
+  "generated_at": "2026-08-25T15:47:37.960896+00:00",
+  "last_success_at": "2026-08-25T15:47:37.960896+00:00",
   "stale": false
 }
