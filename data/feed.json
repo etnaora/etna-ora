@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-29T10:14:17.117219+00:00",
+  "generated_at": "2026-08-29T14:37:50.450385+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
@@ -173,51 +173,6 @@
       "summary": "Localizzato: 9 km SW Linguaglossa (CT).",
       "level": "basso",
       "magnitude": 1.3
-    },
-    {
-      "id": "eq-46892992",
-      "timestamp": "2026-08-15T12:30:47.260000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.7",
-      "summary": "Localizzato: 11 km W Linguaglossa (CT).",
-      "level": "basso",
-      "magnitude": 1.7
-    },
-    {
-      "id": "eq-46892052",
-      "timestamp": "2026-08-15T10:49:39.570000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.1",
-      "summary": "Localizzato: 8 km W Linguaglossa (CT).",
-      "level": "basso",
-      "magnitude": 1.1
-    },
-    {
-      "id": "eq-46892352",
-      "timestamp": "2026-08-15T10:45:24.800000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.1",
-      "summary": "Localizzato: 9 km W Linguaglossa (CT).",
-      "level": "basso",
-      "magnitude": 1.1
-    },
-    {
-      "id": "eq-46892022",
-      "timestamp": "2026-08-15T10:40:52.920000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.4",
-      "summary": "Localizzato: 8 km W Linguaglossa (CT).",
-      "level": "basso",
-      "magnitude": 1.4
-    },
-    {
-      "id": "eq-46891682",
-      "timestamp": "2026-08-15T10:24:08.910000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 3.9",
-      "summary": "Localizzato: 7 km W Linguaglossa (CT).",
-      "level": "alto",
-      "magnitude": 3.9
     },
     {
       "id": "com-ComunicatoETNA20260815101305pdf",
