@@ -1,124 +1,188 @@
 {
-  "generated_at": "2026-08-28T23:37:33.759324+00:00",
+  "generated_at": "2026-08-29T05:07:33.021126+00:00",
   "source": "NASA FIRMS (VIIRS_SNPP_NRT) — https://firms.modaps.eosdis.nasa.gov",
   "status": "alta",
-  "notes": "Anomalia termica significativa rilevata dal satellite (10 hotspot, FRP massimo 2.4 MW).",
-  "last_significant_event": "2026-08-28T23:37:33.759324+00:00",
-  "hotspot_count_24h": 10,
+  "notes": "Anomalia termica significativa rilevata dal satellite (14 hotspot, FRP massimo 2.1 MW).",
+  "last_significant_event": "2026-08-29T05:07:33.021126+00:00",
+  "hotspot_count_24h": 14,
   "points": [
     {
-      "lat": 37.74347,
-      "lng": 15.06424,
-      "frp": 3.8,
-      "confidence": "n",
-      "acq_date": "2026-08-28",
-      "acq_time": "113"
-    },
-    {
       "lat": 37.74441,
-      "lng": 15.05914,
-      "frp": 2.8,
-      "confidence": "n",
-      "acq_date": "2026-08-28",
-      "acq_time": "113"
-    },
-    {
-      "lat": 37.74538,
-      "lng": 15.0539,
-      "frp": 2.8,
-      "confidence": "n",
-      "acq_date": "2026-08-28",
-      "acq_time": "113"
-    },
-    {
-      "lat": 37.74004,
-      "lng": 15.0633,
+      "lng": 15.05632,
       "frp": 2.7,
       "confidence": "n",
-      "acq_date": "2026-08-28",
-      "acq_time": "113"
+      "acq_date": "2026-08-29",
+      "acq_time": "56"
     },
     {
-      "lat": 37.74635,
-      "lng": 15.04873,
-      "frp": 2.4,
+      "lat": 37.74501,
+      "lng": 15.05204,
+      "frp": 2.7,
       "confidence": "n",
-      "acq_date": "2026-08-28",
-      "acq_time": "113"
+      "acq_date": "2026-08-29",
+      "acq_time": "56"
     },
     {
-      "lat": 37.74729,
-      "lng": 15.04365,
-      "frp": 2.4,
+      "lat": 37.73983,
+      "lng": 15.06413,
+      "frp": 2.6,
       "confidence": "n",
-      "acq_date": "2026-08-28",
-      "acq_time": "113"
+      "acq_date": "2026-08-29",
+      "acq_time": "56"
     },
     {
-      "lat": 37.75074,
-      "lng": 15.04442,
-      "frp": 2.4,
+      "lat": 37.74318,
+      "lng": 15.06493,
+      "frp": 2.6,
       "confidence": "n",
-      "acq_date": "2026-08-28",
-      "acq_time": "113"
+      "acq_date": "2026-08-29",
+      "acq_time": "56"
     },
     {
-      "lat": 37.74821,
-      "lng": 15.03866,
-      "frp": 1.4,
+      "lat": 37.7438,
+      "lng": 15.06058,
+      "frp": 2.6,
       "confidence": "n",
-      "acq_date": "2026-08-28",
-      "acq_time": "113"
+      "acq_date": "2026-08-29",
+      "acq_time": "56"
     },
     {
-      "lat": 37.74916,
-      "lng": 15.0335,
-      "frp": 1.4,
+      "lat": 37.74562,
+      "lng": 15.04774,
+      "frp": 2.1,
       "confidence": "n",
-      "acq_date": "2026-08-28",
-      "acq_time": "113"
+      "acq_date": "2026-08-29",
+      "acq_time": "56"
     },
     {
-      "lat": 37.75166,
-      "lng": 15.03941,
-      "frp": 1.4,
+      "lat": 37.74625,
+      "lng": 15.04338,
+      "frp": 2.1,
       "confidence": "n",
-      "acq_date": "2026-08-28",
-      "acq_time": "113"
+      "acq_date": "2026-08-29",
+      "acq_time": "56"
     },
     {
-      "lat": 37.75261,
-      "lng": 15.03428,
-      "frp": 1.4,
+      "lat": 37.74675,
+      "lng": 15.04582,
+      "frp": 2.1,
       "confidence": "n",
-      "acq_date": "2026-08-28",
-      "acq_time": "113"
+      "acq_date": "2026-08-29",
+      "acq_time": "56"
     },
     {
-      "lat": 37.7492,
-      "lng": 14.99471,
-      "frp": 0.8,
+      "lat": 37.74737,
+      "lng": 15.04145,
+      "frp": 2.1,
       "confidence": "n",
-      "acq_date": "2026-08-28",
-      "acq_time": "113"
+      "acq_date": "2026-08-29",
+      "acq_time": "56"
     },
     {
-      "lat": 37.75263,
-      "lng": 14.99553,
-      "frp": 0.8,
+      "lat": 37.7501,
+      "lng": 15.04672,
+      "frp": 2.1,
       "confidence": "n",
-      "acq_date": "2026-08-28",
-      "acq_time": "113"
+      "acq_date": "2026-08-29",
+      "acq_time": "56"
     },
     {
-      "lat": 37.75458,
-      "lng": 15.02369,
-      "frp": 0.7,
+      "lat": 37.75071,
+      "lng": 15.04236,
+      "frp": 2.1,
       "confidence": "n",
-      "acq_date": "2026-08-28",
-      "acq_time": "113"
+      "acq_date": "2026-08-29",
+      "acq_time": "56"
+    },
+    {
+      "lat": 37.74553,
+      "lng": 15.05441,
+      "frp": 2.0,
+      "confidence": "n",
+      "acq_date": "2026-08-29",
+      "acq_time": "56"
+    },
+    {
+      "lat": 37.74614,
+      "lng": 15.05014,
+      "frp": 2.0,
+      "confidence": "n",
+      "acq_date": "2026-08-29",
+      "acq_time": "56"
+    },
+    {
+      "lat": 37.74799,
+      "lng": 15.0371,
+      "frp": 1.6,
+      "confidence": "n",
+      "acq_date": "2026-08-29",
+      "acq_time": "56"
+    },
+    {
+      "lat": 37.75133,
+      "lng": 15.038,
+      "frp": 1.6,
+      "confidence": "n",
+      "acq_date": "2026-08-29",
+      "acq_time": "56"
+    },
+    {
+      "lat": 37.75194,
+      "lng": 15.0337,
+      "frp": 1.6,
+      "confidence": "n",
+      "acq_date": "2026-08-29",
+      "acq_time": "56"
+    },
+    {
+      "lat": 37.7392,
+      "lng": 15.06852,
+      "frp": 1.3,
+      "confidence": "n",
+      "acq_date": "2026-08-29",
+      "acq_time": "56"
+    },
+    {
+      "lat": 37.74353,
+      "lng": 15.03814,
+      "frp": 1.2,
+      "confidence": "n",
+      "acq_date": "2026-08-29",
+      "acq_time": "56"
+    },
+    {
+      "lat": 37.74687,
+      "lng": 15.039,
+      "frp": 1.2,
+      "confidence": "n",
+      "acq_date": "2026-08-29",
+      "acq_time": "56"
+    },
+    {
+      "lat": 37.74948,
+      "lng": 14.99596,
+      "frp": 1.0,
+      "confidence": "n",
+      "acq_date": "2026-08-29",
+      "acq_time": "56"
+    },
+    {
+      "lat": 37.75282,
+      "lng": 14.99681,
+      "frp": 1.0,
+      "confidence": "n",
+      "acq_date": "2026-08-29",
+      "acq_time": "56"
+    },
+    {
+      "lat": 37.75401,
+      "lng": 14.99482,
+      "frp": 0.4,
+      "confidence": "n",
+      "acq_date": "2026-08-29",
+      "acq_time": "56"
     }
   ],
   "stale": false,
-  "last_success_at": "2026-08-28T23:37:33.759324+00:00"
+  "last_success_at": "2026-08-29T05:07:33.021126+00:00"
 }
