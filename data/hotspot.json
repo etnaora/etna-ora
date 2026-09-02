@@ -1,11 +1,92 @@
 {
-  "generated_at": "2026-09-02T02:21:12.185861+00:00",
+  "generated_at": "2026-09-02T07:13:28.798017+00:00",
   "source": "NASA FIRMS (VIIRS_SNPP_NRT) — https://firms.modaps.eosdis.nasa.gov",
-  "status": "quiete",
-  "notes": "Nessuna anomalia termica rilevata dal satellite nelle ultime 24 ore.",
-  "last_significant_event": null,
-  "hotspot_count_24h": 0,
-  "points": [],
+  "status": "alta",
+  "notes": "Anomalia termica significativa rilevata dal satellite (7 hotspot, FRP massimo 2.5 MW).",
+  "last_significant_event": "2026-09-02T07:13:28.798017+00:00",
+  "hotspot_count_24h": 7,
+  "points": [
+    {
+      "lat": 37.74236,
+      "lng": 15.06561,
+      "frp": 3.1,
+      "confidence": "n",
+      "acq_date": "2026-09-02",
+      "acq_time": "122"
+    },
+    {
+      "lat": 37.74352,
+      "lng": 15.05965,
+      "frp": 3.1,
+      "confidence": "n",
+      "acq_date": "2026-09-02",
+      "acq_time": "122"
+    },
+    {
+      "lat": 37.75211,
+      "lng": 14.99576,
+      "frp": 2.5,
+      "confidence": "n",
+      "acq_date": "2026-09-02",
+      "acq_time": "122"
+    },
+    {
+      "lat": 37.74474,
+      "lng": 15.05338,
+      "frp": 1.9,
+      "confidence": "n",
+      "acq_date": "2026-09-02",
+      "acq_time": "122"
+    },
+    {
+      "lat": 37.74592,
+      "lng": 15.04728,
+      "frp": 1.9,
+      "confidence": "n",
+      "acq_date": "2026-09-02",
+      "acq_time": "122"
+    },
+    {
+      "lat": 37.7496,
+      "lng": 15.04803,
+      "frp": 1.9,
+      "confidence": "n",
+      "acq_date": "2026-09-02",
+      "acq_time": "122"
+    },
+    {
+      "lat": 37.74707,
+      "lng": 15.04137,
+      "frp": 1.6,
+      "confidence": "n",
+      "acq_date": "2026-09-02",
+      "acq_time": "122"
+    },
+    {
+      "lat": 37.74824,
+      "lng": 15.03537,
+      "frp": 1.6,
+      "confidence": "n",
+      "acq_date": "2026-09-02",
+      "acq_time": "122"
+    },
+    {
+      "lat": 37.75075,
+      "lng": 15.0421,
+      "frp": 1.6,
+      "confidence": "n",
+      "acq_date": "2026-09-02",
+      "acq_time": "122"
+    },
+    {
+      "lat": 37.75191,
+      "lng": 15.03613,
+      "frp": 1.6,
+      "confidence": "n",
+      "acq_date": "2026-09-02",
+      "acq_time": "122"
+    }
+  ],
   "stale": false,
-  "last_success_at": "2026-09-02T02:21:12.185861+00:00"
+  "last_success_at": "2026-09-02T07:13:28.798017+00:00"
 }
