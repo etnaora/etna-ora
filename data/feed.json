@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-03T06:25:26.929576+00:00",
+  "generated_at": "2026-09-03T09:49:38.957962+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
@@ -65,60 +65,6 @@
       "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
       "level": "medio",
       "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260820123446.pdf"
-    },
-    {
-      "id": "eq-46943752",
-      "timestamp": "2026-08-20T06:54:56.830000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.8",
-      "summary": "Localizzato: 10 km SW Linguaglossa (CT).",
-      "level": "basso",
-      "magnitude": 1.8
-    },
-    {
-      "id": "eq-46943642",
-      "timestamp": "2026-08-20T06:42:31.450000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.3",
-      "summary": "Localizzato: 2 km SW Zafferana Etnea (CT).",
-      "level": "basso",
-      "magnitude": 1.3
-    },
-    {
-      "id": "eq-46943362",
-      "timestamp": "2026-08-20T06:03:13.820000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.2",
-      "summary": "Localizzato: 9 km SW Linguaglossa (CT).",
-      "level": "basso",
-      "magnitude": 1.2
-    },
-    {
-      "id": "eq-46943402",
-      "timestamp": "2026-08-20T05:49:47.350000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.1",
-      "summary": "Localizzato: 9 km SW Linguaglossa (CT).",
-      "level": "basso",
-      "magnitude": 1.1
-    },
-    {
-      "id": "eq-46943192",
-      "timestamp": "2026-08-20T05:47:03+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 3.1",
-      "summary": "Localizzato: 10 km SW Linguaglossa (CT).",
-      "level": "alto",
-      "magnitude": 3.1
-    },
-    {
-      "id": "eq-46943092",
-      "timestamp": "2026-08-20T05:36:03.050000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.0",
-      "summary": "Localizzato: 9 km SW Linguaglossa (CT).",
-      "level": "basso",
-      "magnitude": 1
     },
     {
       "id": "com-ComunicatoETNA20260819144559pdf",
