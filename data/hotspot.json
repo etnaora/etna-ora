@@ -1,11 +1,84 @@
 {
-  "generated_at": "2026-09-04T00:36:38.345841+00:00",
+  "generated_at": "2026-09-04T05:19:37.393282+00:00",
   "source": "NASA FIRMS (VIIRS_SNPP_NRT) — https://firms.modaps.eosdis.nasa.gov",
-  "status": "quiete",
-  "notes": "Nessuna anomalia termica rilevata dal satellite nelle ultime 24 ore.",
-  "last_significant_event": null,
-  "hotspot_count_24h": 0,
-  "points": [],
+  "status": "alta",
+  "notes": "Anomalia termica significativa rilevata dal satellite (6 hotspot, FRP massimo 2.3 MW).",
+  "last_significant_event": "2026-09-04T05:19:37.393282+00:00",
+  "hotspot_count_24h": 6,
+  "points": [
+    {
+      "lat": 37.74331,
+      "lng": 15.06436,
+      "frp": 3.1,
+      "confidence": "n",
+      "acq_date": "2026-09-04",
+      "acq_time": "43"
+    },
+    {
+      "lat": 37.7439,
+      "lng": 15.05918,
+      "frp": 3.1,
+      "confidence": "n",
+      "acq_date": "2026-09-04",
+      "acq_time": "43"
+    },
+    {
+      "lat": 37.74446,
+      "lng": 15.05418,
+      "frp": 2.3,
+      "confidence": "n",
+      "acq_date": "2026-09-04",
+      "acq_time": "43"
+    },
+    {
+      "lat": 37.74504,
+      "lng": 15.04908,
+      "frp": 2.3,
+      "confidence": "n",
+      "acq_date": "2026-09-04",
+      "acq_time": "43"
+    },
+    {
+      "lat": 37.74564,
+      "lng": 15.04383,
+      "frp": 1.8,
+      "confidence": "n",
+      "acq_date": "2026-09-04",
+      "acq_time": "43"
+    },
+    {
+      "lat": 37.74625,
+      "lng": 15.03846,
+      "frp": 1.8,
+      "confidence": "n",
+      "acq_date": "2026-09-04",
+      "acq_time": "43"
+    },
+    {
+      "lat": 37.74939,
+      "lng": 15.04494,
+      "frp": 1.8,
+      "confidence": "n",
+      "acq_date": "2026-09-04",
+      "acq_time": "43"
+    },
+    {
+      "lat": 37.75,
+      "lng": 15.03959,
+      "frp": 1.8,
+      "confidence": "n",
+      "acq_date": "2026-09-04",
+      "acq_time": "43"
+    },
+    {
+      "lat": 37.75058,
+      "lng": 15.03445,
+      "frp": 1.5,
+      "confidence": "n",
+      "acq_date": "2026-09-04",
+      "acq_time": "43"
+    }
+  ],
   "stale": false,
-  "last_success_at": "2026-09-04T00:36:38.345841+00:00"
+  "last_success_at": "2026-09-04T05:19:37.393282+00:00"
 }
