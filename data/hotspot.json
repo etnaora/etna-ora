@@ -1,36 +1,11 @@
 {
-  "generated_at": "2026-09-06T22:37:12.914055+00:00",
+  "generated_at": "2026-09-07T00:35:48.590655+00:00",
   "source": "NASA FIRMS (VIIRS_SNPP_NRT) — https://firms.modaps.eosdis.nasa.gov",
-  "status": "moderata",
-  "notes": "Attività termica rilevata dal satellite (2 hotspot, FRP massimo 2.1 MW).",
-  "last_significant_event": "2026-09-06T22:37:12.914055+00:00",
-  "hotspot_count_24h": 2,
-  "points": [
-    {
-      "lat": 37.74485,
-      "lng": 15.05836,
-      "frp": 2.3,
-      "confidence": "n",
-      "acq_date": "2026-09-06",
-      "acq_time": "145"
-    },
-    {
-      "lat": 37.74895,
-      "lng": 15.0421,
-      "frp": 2.1,
-      "confidence": "n",
-      "acq_date": "2026-09-06",
-      "acq_time": "145"
-    },
-    {
-      "lat": 37.74771,
-      "lng": 15.04699,
-      "frp": 1.8,
-      "confidence": "n",
-      "acq_date": "2026-09-06",
-      "acq_time": "145"
-    }
-  ],
+  "status": "quiete",
+  "notes": "Nessuna anomalia termica rilevata dal satellite nelle ultime 24 ore.",
+  "last_significant_event": null,
+  "hotspot_count_24h": 0,
+  "points": [],
   "stale": false,
-  "last_success_at": "2026-09-06T22:37:12.914055+00:00"
+  "last_success_at": "2026-09-07T00:35:48.590655+00:00"
 }
