@@ -1,100 +1,11 @@
 {
-  "generated_at": "2026-09-08T23:29:59.389046+00:00",
+  "generated_at": "2026-09-09T01:25:25.725846+00:00",
   "source": "NASA FIRMS (VIIRS_SNPP_NRT) — https://firms.modaps.eosdis.nasa.gov",
-  "status": "alta",
-  "notes": "Anomalia termica significativa rilevata dal satellite (7 hotspot, FRP massimo 3.2 MW).",
-  "last_significant_event": "2026-09-08T23:29:59.389046+00:00",
-  "hotspot_count_24h": 7,
-  "points": [
-    {
-      "lat": 37.74817,
-      "lng": 15.04543,
-      "frp": 3.2,
-      "confidence": "n",
-      "acq_date": "2026-09-08",
-      "acq_time": "107"
-    },
-    {
-      "lat": 37.74256,
-      "lng": 15.05825,
-      "frp": 1.5,
-      "confidence": "n",
-      "acq_date": "2026-09-08",
-      "acq_time": "107"
-    },
-    {
-      "lat": 37.74332,
-      "lng": 15.05368,
-      "frp": 1.5,
-      "confidence": "n",
-      "acq_date": "2026-09-08",
-      "acq_time": "107"
-    },
-    {
-      "lat": 37.74103,
-      "lng": 15.06729,
-      "frp": 1.4,
-      "confidence": "n",
-      "acq_date": "2026-09-08",
-      "acq_time": "107"
-    },
-    {
-      "lat": 37.74179,
-      "lng": 15.0628,
-      "frp": 1.4,
-      "confidence": "n",
-      "acq_date": "2026-09-08",
-      "acq_time": "107"
-    },
-    {
-      "lat": 37.74892,
-      "lng": 15.04094,
-      "frp": 1.4,
-      "confidence": "n",
-      "acq_date": "2026-09-08",
-      "acq_time": "107"
-    },
-    {
-      "lat": 37.74968,
-      "lng": 15.03643,
-      "frp": 1.4,
-      "confidence": "n",
-      "acq_date": "2026-09-08",
-      "acq_time": "107"
-    },
-    {
-      "lat": 37.75299,
-      "lng": 15.03722,
-      "frp": 1.4,
-      "confidence": "n",
-      "acq_date": "2026-09-08",
-      "acq_time": "107"
-    },
-    {
-      "lat": 37.74928,
-      "lng": 14.99798,
-      "frp": 0.9,
-      "confidence": "n",
-      "acq_date": "2026-09-08",
-      "acq_time": "107"
-    },
-    {
-      "lat": 37.75002,
-      "lng": 14.99356,
-      "frp": 0.3,
-      "confidence": "n",
-      "acq_date": "2026-09-08",
-      "acq_time": "107"
-    },
-    {
-      "lat": 37.75332,
-      "lng": 14.99436,
-      "frp": 0.3,
-      "confidence": "n",
-      "acq_date": "2026-09-08",
-      "acq_time": "107"
-    }
-  ],
+  "status": "quiete",
+  "notes": "Nessuna anomalia termica rilevata dal satellite nelle ultime 24 ore.",
+  "last_significant_event": null,
+  "hotspot_count_24h": 0,
+  "points": [],
   "stale": false,
-  "last_success_at": "2026-09-08T23:29:59.389046+00:00"
+  "last_success_at": "2026-09-09T01:25:25.725846+00:00"
 }
