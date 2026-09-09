@@ -1,8 +1,26 @@
 {
-  "generated_at": "2026-09-09T01:27:52.748205+00:00",
+  "generated_at": "2026-09-09T06:03:06.943023+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
+    {
+      "id": "eq-47108172",
+      "timestamp": "2026-09-09T04:18:48.720000+00:00",
+      "type": "sismicita",
+      "title": "Evento sismico Ml 1.5",
+      "summary": "Localizzato: 2 km N Ragalna (CT).",
+      "level": "basso",
+      "magnitude": 1.5
+    },
+    {
+      "id": "eq-47107672",
+      "timestamp": "2026-09-09T01:42:27.580000+00:00",
+      "type": "sismicita",
+      "title": "Evento sismico Ml 1.7",
+      "summary": "Localizzato: 2 km NW Ragalna (CT).",
+      "level": "basso",
+      "magnitude": 1.7
+    },
     {
       "id": "eq-47077212",
       "timestamp": "2026-09-05T09:29:25.270000+00:00",
@@ -209,24 +227,6 @@
       "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
       "level": "medio",
       "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260810175504.pdf"
-    },
-    {
-      "id": "com-ComunicatoETNA20260810081206pdf",
-      "timestamp": "2026-08-10T08:16:54+00:00",
-      "type": "comunicato",
-      "title": "Invio comunicato generico di attività vulcanica",
-      "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
-      "level": "medio",
-      "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260810081206.pdf"
-    },
-    {
-      "id": "com-ComunicatoETNA20260809155707pdf",
-      "timestamp": "2026-08-09T15:59:41+00:00",
-      "type": "comunicato",
-      "title": "Invio comunicato generico di attività vulcanica",
-      "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
-      "level": "medio",
-      "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260809155707.pdf"
     }
   ]
 }
