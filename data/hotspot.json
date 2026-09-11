@@ -1,70 +1,11 @@
 {
-  "generated_at": "2026-09-10T21:43:47.528360+00:00",
+  "generated_at": "2026-09-11T02:27:28.518459+00:00",
   "source": "NASA FIRMS (VIIRS_SNPP_NRT) — https://firms.modaps.eosdis.nasa.gov",
-  "status": "moderata",
-  "notes": "Attività termica rilevata dal satellite (4 hotspot, FRP massimo 3.1 MW).",
-  "last_significant_event": "2026-09-10T21:43:47.528360+00:00",
-  "hotspot_count_24h": 4,
-  "points": [
-    {
-      "lat": 37.74179,
-      "lng": 15.06237,
-      "frp": 4.0,
-      "confidence": "n",
-      "acq_date": "2026-09-10",
-      "acq_time": "33"
-    },
-    {
-      "lat": 37.74783,
-      "lng": 15.04525,
-      "frp": 3.1,
-      "confidence": "n",
-      "acq_date": "2026-09-10",
-      "acq_time": "33"
-    },
-    {
-      "lat": 37.74218,
-      "lng": 15.05785,
-      "frp": 2.0,
-      "confidence": "n",
-      "acq_date": "2026-09-10",
-      "acq_time": "33"
-    },
-    {
-      "lat": 37.74256,
-      "lng": 15.05339,
-      "frp": 2.0,
-      "confidence": "n",
-      "acq_date": "2026-09-10",
-      "acq_time": "33"
-    },
-    {
-      "lat": 37.74825,
-      "lng": 15.04035,
-      "frp": 1.6,
-      "confidence": "n",
-      "acq_date": "2026-09-10",
-      "acq_time": "33"
-    },
-    {
-      "lat": 37.74866,
-      "lng": 15.03561,
-      "frp": 1.6,
-      "confidence": "n",
-      "acq_date": "2026-09-10",
-      "acq_time": "33"
-    },
-    {
-      "lat": 37.75244,
-      "lng": 14.99159,
-      "frp": 1.2,
-      "confidence": "n",
-      "acq_date": "2026-09-10",
-      "acq_time": "33"
-    }
-  ],
-  "stale": true,
-  "last_success_at": "2026-09-10T21:43:47.528360+00:00",
-  "checked_at": "2026-09-10T23:36:38.115696+00:00",
-  "stale_reason": "NASA FIRMS non raggiungibile su nessun host disponibile (HTTPSConnectionPool(host='firms2.modaps.eosdis.nasa.gov', port=443): Max retries exceeded with url: /api/area/csv/72952be493ba7ed231f2d6c7e0744e26/VIIRS_SNPP_NRT/14.90,37.68,15.15,37.82/1 (Caused by ConnectTimeoutError(<HTTPSConnection(host='firms2.modaps.eosdis.nasa.gov', port=443) at 0x7f49b5ff7320>, 'Connection to firms2.modaps.eosdis.nasa.gov timed out. (connect timeout=20)')))"
+  "status": "quiete",
+  "notes": "Nessuna anomalia termica rilevata dal satellite nelle ultime 24 ore.",
+  "last_significant_event": null,
+  "hotspot_count_24h": 0,
+  "points": [],
+  "stale": false,
+  "last_success_at": "2026-09-11T02:27:28.518459+00:00"
 }
