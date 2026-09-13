@@ -1,8 +1,17 @@
 {
-  "generated_at": "2026-09-13T00:52:05.095292+00:00",
+  "generated_at": "2026-09-13T01:00:16.206772+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
+    {
+      "id": "eq-47156672",
+      "timestamp": "2026-09-13T00:06:19.570000+00:00",
+      "type": "sismicita",
+      "title": "Evento sismico Ml 2.2",
+      "summary": "Localizzato: 10 km SW Linguaglossa (CT).",
+      "level": "medio",
+      "magnitude": 2.2
+    },
     {
       "id": "eq-47155882",
       "timestamp": "2026-09-12T21:19:02.070000+00:00",
@@ -218,15 +227,6 @@
       "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
       "level": "medio",
       "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260811103628.pdf"
-    },
-    {
-      "id": "com-ComunicatoETNA20260810221734pdf",
-      "timestamp": "2026-08-10T22:25:18+00:00",
-      "type": "comunicato",
-      "title": "Invio comunicato generico di attività vulcanica",
-      "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
-      "level": "medio",
-      "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260810221734.pdf"
     }
   ]
 }
