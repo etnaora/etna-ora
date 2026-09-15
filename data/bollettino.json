@@ -1,17 +1,17 @@
 {
-  "bulletin_date": "2026-09-08",
-  "bulletin_url": "https://www.ct.ingv.it/index.php/monitoraggio-e-sorveglianza/prodotti-del-monitoraggio/bollettini-settimanali-multidisciplinari/1162-bollettino-Settimanale-sul-monitoraggio-vulcanico-geochimico-e-sismico-del-vulcano-Etna-del-2026-09-08/file",
+  "bulletin_date": "2026-09-15",
+  "bulletin_url": "https://www.ct.ingv.it/index.php/monitoraggio-e-sorveglianza/prodotti-del-monitoraggio/bollettini-settimanali-multidisciplinari/1165-bollettino-Settimanale-sul-monitoraggio-vulcanico-geochimico-e-sismico-del-vulcano-Etna-del-2026-09-15/file",
   "sections": {
-    "vulcanologiche": "Attività di degassamento a regime variabile dai crateri sommitali, associata a quasi continue emissioni di cenere dal Cratere di Nord-Est; debole attività stromboliana e sporadiche emissioni di cenere dal cratere Bocca Nuova",
-    "sismologia": "Assenza di attività sismica da fratturazione con Ml>=2.0. Ampiezza del tremore tra il livello basso e quello medio",
-    "infrasuono": "Attività infrasonica prevalentemente bassa con episodici incrementi",
-    "deformazioni": "I segnali delle reti di monitoraggio delle deformazioni del suolo non hanno mostrato variazioni significative nel corso dell'ultima settimana",
-    "geochimica": "Flusso di SO2 su un livello medio. Flusso CO2 dal suolo (Etnagas): su valori medo-bassi. Pressione parziale di CO2 disciolta in falda (Rete EtnaAcque): nessun aggiornamento. Rapporto isotopico He nei siti periferici: non ci sono aggiornamenti, l'ultimo dato era su valori alti (26 agosto 2026)",
-    "satellitare": "L’attività termica osservata da satellite in area sommitale è stata generalmente di livello basso con isolate anomalie di livello moderato",
-    "altre_osservazioni": null,
-    "so2_estratto": "Flusso di SO2 su un livello medio. Flusso CO2 dal suolo (Etnagas): su valori medo-bassi"
+    "vulcanologiche": "Attività di degassamento a regime variabile dai crateri sommitali, associata a quasi continue emissioni di cenere dal Cratere di Nord-Est; debole e discontinua attività stromboliana e sporadiche emissioni di cenere dal Cratere Bocca Nuova",
+    "sismologia": "Attività sismica da fratturazione bassa: un solo evento ha raggiunto la soglia di ML>=2.0. Ampiezza del tremore tra il livello basso e quello medio",
+    "infrasuono": "Attività infrasonica di bassa energia con frequenze di accadimento variabili tra i livelli basso e molto alto",
+    "deformazioni": "I segnali delle reti di monitoraggio delle deformazioni del suolo non hanno mostrato variazioni significative",
+    "geochimica": "Flusso di SO2 su un livello medio Flusso CO2 dal suolo (Etnagas): su valori medi. Pressione parziale di CO2 disciolta in falda (Rete EtnaAcque): nessun aggiornamento. Rapporto isotopico He nei siti periferici: non ci sono aggiornamenti, l'ultimo dato era su valori alti (26 agosto 2026)",
+    "satellitare": "L’attività termica osservata da satellite in area sommitale è stata generalmente di livello basso",
+    "altre_osservazioni": "I dati della rete RADONETNA durante il mese di Settembre 2026 hanno mostrato anomalie nei siti fianco meridionale che hanno preceduto di alcuni giorni quelle osservate nei siti del fianco settentrionale",
+    "so2_estratto": "Flusso di SO2 su un livello medio Flusso CO2 dal suolo (Etnagas): su valori medi"
   },
-  "generated_at": "2026-09-15T11:25:13.556979+00:00",
-  "last_success_at": "2026-09-15T11:25:13.556979+00:00",
+  "generated_at": "2026-09-15T16:37:44.593537+00:00",
+  "last_success_at": "2026-09-15T16:37:44.593537+00:00",
   "stale": false
 }
