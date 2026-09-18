@@ -1,54 +1,68 @@
 {
-  "generated_at": "2026-09-17T22:58:20.542461+00:00",
+  "generated_at": "2026-09-18T06:12:10.891821+00:00",
   "source": "NASA FIRMS (VIIRS_SNPP_NRT) — https://firms.modaps.eosdis.nasa.gov",
   "status": "moderata",
-  "notes": "Attività termica rilevata dal satellite (3 hotspot, FRP massimo 2.6 MW).",
-  "last_significant_event": "2026-09-17T22:58:20.542461+00:00",
-  "hotspot_count_24h": 3,
+  "notes": "Attività termica rilevata dal satellite (5 hotspot, FRP massimo 1.5 MW).",
+  "last_significant_event": "2026-09-18T06:12:10.891821+00:00",
+  "hotspot_count_24h": 5,
   "points": [
     {
-      "lat": 37.7499,
-      "lng": 14.99268,
-      "frp": 2.6,
+      "lat": 37.74249,
+      "lng": 15.06266,
+      "frp": 1.9,
       "confidence": "n",
-      "acq_date": "2026-09-17",
-      "acq_time": "139"
+      "acq_date": "2026-09-18",
+      "acq_time": "122"
     },
     {
-      "lat": 37.74855,
-      "lng": 15.03969,
-      "frp": 1.6,
+      "lat": 37.74369,
+      "lng": 15.05654,
+      "frp": 1.9,
       "confidence": "n",
-      "acq_date": "2026-09-17",
-      "acq_time": "139"
+      "acq_date": "2026-09-18",
+      "acq_time": "122"
     },
     {
-      "lat": 37.74285,
-      "lng": 15.06376,
+      "lat": 37.74606,
+      "lng": 15.04446,
       "frp": 1.5,
       "confidence": "n",
-      "acq_date": "2026-09-17",
-      "acq_time": "139"
+      "acq_date": "2026-09-18",
+      "acq_time": "122"
     },
     {
-      "lat": 37.7448,
-      "lng": 15.05552,
-      "frp": 1.4,
+      "lat": 37.74973,
+      "lng": 15.04522,
+      "frp": 1.5,
       "confidence": "n",
-      "acq_date": "2026-09-17",
-      "acq_time": "139"
+      "acq_date": "2026-09-18",
+      "acq_time": "122"
     },
     {
-      "lat": 37.74677,
-      "lng": 15.04722,
-      "frp": 1.4,
+      "lat": 37.7472,
+      "lng": 15.03866,
+      "frp": 1.2,
       "confidence": "n",
-      "acq_date": "2026-09-17",
-      "acq_time": "139"
+      "acq_date": "2026-09-18",
+      "acq_time": "122"
+    },
+    {
+      "lat": 37.75206,
+      "lng": 15.03332,
+      "frp": 1.2,
+      "confidence": "n",
+      "acq_date": "2026-09-18",
+      "acq_time": "122"
+    },
+    {
+      "lat": 37.75225,
+      "lng": 14.99358,
+      "frp": 0.9,
+      "confidence": "n",
+      "acq_date": "2026-09-18",
+      "acq_time": "122"
     }
   ],
-  "stale": true,
-  "last_success_at": "2026-09-17T22:58:20.542461+00:00",
-  "checked_at": "2026-09-18T01:05:40.932986+00:00",
-  "stale_reason": "NASA FIRMS non raggiungibile su nessun host disponibile (HTTPSConnectionPool(host='firms2.modaps.eosdis.nasa.gov', port=443): Max retries exceeded with url: /api/area/csv/72952be493ba7ed231f2d6c7e0744e26/VIIRS_SNPP_NRT/14.90,37.68,15.15,37.82/1 (Caused by ConnectTimeoutError(<HTTPSConnection(host='firms2.modaps.eosdis.nasa.gov', port=443) at 0x7fa6971e7920>, 'Connection to firms2.modaps.eosdis.nasa.gov timed out. (connect timeout=20)')))"
+  "stale": false,
+  "last_success_at": "2026-09-18T06:12:10.891821+00:00"
 }
