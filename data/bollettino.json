@@ -13,5 +13,7 @@
   },
   "generated_at": "2026-09-18T20:40:24.970435+00:00",
   "last_success_at": "2026-09-18T20:40:24.970435+00:00",
-  "stale": false
+  "stale": true,
+  "checked_at": "2026-09-18T23:08:18.716314+00:00",
+  "stale_reason": "Bollettino INGV non recuperabile (('Connection broken: IncompleteRead(1053144 bytes read, 1224452 more expected)', IncompleteRead(1053144 bytes read, 1224452 more expected)))"
 }
