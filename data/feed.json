@@ -1,8 +1,17 @@
 {
-  "generated_at": "2026-09-19T06:42:36.534049+00:00",
+  "generated_at": "2026-09-19T11:24:05.482778+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
+    {
+      "id": "eq-47200722",
+      "timestamp": "2026-09-19T06:03:27.080000+00:00",
+      "type": "sismicita",
+      "title": "Evento sismico Ml 1.6",
+      "summary": "Localizzato: 5 km SE Bronte (CT).",
+      "level": "basso",
+      "magnitude": 1.6
+    },
     {
       "id": "eq-47190342",
       "timestamp": "2026-09-18T01:51:35.860000+00:00",
@@ -92,15 +101,6 @@
       "summary": "Localizzato: 2 km NW Ragalna (CT).",
       "level": "basso",
       "magnitude": 1.7
-    },
-    {
-      "id": "eq-47077212",
-      "timestamp": "2026-09-05T09:29:25.270000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.9",
-      "summary": "Localizzato: 11 km W Milo (CT).",
-      "level": "basso",
-      "magnitude": 1.9
     },
     {
       "id": "com-ComunicatoETNA20260826112008pdf",
