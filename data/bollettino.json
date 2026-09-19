@@ -11,9 +11,7 @@
     "altre_osservazioni": "I dati della rete RADONETNA durante il mese di Settembre 2026 hanno mostrato anomalie nei siti fianco meridionale che hanno preceduto di alcuni giorni quelle osservate nei siti del fianco settentrionale",
     "so2_estratto": "Flusso di SO2 su un livello medio Flusso CO2 dal suolo (Etnagas): su valori medi"
   },
-  "generated_at": "2026-09-18T20:40:24.970435+00:00",
-  "last_success_at": "2026-09-18T20:40:24.970435+00:00",
-  "stale": true,
-  "checked_at": "2026-09-18T23:08:18.716314+00:00",
-  "stale_reason": "Bollettino INGV non recuperabile (('Connection broken: IncompleteRead(1053144 bytes read, 1224452 more expected)', IncompleteRead(1053144 bytes read, 1224452 more expected)))"
+  "generated_at": "2026-09-19T03:58:00.175864+00:00",
+  "last_success_at": "2026-09-19T03:58:00.175864+00:00",
+  "stale": false
 }
