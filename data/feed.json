@@ -1,8 +1,17 @@
 {
-  "generated_at": "2026-09-22T16:48:58.417912+00:00",
+  "generated_at": "2026-09-22T19:15:01.121209+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
+    {
+      "id": "eq-47224352",
+      "timestamp": "2026-09-22T16:56:51.400000+00:00",
+      "type": "sismicita",
+      "title": "Evento sismico Ml 1.3",
+      "summary": "Localizzato: 5 km NW Maniace (CT).",
+      "level": "basso",
+      "magnitude": 1.3
+    },
     {
       "id": "eq-47218762",
       "timestamp": "2026-09-21T19:55:31.020000+00:00",
@@ -218,15 +227,6 @@
       "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
       "level": "medio",
       "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260816170646.pdf"
-    },
-    {
-      "id": "com-ComunicatoETNA20260815101305pdf",
-      "timestamp": "2026-08-15T10:15:10+00:00",
-      "type": "comunicato",
-      "title": "Invio comunicato generico di attività vulcanica",
-      "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
-      "level": "medio",
-      "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260815101305.pdf"
     }
   ]
 }
