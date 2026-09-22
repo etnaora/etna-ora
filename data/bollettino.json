@@ -1,19 +1,17 @@
 {
-  "bulletin_date": "2026-09-15",
-  "bulletin_url": "https://www.ct.ingv.it/index.php/monitoraggio-e-sorveglianza/prodotti-del-monitoraggio/bollettini-settimanali-multidisciplinari/1165-bollettino-Settimanale-sul-monitoraggio-vulcanico-geochimico-e-sismico-del-vulcano-Etna-del-2026-09-15/file",
+  "bulletin_date": "2026-09-22",
+  "bulletin_url": "https://www.ct.ingv.it/index.php/monitoraggio-e-sorveglianza/prodotti-del-monitoraggio/bollettini-settimanali-multidisciplinari/1166-bollettino-Settimanale-sul-monitoraggio-vulcanico-geochimico-e-sismico-del-vulcano-Etna-del-2026-09-22/file",
   "sections": {
-    "vulcanologiche": "Attività di degassamento a regime variabile dai crateri sommitali, associata a quasi continue emissioni di cenere dal Cratere di Nord-Est; debole e discontinua attività stromboliana e sporadiche emissioni di cenere dal Cratere Bocca Nuova",
-    "sismologia": "Attività sismica da fratturazione bassa: un solo evento ha raggiunto la soglia di ML>=2.0. Ampiezza del tremore tra il livello basso e quello medio",
-    "infrasuono": "Attività infrasonica di bassa energia con frequenze di accadimento variabili tra i livelli basso e molto alto",
+    "vulcanologiche": "Attività di degassamento a regime variabile dai crateri sommitali; emissioni di cenere dal Cratere di Nord-Est in alternanza con il Cratere Bocca Nuova; attività stromboliana dal Cratere Bocca Nuova",
+    "sismologia": "Bassa attività sismica da fratturazione. Ampiezza media del tremore vulcanico moderatamente variabile tra valori bassi e medi",
+    "infrasuono": "Attività infrasonica generalmente medio - bassa, localizzata principalmente al cratere Bocca Nuova",
     "deformazioni": "I segnali delle reti di monitoraggio delle deformazioni del suolo non hanno mostrato variazioni significative",
-    "geochimica": "Flusso di SO2 su un livello medio Flusso CO2 dal suolo (Etnagas): su valori medi. Pressione parziale di CO2 disciolta in falda (Rete EtnaAcque): nessun aggiornamento. Rapporto isotopico He nei siti periferici: non ci sono aggiornamenti, l'ultimo dato era su valori alti (26 agosto 2026)",
+    "geochimica": "Flusso di SO2 su un livello medio. Flusso CO2 dal suolo (Etnagas): su valori medio alti. Pressione parziale di CO2 disciolta in falda (Rete EtnaAcque): nessun aggiornamento. Rapporto isotopico He nei siti periferici: non ci sono aggiornamenti, l'ultimo dato era su valori alti (26 agosto 2026)",
     "satellitare": "L’attività termica osservata da satellite in area sommitale è stata generalmente di livello basso",
-    "altre_osservazioni": "I dati della rete RADONETNA durante il mese di Settembre 2026 hanno mostrato anomalie nei siti fianco meridionale che hanno preceduto di alcuni giorni quelle osservate nei siti del fianco settentrionale",
-    "so2_estratto": "Flusso di SO2 su un livello medio Flusso CO2 dal suolo (Etnagas): su valori medi"
+    "altre_osservazioni": "I dati della rete RADONETNA durante il mese di Settembre 2026 hanno mostrato diverse anomalie, sia positive sia negative, in tutti i siti. Le variazioni anomale si sono manifestate prima nei siti del fianco meridionale e successivamente nei siti del fianco orientale e",
+    "so2_estratto": "Flusso di SO2 su un livello medio. Flusso CO2 dal suolo (Etnagas): su valori medio alti"
   },
-  "generated_at": "2026-09-22T04:38:39.764013+00:00",
-  "last_success_at": "2026-09-22T04:38:39.764013+00:00",
-  "stale": true,
-  "checked_at": "2026-09-22T11:15:42.774838+00:00",
-  "stale_reason": "Bollettino INGV non recuperabile (('Connection broken: IncompleteRead(2199960 bytes read, 77636 more expected)', IncompleteRead(2199960 bytes read, 77636 more expected)))"
+  "generated_at": "2026-09-22T16:37:45.762459+00:00",
+  "last_success_at": "2026-09-22T16:37:45.762459+00:00",
+  "stale": false
 }
