@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-09-30T14:01:11.802395+00:00",
+  "generated_at": "2026-09-30T23:22:29.360108+00:00",
   "source": "NASA FIRMS (VIIRS_SNPP_NRT) — https://firms.modaps.eosdis.nasa.gov",
   "status": "moderata",
   "notes": "Attività termica rilevata dal satellite (1 hotspot, FRP massimo 2.5 MW).",
-  "last_significant_event": "2026-09-30T14:01:11.802395+00:00",
+  "last_significant_event": "2026-09-30T23:22:29.360108+00:00",
   "hotspot_count_24h": 1,
   "points": [
     {
@@ -39,8 +39,6 @@
       "acq_time": "56"
     }
   ],
-  "stale": true,
-  "last_success_at": "2026-09-30T14:01:11.802395+00:00",
-  "checked_at": "2026-09-30T19:32:09.800057+00:00",
-  "stale_reason": "NASA FIRMS non raggiungibile su nessun host disponibile (HTTPSConnectionPool(host='firms2.modaps.eosdis.nasa.gov', port=443): Max retries exceeded with url: /api/area/csv/72952be493ba7ed231f2d6c7e0744e26/VIIRS_SNPP_NRT/14.90,37.68,15.15,37.82/1 (Caused by ConnectTimeoutError(<HTTPSConnection(host='firms2.modaps.eosdis.nasa.gov', port=443) at 0x7fcdb1f9e4e0>, 'Connection to firms2.modaps.eosdis.nasa.gov timed out. (connect timeout=20)')))"
+  "stale": false,
+  "last_success_at": "2026-09-30T23:22:29.360108+00:00"
 }
