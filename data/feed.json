@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-01T18:59:54.881097+00:00",
+  "generated_at": "2026-10-01T21:22:09.052267+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
@@ -92,24 +92,6 @@
       "summary": "Localizzato: 9 km SW Bronte (CT).",
       "level": "basso",
       "magnitude": 1.8
-    },
-    {
-      "id": "eq-47189652",
-      "timestamp": "2026-09-17T19:24:11.490000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 2.4",
-      "summary": "Localizzato: 8 km SW Bronte (CT).",
-      "level": "medio",
-      "magnitude": 2.4
-    },
-    {
-      "id": "eq-47189552",
-      "timestamp": "2026-09-17T18:27:32.150000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.6",
-      "summary": "Localizzato: 5 km W Bronte (CT).",
-      "level": "basso",
-      "magnitude": 1.6
     },
     {
       "id": "com-ComunicatoETNA20260826112008pdf",
