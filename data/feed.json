@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-03T02:22:30.613234+00:00",
+  "generated_at": "2026-10-03T06:57:43.285679+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
@@ -65,15 +65,6 @@
       "summary": "Localizzato: Zafferana Etnea (CT).",
       "level": "basso",
       "magnitude": 1.1
-    },
-    {
-      "id": "eq-47200722",
-      "timestamp": "2026-09-19T06:03:27.080000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.6",
-      "summary": "Localizzato: 5 km SE Bronte (CT).",
-      "level": "basso",
-      "magnitude": 1.6
     },
     {
       "id": "com-ComunicatoETNA20260826112008pdf",
