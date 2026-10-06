@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-06T16:00:58.635483+00:00",
+  "generated_at": "2026-10-06T19:42:03.104833+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
@@ -47,15 +47,6 @@
       "summary": "Localizzato: 2 km W Zafferana Etnea (CT).",
       "level": "basso",
       "magnitude": 1.8
-    },
-    {
-      "id": "eq-47224352",
-      "timestamp": "2026-09-22T16:56:51.400000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.3",
-      "summary": "Localizzato: 5 km NW Maniace (CT).",
-      "level": "basso",
-      "magnitude": 1.3
     },
     {
       "id": "com-ComunicatoETNA20260826112008pdf",
