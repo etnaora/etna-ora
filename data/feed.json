@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-05T21:57:33.651058+00:00",
+  "generated_at": "2026-10-06T00:58:06.814980+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
@@ -56,15 +56,6 @@
       "summary": "Localizzato: 5 km NW Maniace (CT).",
       "level": "basso",
       "magnitude": 1.3
-    },
-    {
-      "id": "eq-47218762",
-      "timestamp": "2026-09-21T19:55:31.020000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.2",
-      "summary": "Localizzato: 1 km N Ragalna (CT).",
-      "level": "basso",
-      "magnitude": 1.2
     },
     {
       "id": "com-ComunicatoETNA20260826112008pdf",
