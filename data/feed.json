@@ -1,8 +1,26 @@
 {
-  "generated_at": "2026-10-07T00:35:51.467180+00:00",
+  "generated_at": "2026-10-07T02:35:27.286756+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
+    {
+      "id": "eq-46783501",
+      "timestamp": "2026-10-07T01:37:07.850000+00:00",
+      "type": "sismicita",
+      "title": "Evento sismico Ml 1.4",
+      "summary": "Localizzato: 4 km SW Randazzo (CT).",
+      "level": "basso",
+      "magnitude": 1.4
+    },
+    {
+      "id": "eq-46783451",
+      "timestamp": "2026-10-07T00:55:47.340000+00:00",
+      "type": "sismicita",
+      "title": "Evento sismico Ml 1.8",
+      "summary": "Localizzato: 4 km S Randazzo (CT).",
+      "level": "basso",
+      "magnitude": 1.8
+    },
     {
       "id": "eq-47443202",
       "timestamp": "2026-10-04T23:57:21.610000+00:00",
@@ -209,24 +227,6 @@
       "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
       "level": "medio",
       "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260811103628.pdf"
-    },
-    {
-      "id": "com-ComunicatoETNA20260810221734pdf",
-      "timestamp": "2026-08-10T22:25:18+00:00",
-      "type": "comunicato",
-      "title": "Invio comunicato generico di attività vulcanica",
-      "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
-      "level": "medio",
-      "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260810221734.pdf"
-    },
-    {
-      "id": "com-ComunicatoETNA20260810175504pdf",
-      "timestamp": "2026-08-10T18:03:21+00:00",
-      "type": "comunicato",
-      "title": "Invio comunicato generico di attività vulcanica",
-      "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
-      "level": "medio",
-      "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260810175504.pdf"
     }
   ]
 }
