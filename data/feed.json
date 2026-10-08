@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-10-08T06:16:41.190189+00:00",
+  "generated_at": "2026-10-08T07:59:22.027059+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
     {
-      "id": "eq-46790001",
+      "id": "eq-47466692",
       "timestamp": "2026-10-07T20:30:45.520000+00:00",
       "type": "sismicita",
       "title": "Evento sismico Ml 2.2",
