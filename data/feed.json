@@ -1,8 +1,17 @@
 {
-  "generated_at": "2026-10-09T23:09:54.073807+00:00",
+  "generated_at": "2026-10-09T23:30:58.590020+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
+    {
+      "id": "eq-47493322",
+      "timestamp": "2026-10-09T21:02:37.450000+00:00",
+      "type": "sismicita",
+      "title": "Evento sismico Ml 1.1",
+      "summary": "Localizzato: 2 km W Ragalna (CT).",
+      "level": "basso",
+      "magnitude": 1.1
+    },
     {
       "id": "eq-47481672",
       "timestamp": "2026-10-08T21:08:56.830000+00:00",
@@ -218,15 +227,6 @@
       "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
       "level": "medio",
       "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260814162900.pdf"
-    },
-    {
-      "id": "com-ComunicatoETNA20260813173220pdf",
-      "timestamp": "2026-08-13T17:37:58+00:00",
-      "type": "comunicato",
-      "title": "Invio comunicato generico di attività vulcanica",
-      "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
-      "level": "medio",
-      "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260813173220.pdf"
     }
   ]
 }
