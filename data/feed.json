@@ -1,8 +1,17 @@
 {
-  "generated_at": "2026-10-11T07:52:47.392225+00:00",
+  "generated_at": "2026-10-11T14:39:03.565158+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
+    {
+      "id": "eq-47509092",
+      "timestamp": "2026-10-11T09:40:18.140000+00:00",
+      "type": "sismicita",
+      "title": "Evento sismico Ml 1.7",
+      "summary": "Localizzato: 6 km SW Moio Alcantara (ME).",
+      "level": "basso",
+      "magnitude": 1.7
+    },
     {
       "id": "eq-47507442",
       "timestamp": "2026-10-10T23:29:35.040000+00:00",
@@ -218,15 +227,6 @@
       "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
       "level": "medio",
       "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260815101305.pdf"
-    },
-    {
-      "id": "com-ComunicatoETNA20260815082043pdf",
-      "timestamp": "2026-08-15T08:26:32+00:00",
-      "type": "comunicato",
-      "title": "Invio comunicato generico di attività vulcanica",
-      "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
-      "level": "medio",
-      "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260815082043.pdf"
     }
   ]
 }
