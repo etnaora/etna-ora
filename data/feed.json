@@ -1,8 +1,17 @@
 {
-  "generated_at": "2026-10-12T02:03:55.600242+00:00",
+  "generated_at": "2026-10-12T02:28:49.429603+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
+    {
+      "id": "com-ComunicatoETNA20261012015852pdf",
+      "timestamp": "2026-10-12T02:03:57+00:00",
+      "type": "comunicato",
+      "title": "Primo comunicato (valutazione multidisciplinare)",
+      "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
+      "level": "medio",
+      "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20261012015852.pdf"
+    },
     {
       "id": "eq-47509092",
       "timestamp": "2026-10-11T09:40:18.140000+00:00",
