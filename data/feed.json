@@ -1,8 +1,17 @@
 {
-  "generated_at": "2026-10-12T02:28:49.429603+00:00",
+  "generated_at": "2026-10-12T09:11:32.706453+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
+    {
+      "id": "eq-47513552",
+      "timestamp": "2026-10-12T05:23:38.240000+00:00",
+      "type": "sismicita",
+      "title": "Evento sismico Ml 2.0",
+      "summary": "Localizzato: 4 km W Bronte (CT).",
+      "level": "medio",
+      "magnitude": 2
+    },
     {
       "id": "com-ComunicatoETNA20261012015852pdf",
       "timestamp": "2026-10-12T02:03:57+00:00",
@@ -218,15 +227,6 @@
       "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
       "level": "medio",
       "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260816170646.pdf"
-    },
-    {
-      "id": "com-ComunicatoETNA20260815101305pdf",
-      "timestamp": "2026-08-15T10:15:10+00:00",
-      "type": "comunicato",
-      "title": "Invio comunicato generico di attività vulcanica",
-      "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
-      "level": "medio",
-      "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260815101305.pdf"
     }
   ]
 }
