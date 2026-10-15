@@ -1,8 +1,17 @@
 {
-  "generated_at": "2026-10-15T15:18:08.674739+00:00",
+  "generated_at": "2026-10-15T19:10:44.959795+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
+    {
+      "id": "eq-47545112",
+      "timestamp": "2026-10-15T15:31:55.730000+00:00",
+      "type": "sismicita",
+      "title": "Evento sismico Ml 1.2",
+      "summary": "Localizzato: 3 km N Sant'Alfio (CT).",
+      "level": "basso",
+      "magnitude": 1.2
+    },
     {
       "id": "eq-47515732",
       "timestamp": "2026-10-12T10:42:00.310000+00:00",
@@ -218,15 +227,6 @@
       "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
       "level": "medio",
       "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260816170646.pdf"
-    },
-    {
-      "id": "com-ComunicatoETNA20260815101305pdf",
-      "timestamp": "2026-08-15T10:15:10+00:00",
-      "type": "comunicato",
-      "title": "Invio comunicato generico di attività vulcanica",
-      "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
-      "level": "medio",
-      "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260815101305.pdf"
     }
   ]
 }
