@@ -1,8 +1,89 @@
 {
-  "generated_at": "2026-10-18T05:44:53.719602+00:00",
+  "generated_at": "2026-10-18T09:06:14.248594+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
+    {
+      "id": "eq-47566402",
+      "timestamp": "2026-10-18T07:06:10.270000+00:00",
+      "type": "sismicita",
+      "title": "Evento sismico Ml 1.1",
+      "summary": "Localizzato: 7 km SE Bronte (CT).",
+      "level": "basso",
+      "magnitude": 1.1
+    },
+    {
+      "id": "eq-47566072",
+      "timestamp": "2026-10-18T05:53:58.820000+00:00",
+      "type": "sismicita",
+      "title": "Evento sismico Ml 1.4",
+      "summary": "Localizzato: 7 km SE Bronte (CT).",
+      "level": "basso",
+      "magnitude": 1.4
+    },
+    {
+      "id": "eq-47566092",
+      "timestamp": "2026-10-18T05:53:37.400000+00:00",
+      "type": "sismicita",
+      "title": "Evento sismico Ml 1.1",
+      "summary": "Localizzato: 6 km SE Bronte (CT).",
+      "level": "basso",
+      "magnitude": 1.1
+    },
+    {
+      "id": "eq-47565882",
+      "timestamp": "2026-10-18T05:18:30.210000+00:00",
+      "type": "sismicita",
+      "title": "Evento sismico Ml 1.1",
+      "summary": "Localizzato: 7 km SE Bronte (CT).",
+      "level": "basso",
+      "magnitude": 1.1
+    },
+    {
+      "id": "eq-47565922",
+      "timestamp": "2026-10-18T05:10:33.220000+00:00",
+      "type": "sismicita",
+      "title": "Evento sismico Ml 1.0",
+      "summary": "Localizzato: 7 km SE Bronte (CT).",
+      "level": "basso",
+      "magnitude": 1
+    },
+    {
+      "id": "eq-47565912",
+      "timestamp": "2026-10-18T05:06:55.820000+00:00",
+      "type": "sismicita",
+      "title": "Evento sismico Ml 1.2",
+      "summary": "Localizzato: 7 km SE Bronte (CT).",
+      "level": "basso",
+      "magnitude": 1.2
+    },
+    {
+      "id": "eq-47565772",
+      "timestamp": "2026-10-18T04:37:07.650000+00:00",
+      "type": "sismicita",
+      "title": "Evento sismico Ml 1.0",
+      "summary": "Localizzato: 6 km SE Bronte (CT).",
+      "level": "basso",
+      "magnitude": 1
+    },
+    {
+      "id": "eq-47565782",
+      "timestamp": "2026-10-18T04:33:26.810000+00:00",
+      "type": "sismicita",
+      "title": "Evento sismico Ml 1.0",
+      "summary": "Localizzato: 7 km SE Bronte (CT).",
+      "level": "basso",
+      "magnitude": 1
+    },
+    {
+      "id": "eq-47565642",
+      "timestamp": "2026-10-18T04:20:46.870000+00:00",
+      "type": "sismicita",
+      "title": "Evento sismico Ml 3.2",
+      "summary": "Localizzato: 7 km SE Bronte (CT).",
+      "level": "alto",
+      "magnitude": 3.2
+    },
     {
       "id": "eq-47565042",
       "timestamp": "2026-10-18T02:54:44.060000+00:00",
@@ -146,87 +227,6 @@
       "summary": "Localizzato: 4 km S Randazzo (CT).",
       "level": "basso",
       "magnitude": 1.8
-    },
-    {
-      "id": "eq-47443202",
-      "timestamp": "2026-10-04T23:57:21.610000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.2",
-      "summary": "Localizzato: 2 km W Ragalna (CT).",
-      "level": "basso",
-      "magnitude": 1.2
-    },
-    {
-      "id": "com-ComunicatoETNA20260826112008pdf",
-      "timestamp": "2026-08-26T11:21:24+00:00",
-      "type": "comunicato",
-      "title": "Comunicato di fine fenomeno",
-      "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
-      "level": "medio",
-      "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260826112008.pdf"
-    },
-    {
-      "id": "com-ComunicatoETNA20260823074420pdf",
-      "timestamp": "2026-08-23T07:48:46+00:00",
-      "type": "comunicato",
-      "title": "Invio comunicato generico di attività vulcanica",
-      "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
-      "level": "medio",
-      "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260823074420.pdf"
-    },
-    {
-      "id": "com-ComunicatoETNA20260821181114pdf",
-      "timestamp": "2026-08-21T18:15:52+00:00",
-      "type": "comunicato",
-      "title": "Invio comunicato generico di attività vulcanica",
-      "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
-      "level": "medio",
-      "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260821181114.pdf"
-    },
-    {
-      "id": "com-ComunicatoETNA20260821162438pdf",
-      "timestamp": "2026-08-21T16:31:57+00:00",
-      "type": "comunicato",
-      "title": "Invio comunicato generico di attività vulcanica",
-      "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
-      "level": "medio",
-      "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260821162438.pdf"
-    },
-    {
-      "id": "com-ComunicatoETNA20260820123446pdf",
-      "timestamp": "2026-08-20T12:39:51+00:00",
-      "type": "comunicato",
-      "title": "Invio comunicato generico di attività vulcanica",
-      "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
-      "level": "medio",
-      "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260820123446.pdf"
-    },
-    {
-      "id": "com-ComunicatoETNA20260819144559pdf",
-      "timestamp": "2026-08-19T14:56:37+00:00",
-      "type": "comunicato",
-      "title": "Invio comunicato generico di attività vulcanica",
-      "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
-      "level": "medio",
-      "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260819144559.pdf"
-    },
-    {
-      "id": "com-ComunicatoETNA20260819033820pdf",
-      "timestamp": "2026-08-19T03:50:37+00:00",
-      "type": "comunicato",
-      "title": "Invio comunicato generico di attività vulcanica",
-      "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
-      "level": "medio",
-      "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260819033820.pdf"
-    },
-    {
-      "id": "com-ComunicatoETNA20260818124155pdf",
-      "timestamp": "2026-08-18T12:51:40+00:00",
-      "type": "comunicato",
-      "title": "Invio comunicato generico di attività vulcanica",
-      "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
-      "level": "medio",
-      "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260818124155.pdf"
     }
   ]
 }
