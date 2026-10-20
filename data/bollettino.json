@@ -1,9 +1,9 @@
 {
-  "bulletin_date": "2026-10-13",
-  "bulletin_url": "https://www.ct.ingv.it/index.php/monitoraggio-e-sorveglianza/prodotti-del-monitoraggio/bollettini-settimanali-multidisciplinari/1174-bollettino-Settimanale-sul-monitoraggio-vulcanico-geochimico-e-sismico-del-vulcano-Etna-del-2026-10-13/file",
+  "bulletin_date": "2026-10-20",
+  "bulletin_url": "https://www.ct.ingv.it/index.php/monitoraggio-e-sorveglianza/prodotti-del-monitoraggio/bollettini-settimanali-multidisciplinari/1176-bollettino-Settimanale-sul-monitoraggio-vulcanico-geochimico-e-sismico-del-vulcano-Etna-del-2026-10-20/file",
   "sections": {
-    "vulcanologiche": "Attività di degassamento a regime variabile dai crateri sommitali e discontinue emissioni di cenere dal Cratere di Nord-Est",
-    "sismologia": "Bassa attività sismica da fratturazione. Ampiezza media del tremore vulcanico sul livello basso",
+    "vulcanologiche": "Attività di degassamento a regime variabile dai crateri sommitali e discontinue emissioni di cenere dalla Bocca Nuova e al Cratere di Nord-Est",
+    "sismologia": "Moderata attività sismica da fratturazione; l’ampiezza media del tremore mostra oscillazioni comprese tra valori medi e bassi",
     "infrasuono": "Bassa attività infrasonica",
     "deformazioni": "Le serie temporali delle stazioni di monitoraggio delle deformazioni del suolo non mostrano variazioni significative",
     "geochimica": "Flusso di SO2 su un livello medio Flusso CO2 dal suolo (Etnagas): su valori medi Pressione parziale di CO2 disciolta in falda (Rete EtnaAcque): nessun aggiornamento. Rapporto isotopico He nei siti periferici: l'ultimo dato del 22 settembre 2026 conferma valori alti",
@@ -11,7 +11,7 @@
     "altre_osservazioni": null,
     "so2_estratto": "Flusso di SO2 su un livello medio Flusso CO2 dal suolo (Etnagas): su valori medi"
   },
-  "generated_at": "2026-10-20T08:19:41.637201+00:00",
-  "last_success_at": "2026-10-20T08:19:41.637201+00:00",
+  "generated_at": "2026-10-20T14:11:44.769839+00:00",
+  "last_success_at": "2026-10-20T14:11:44.769839+00:00",
   "stale": false
 }
