@@ -1,8 +1,53 @@
 {
-  "generated_at": "2026-10-21T05:14:35.705098+00:00",
+  "generated_at": "2026-10-21T09:49:10.452207+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
+    {
+      "id": "eq-47590772",
+      "timestamp": "2026-10-21T07:01:11.460000+00:00",
+      "type": "sismicita",
+      "title": "Evento sismico Ml 1.1",
+      "summary": "Localizzato: 6 km NW Milo (CT).",
+      "level": "basso",
+      "magnitude": 1.1
+    },
+    {
+      "id": "eq-47590702",
+      "timestamp": "2026-10-21T07:00:05.850000+00:00",
+      "type": "sismicita",
+      "title": "Evento sismico Ml 1.2",
+      "summary": "Localizzato: 5 km W Milo (CT).",
+      "level": "basso",
+      "magnitude": 1.2
+    },
+    {
+      "id": "eq-47590632",
+      "timestamp": "2026-10-21T06:53:08.960000+00:00",
+      "type": "sismicita",
+      "title": "Evento sismico Ml 1.5",
+      "summary": "Localizzato: 7 km W Milo (CT).",
+      "level": "basso",
+      "magnitude": 1.5
+    },
+    {
+      "id": "eq-47590562",
+      "timestamp": "2026-10-21T06:51:04.760000+00:00",
+      "type": "sismicita",
+      "title": "Evento sismico Ml 1.8",
+      "summary": "Localizzato: 8 km W Milo (CT).",
+      "level": "basso",
+      "magnitude": 1.8
+    },
+    {
+      "id": "eq-47590502",
+      "timestamp": "2026-10-21T06:49:13.790000+00:00",
+      "type": "sismicita",
+      "title": "Evento sismico Ml 3.8",
+      "summary": "Localizzato: 7 km W Milo (CT).",
+      "level": "alto",
+      "magnitude": 3.8
+    },
     {
       "id": "eq-47583442",
       "timestamp": "2026-10-20T10:44:07.620000+00:00",
@@ -182,51 +227,6 @@
       "summary": "Localizzato: 3 km N Sant'Alfio (CT).",
       "level": "basso",
       "magnitude": 1.2
-    },
-    {
-      "id": "eq-47515732",
-      "timestamp": "2026-10-12T10:42:00.310000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.7",
-      "summary": "Localizzato: 1 km W Milo (CT).",
-      "level": "basso",
-      "magnitude": 1.7
-    },
-    {
-      "id": "eq-47513552",
-      "timestamp": "2026-10-12T05:23:38.240000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 2.0",
-      "summary": "Localizzato: 4 km W Bronte (CT).",
-      "level": "medio",
-      "magnitude": 2
-    },
-    {
-      "id": "com-ComunicatoETNA20261012015852pdf",
-      "timestamp": "2026-10-12T02:03:57+00:00",
-      "type": "comunicato",
-      "title": "Primo comunicato (valutazione multidisciplinare)",
-      "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
-      "level": "medio",
-      "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20261012015852.pdf"
-    },
-    {
-      "id": "eq-47509092",
-      "timestamp": "2026-10-11T09:40:18.140000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.7",
-      "summary": "Localizzato: 6 km SW Moio Alcantara (ME).",
-      "level": "basso",
-      "magnitude": 1.7
-    },
-    {
-      "id": "eq-47507442",
-      "timestamp": "2026-10-10T23:29:35.040000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.4",
-      "summary": "Localizzato: 6 km W Milo (CT).",
-      "level": "basso",
-      "magnitude": 1.4
     }
   ]
 }
