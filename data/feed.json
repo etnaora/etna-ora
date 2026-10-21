@@ -1,8 +1,17 @@
 {
-  "generated_at": "2026-10-21T10:17:15.775706+00:00",
+  "generated_at": "2026-10-21T14:51:26.640398+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
+    {
+      "id": "eq-47592192",
+      "timestamp": "2026-10-21T10:06:46.260000+00:00",
+      "type": "sismicita",
+      "title": "Evento sismico Ml 1.9",
+      "summary": "Localizzato: 1 km SE Zafferana Etnea (CT).",
+      "level": "basso",
+      "magnitude": 1.9
+    },
     {
       "id": "eq-47590772",
       "timestamp": "2026-10-21T07:01:11.460000+00:00",
@@ -218,15 +227,6 @@
       "summary": "Localizzato: 7 km SE Bronte (CT).",
       "level": "medio",
       "magnitude": 2.1
-    },
-    {
-      "id": "eq-47545112",
-      "timestamp": "2026-10-15T15:31:55.730000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.2",
-      "summary": "Localizzato: 3 km N Sant'Alfio (CT).",
-      "level": "basso",
-      "magnitude": 1.2
     }
   ]
 }
