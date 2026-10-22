@@ -12,6 +12,6 @@
   "generated_at": "2026-10-21T12:16:26.163505+00:00",
   "last_success_at": "2026-10-21T12:16:26.163505+00:00",
   "stale": true,
-  "checked_at": "2026-10-22T00:07:40.917054+00:00",
-  "stale_reason": "VAAC Toulouse non raggiungibile (HTTPSConnectionPool(host='vaac.meteo.fr', port=443): Max retries exceeded with url: /volcanoes/etna/ (Caused by ConnectTimeoutError(<HTTPSConnection(host='vaac.meteo.fr', port=443) at 0x7fa5450d98e0>, 'Connection to vaac.meteo.fr timed out. (connect timeout=20)')))"
+  "checked_at": "2026-10-22T05:13:23.776946+00:00",
+  "stale_reason": "VAAC Toulouse non raggiungibile (HTTPSConnectionPool(host='vaac.meteo.fr', port=443): Max retries exceeded with url: /volcanoes/etna/ (Caused by ConnectTimeoutError(<HTTPSConnection(host='vaac.meteo.fr', port=443) at 0x7fc96cf19100>, 'Connection to vaac.meteo.fr timed out. (connect timeout=20)')))"
 }
