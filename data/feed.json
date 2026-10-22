@@ -1,8 +1,26 @@
 {
-  "generated_at": "2026-10-22T20:01:48.486704+00:00",
+  "generated_at": "2026-10-22T22:46:52.932666+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
+    {
+      "id": "eq-47602042",
+      "timestamp": "2026-10-22T19:35:11.740000+00:00",
+      "type": "sismicita",
+      "title": "Evento sismico Ml 1.5",
+      "summary": "Localizzato: 8 km SE Centuripe (EN).",
+      "level": "basso",
+      "magnitude": 1.5
+    },
+    {
+      "id": "eq-47601972",
+      "timestamp": "2026-10-22T19:15:39.960000+00:00",
+      "type": "sismicita",
+      "title": "Evento sismico Ml 1.9",
+      "summary": "Localizzato: 5 km S Centuripe (EN).",
+      "level": "basso",
+      "magnitude": 1.9
+    },
     {
       "id": "eq-47596522",
       "timestamp": "2026-10-21T23:15:03.370000+00:00",
@@ -209,24 +227,6 @@
       "summary": "Localizzato: 7 km SE Bronte (CT).",
       "level": "alto",
       "magnitude": 3.2
-    },
-    {
-      "id": "eq-47565042",
-      "timestamp": "2026-10-18T02:54:44.060000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.4",
-      "summary": "Localizzato: 7 km SE Bronte (CT).",
-      "level": "basso",
-      "magnitude": 1.4
-    },
-    {
-      "id": "eq-47564742",
-      "timestamp": "2026-10-18T02:27:39.480000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 2.5",
-      "summary": "Localizzato: 7 km SE Bronte (CT).",
-      "level": "medio",
-      "magnitude": 2.5
     }
   ]
 }
