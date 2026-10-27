@@ -1,8 +1,17 @@
 {
-  "generated_at": "2026-10-27T06:46:22.818657+00:00",
+  "generated_at": "2026-10-27T12:32:29.835533+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
+    {
+      "id": "eq-47788272",
+      "timestamp": "2026-10-27T08:57:39.590000+00:00",
+      "type": "sismicita",
+      "title": "Evento sismico Ml 1.6",
+      "summary": "Localizzato: 11 km W Milo (CT).",
+      "level": "basso",
+      "magnitude": 1.6
+    },
     {
       "id": "eq-47785822",
       "timestamp": "2026-10-27T00:05:26.990000+00:00",
@@ -218,15 +227,6 @@
       "summary": "Localizzato: 7 km SE Bronte (CT).",
       "level": "basso",
       "magnitude": 1.2
-    },
-    {
-      "id": "eq-47565772",
-      "timestamp": "2026-10-18T04:37:07.650000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.0",
-      "summary": "Localizzato: 6 km SE Bronte (CT).",
-      "level": "basso",
-      "magnitude": 1
     }
   ]
 }
