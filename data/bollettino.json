@@ -1,17 +1,17 @@
 {
-  "bulletin_date": "2026-10-20",
-  "bulletin_url": "https://www.ct.ingv.it/index.php/monitoraggio-e-sorveglianza/prodotti-del-monitoraggio/bollettini-settimanali-multidisciplinari/1176-bollettino-Settimanale-sul-monitoraggio-vulcanico-geochimico-e-sismico-del-vulcano-Etna-del-2026-10-20/file",
+  "bulletin_date": "2026-10-27",
+  "bulletin_url": "https://www.ct.ingv.it/index.php/monitoraggio-e-sorveglianza/prodotti-del-monitoraggio/bollettini-settimanali-multidisciplinari/1179-bollettino-Settimanale-sul-monitoraggio-vulcanico-geochimico-e-sismico-del-vulcano-Etna-del-2026-10-27/file",
   "sections": {
-    "vulcanologiche": "Attività di degassamento a regime variabile dai crateri sommitali e discontinue emissioni di cenere dalla Bocca Nuova e al Cratere di Nord-Est",
-    "sismologia": "Moderata attività sismica da fratturazione; l’ampiezza media del tremore mostra oscillazioni comprese tra valori medi e bassi",
+    "vulcanologiche": "Attività di degassamento a regime variabile dai crateri sommitali e occasionali emissioni di cenere dal Cratere di Nord-Est",
+    "sismologia": "Moderata attività sismica da fratturazione; l’ampiezza media del tremore vulcanico mostra essenzialmente oscillazioni comprese nell’intervallo dei valori medi",
     "infrasuono": "Bassa attività infrasonica",
-    "deformazioni": "Le serie temporali delle stazioni di monitoraggio delle deformazioni del suolo non mostrano variazioni significative",
-    "geochimica": "Flusso di SO2 su un livello medio Flusso CO2 dal suolo (Etnagas): su valori medi Pressione parziale di CO2 disciolta in falda (Rete EtnaAcque): nessun aggiornamento. Rapporto isotopico He nei siti periferici: l'ultimo dato del 22 settembre 2026 conferma valori alti",
+    "deformazioni": "Le serie temporali delle stazioni permanenti di monitoraggio delle deformazioni del suolo non mostrano variazioni significative",
+    "geochimica": "Flusso di SO2 su un livello medio Flusso CO2 dal suolo (Etnagas): permane su valori medi Pressione parziale di CO2 disciolta in falda (Rete EtnaAcque): nessun aggiornamento. Rapporto isotopico He nei siti periferici: l'ultimo dato del 22 settembre 2026 conferma valori alti",
     "satellitare": "L’attività termica osservata da satellite in area sommitale è stata generalmente di livello basso",
     "altre_osservazioni": null,
-    "so2_estratto": "Flusso di SO2 su un livello medio Flusso CO2 dal suolo (Etnagas): su valori medi"
+    "so2_estratto": "Flusso di SO2 su un livello medio Flusso CO2 dal suolo (Etnagas): permane su valori medi"
   },
-  "generated_at": "2026-10-27T08:47:22.034140+00:00",
-  "last_success_at": "2026-10-27T08:47:22.034140+00:00",
+  "generated_at": "2026-10-27T15:13:34.377626+00:00",
+  "last_success_at": "2026-10-27T15:13:34.377626+00:00",
   "stale": false
 }
