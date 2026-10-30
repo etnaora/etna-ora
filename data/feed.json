@@ -1,8 +1,17 @@
 {
-  "generated_at": "2026-10-30T01:18:16.859408+00:00",
+  "generated_at": "2026-10-30T07:14:29.956740+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
+    {
+      "id": "eq-47821732",
+      "timestamp": "2026-10-30T01:43:31.670000+00:00",
+      "type": "sismicita",
+      "title": "Evento sismico Ml 1.0",
+      "summary": "Localizzato: 2 km NW Sant'Alfio (CT).",
+      "level": "basso",
+      "magnitude": 1
+    },
     {
       "id": "eq-47809832",
       "timestamp": "2026-10-29T14:15:25.780000+00:00",
@@ -218,15 +227,6 @@
       "summary": "Localizzato: 7 km SE Bronte (CT).",
       "level": "basso",
       "magnitude": 1.1
-    },
-    {
-      "id": "eq-47565922",
-      "timestamp": "2026-10-18T05:10:33.220000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.0",
-      "summary": "Localizzato: 7 km SE Bronte (CT).",
-      "level": "basso",
-      "magnitude": 1
     }
   ]
 }
