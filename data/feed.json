@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-01T07:51:47.055416+00:00",
+  "generated_at": "2026-11-01T08:03:08.273673+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
@@ -209,6 +209,24 @@
       "summary": "Localizzato: 7 km SE Bronte (CT).",
       "level": "basso",
       "magnitude": 1.2
+    },
+    {
+      "id": "com-ComunicatoETNA20261012015852pdf",
+      "timestamp": "2026-10-12T02:03:57+00:00",
+      "type": "comunicato",
+      "title": "Primo comunicato (valutazione multidisciplinare)",
+      "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
+      "level": "medio",
+      "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20261012015852.pdf"
+    },
+    {
+      "id": "com-ComunicatoETNA20260826112008pdf",
+      "timestamp": "2026-08-26T11:21:24+00:00",
+      "type": "comunicato",
+      "title": "Comunicato di fine fenomeno",
+      "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
+      "level": "medio",
+      "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260826112008.pdf"
     }
   ]
 }
