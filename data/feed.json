@@ -1,8 +1,17 @@
 {
-  "generated_at": "2026-11-01T01:26:22.354421+00:00",
+  "generated_at": "2026-11-01T07:51:47.055416+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
+    {
+      "id": "eq-47841472",
+      "timestamp": "2026-11-01T06:11:49.150000+00:00",
+      "type": "sismicita",
+      "title": "Evento sismico Ml 1.7",
+      "summary": "Localizzato: 1 km E Moio Alcantara (ME).",
+      "level": "basso",
+      "magnitude": 1.7
+    },
     {
       "id": "eq-47826222",
       "timestamp": "2026-10-30T11:36:44.340000+00:00",
@@ -200,33 +209,6 @@
       "summary": "Localizzato: 7 km SE Bronte (CT).",
       "level": "basso",
       "magnitude": 1.2
-    },
-    {
-      "id": "eq-47566402",
-      "timestamp": "2026-10-18T07:06:10.270000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.1",
-      "summary": "Localizzato: 7 km SE Bronte (CT).",
-      "level": "basso",
-      "magnitude": 1.1
-    },
-    {
-      "id": "eq-47566072",
-      "timestamp": "2026-10-18T05:53:58.820000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.4",
-      "summary": "Localizzato: 7 km SE Bronte (CT).",
-      "level": "basso",
-      "magnitude": 1.4
-    },
-    {
-      "id": "eq-47566092",
-      "timestamp": "2026-10-18T05:53:37.400000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.1",
-      "summary": "Localizzato: 6 km SE Bronte (CT).",
-      "level": "basso",
-      "magnitude": 1.1
     }
   ]
 }
