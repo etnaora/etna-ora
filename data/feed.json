@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-01T08:03:08.273673+00:00",
+  "generated_at": "2026-11-01T14:44:42.546588+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
@@ -155,60 +155,6 @@
       "summary": "Localizzato: 1 km S Maletto (CT).",
       "level": "basso",
       "magnitude": 1.8
-    },
-    {
-      "id": "eq-47569262",
-      "timestamp": "2026-10-18T12:21:38.600000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.2",
-      "summary": "Localizzato: 7 km SE Bronte (CT).",
-      "level": "basso",
-      "magnitude": 1.2
-    },
-    {
-      "id": "eq-47568792",
-      "timestamp": "2026-10-18T11:08:57.540000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.8",
-      "summary": "Localizzato: 7 km SE Bronte (CT).",
-      "level": "basso",
-      "magnitude": 1.8
-    },
-    {
-      "id": "eq-47568802",
-      "timestamp": "2026-10-18T11:07:53.080000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.9",
-      "summary": "Localizzato: 7 km SE Bronte (CT).",
-      "level": "basso",
-      "magnitude": 1.9
-    },
-    {
-      "id": "eq-47568132",
-      "timestamp": "2026-10-18T10:03:15.870000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.4",
-      "summary": "Localizzato: 7 km SE Bronte (CT).",
-      "level": "basso",
-      "magnitude": 1.4
-    },
-    {
-      "id": "eq-47568052",
-      "timestamp": "2026-10-18T10:02:16+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 2.5",
-      "summary": "Localizzato: 7 km SE Bronte (CT).",
-      "level": "medio",
-      "magnitude": 2.5
-    },
-    {
-      "id": "eq-47567862",
-      "timestamp": "2026-10-18T09:52:58.330000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.2",
-      "summary": "Localizzato: 7 km SE Bronte (CT).",
-      "level": "basso",
-      "magnitude": 1.2
     },
     {
       "id": "com-ComunicatoETNA20261012015852pdf",
