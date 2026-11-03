@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-03T09:57:30.450204+00:00",
+  "generated_at": "2026-11-03T17:01:48.519068+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
@@ -173,15 +173,6 @@
       "summary": "Localizzato: 7 km W Milo (CT).",
       "level": "alto",
       "magnitude": 3.8
-    },
-    {
-      "id": "eq-47583442",
-      "timestamp": "2026-10-20T10:44:07.620000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.8",
-      "summary": "Localizzato: 1 km S Maletto (CT).",
-      "level": "basso",
-      "magnitude": 1.8
     },
     {
       "id": "com-ComunicatoETNA20261012015852pdf",
