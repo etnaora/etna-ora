@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-04T02:40:17.059198+00:00",
+  "generated_at": "2026-11-04T09:52:15.016882+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
@@ -128,51 +128,6 @@
       "summary": "Localizzato: 1 km SE Zafferana Etnea (CT).",
       "level": "basso",
       "magnitude": 1.9
-    },
-    {
-      "id": "eq-47590772",
-      "timestamp": "2026-10-21T07:01:11.460000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.1",
-      "summary": "Localizzato: 6 km NW Milo (CT).",
-      "level": "basso",
-      "magnitude": 1.1
-    },
-    {
-      "id": "eq-47590702",
-      "timestamp": "2026-10-21T07:00:05.850000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.2",
-      "summary": "Localizzato: 5 km W Milo (CT).",
-      "level": "basso",
-      "magnitude": 1.2
-    },
-    {
-      "id": "eq-47590632",
-      "timestamp": "2026-10-21T06:53:08.960000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.5",
-      "summary": "Localizzato: 7 km W Milo (CT).",
-      "level": "basso",
-      "magnitude": 1.5
-    },
-    {
-      "id": "eq-47590562",
-      "timestamp": "2026-10-21T06:51:04.760000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.8",
-      "summary": "Localizzato: 8 km W Milo (CT).",
-      "level": "basso",
-      "magnitude": 1.8
-    },
-    {
-      "id": "eq-47590502",
-      "timestamp": "2026-10-21T06:49:13.790000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 3.8",
-      "summary": "Localizzato: 7 km W Milo (CT).",
-      "level": "alto",
-      "magnitude": 3.8
     },
     {
       "id": "com-ComunicatoETNA20261012015852pdf",
