@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-04T09:52:15.016882+00:00",
+  "generated_at": "2026-11-04T09:57:09.175432+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
@@ -182,6 +182,51 @@
       "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
       "level": "medio",
       "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260820123446.pdf"
+    },
+    {
+      "id": "com-ComunicatoETNA20260819144559pdf",
+      "timestamp": "2026-08-19T14:56:37+00:00",
+      "type": "comunicato",
+      "title": "Invio comunicato generico di attività vulcanica",
+      "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
+      "level": "medio",
+      "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260819144559.pdf"
+    },
+    {
+      "id": "com-ComunicatoETNA20260819033820pdf",
+      "timestamp": "2026-08-19T03:50:37+00:00",
+      "type": "comunicato",
+      "title": "Invio comunicato generico di attività vulcanica",
+      "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
+      "level": "medio",
+      "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260819033820.pdf"
+    },
+    {
+      "id": "com-ComunicatoETNA20260818124155pdf",
+      "timestamp": "2026-08-18T12:51:40+00:00",
+      "type": "comunicato",
+      "title": "Invio comunicato generico di attività vulcanica",
+      "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
+      "level": "medio",
+      "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260818124155.pdf"
+    },
+    {
+      "id": "com-ComunicatoETNA20260817161616pdf",
+      "timestamp": "2026-08-17T16:19:56+00:00",
+      "type": "comunicato",
+      "title": "Invio comunicato generico di attività vulcanica",
+      "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
+      "level": "medio",
+      "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260817161616.pdf"
+    },
+    {
+      "id": "com-ComunicatoETNA20260817070640pdf",
+      "timestamp": "2026-08-17T07:18:34+00:00",
+      "type": "comunicato",
+      "title": "Invio comunicato generico di attività vulcanica",
+      "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
+      "level": "medio",
+      "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260817070640.pdf"
     }
   ]
 }
