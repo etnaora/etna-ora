@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-04T23:33:20.605213+00:00",
+  "generated_at": "2026-11-05T03:31:06.472735+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
@@ -128,15 +128,6 @@
       "summary": "Localizzato: 5 km S Centuripe (EN).",
       "level": "basso",
       "magnitude": 1.9
-    },
-    {
-      "id": "eq-47596522",
-      "timestamp": "2026-10-21T23:15:03.370000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.3",
-      "summary": "Localizzato: 7 km W Milo (CT).",
-      "level": "basso",
-      "magnitude": 1.3
     },
     {
       "id": "com-ComunicatoETNA20261012015852pdf",
