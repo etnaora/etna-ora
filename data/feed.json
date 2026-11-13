@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-12T22:40:28.282036+00:00",
+  "generated_at": "2026-11-13T02:46:45.511550+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
@@ -83,15 +83,6 @@
       "summary": "Localizzato: 8 km W Milo (CT).",
       "level": "basso",
       "magnitude": 1.4
-    },
-    {
-      "id": "eq-47821732",
-      "timestamp": "2026-10-30T01:43:31.670000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.0",
-      "summary": "Localizzato: 2 km NW Sant'Alfio (CT).",
-      "level": "basso",
-      "magnitude": 1
     },
     {
       "id": "com-ComunicatoETNA20261012015852pdf",
