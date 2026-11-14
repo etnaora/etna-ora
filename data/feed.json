@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-11-14T16:58:06.553812+00:00",
+  "generated_at": "2026-11-14T21:06:17.325438+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
     {
-      "id": "eq-47082921",
+      "id": "eq-47940702",
       "timestamp": "2026-11-14T13:57:36.420000+00:00",
       "type": "sismicita",
       "title": "Evento sismico Ml 1.4",
@@ -13,7 +13,7 @@
       "magnitude": 1.4
     },
     {
-      "id": "eq-47082431",
+      "id": "eq-47940142",
       "timestamp": "2026-11-14T11:51:40.700000+00:00",
       "type": "sismicita",
       "title": "Evento sismico Ml 1.0",
