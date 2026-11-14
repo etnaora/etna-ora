@@ -1,8 +1,26 @@
 {
-  "generated_at": "2026-11-14T10:59:04.036709+00:00",
+  "generated_at": "2026-11-14T16:53:19.077099+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
+    {
+      "id": "eq-47082921",
+      "timestamp": "2026-11-14T13:57:36.420000+00:00",
+      "type": "sismicita",
+      "title": "Evento sismico Ml 1.4",
+      "summary": "Localizzato: 3 km W Santa Domenica Vittoria (ME).",
+      "level": "basso",
+      "magnitude": 1.4
+    },
+    {
+      "id": "eq-47082431",
+      "timestamp": "2026-11-14T11:51:40.700000+00:00",
+      "type": "sismicita",
+      "title": "Evento sismico Ml 1.0",
+      "summary": "Localizzato: 6 km W Milo (CT).",
+      "level": "basso",
+      "magnitude": 1
+    },
     {
       "id": "eq-47028451",
       "timestamp": "2026-11-08T01:54:07.030000+00:00",
@@ -209,24 +227,6 @@
       "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
       "level": "medio",
       "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260814162900.pdf"
-    },
-    {
-      "id": "com-ComunicatoETNA20260813173220pdf",
-      "timestamp": "2026-08-13T17:37:58+00:00",
-      "type": "comunicato",
-      "title": "Invio comunicato generico di attività vulcanica",
-      "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
-      "level": "medio",
-      "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260813173220.pdf"
-    },
-    {
-      "id": "com-ComunicatoETNA20260812155341pdf",
-      "timestamp": "2026-08-12T15:57:08+00:00",
-      "type": "comunicato",
-      "title": "Invio comunicato generico di attività vulcanica",
-      "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
-      "level": "medio",
-      "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260812155341.pdf"
     }
   ]
 }
