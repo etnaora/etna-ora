@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-15T01:15:16.869810+00:00",
+  "generated_at": "2026-11-15T07:50:53.675170+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
@@ -83,15 +83,6 @@
       "summary": "Localizzato: 3 km E Bronte (CT).",
       "level": "basso",
       "magnitude": 1.1
-    },
-    {
-      "id": "eq-47841472",
-      "timestamp": "2026-11-01T06:11:49.150000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.7",
-      "summary": "Localizzato: 1 km E Moio Alcantara (ME).",
-      "level": "basso",
-      "magnitude": 1.7
     },
     {
       "id": "com-ComunicatoETNA20261012015852pdf",
