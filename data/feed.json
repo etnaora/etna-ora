@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-18T17:37:38.991130+00:00",
+  "generated_at": "2026-11-18T23:23:04.191580+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
@@ -72,24 +72,6 @@
       "type": "sismicita",
       "title": "Evento sismico Ml 1.1",
       "summary": "Localizzato: 12 km W Zafferana Etnea (CT).",
-      "level": "basso",
-      "magnitude": 1.1
-    },
-    {
-      "id": "eq-47866262",
-      "timestamp": "2026-11-04T22:40:44.770000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.9",
-      "summary": "Localizzato: 2 km NE Bronte (CT).",
-      "level": "basso",
-      "magnitude": 1.9
-    },
-    {
-      "id": "eq-47866192",
-      "timestamp": "2026-11-04T22:33:11.610000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.1",
-      "summary": "Localizzato: 1 km NE Bronte (CT).",
       "level": "basso",
       "magnitude": 1.1
     },
