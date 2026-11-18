@@ -1,8 +1,17 @@
 {
-  "generated_at": "2026-11-18T08:37:36.613397+00:00",
+  "generated_at": "2026-11-18T17:01:34.343503+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
+    {
+      "id": "eq-47993472",
+      "timestamp": "2026-11-18T10:32:11.120000+00:00",
+      "type": "sismicita",
+      "title": "Evento sismico Ml 1.6",
+      "summary": "Localizzato: 3 km E Biancavilla (CT).",
+      "level": "basso",
+      "magnitude": 1.6
+    },
     {
       "id": "eq-47961222",
       "timestamp": "2026-11-17T00:58:54.050000+00:00",
@@ -218,15 +227,6 @@
       "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
       "level": "medio",
       "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260814162900.pdf"
-    },
-    {
-      "id": "com-ComunicatoETNA20260813173220pdf",
-      "timestamp": "2026-08-13T17:37:58+00:00",
-      "type": "comunicato",
-      "title": "Invio comunicato generico di attività vulcanica",
-      "summary": "Comunicato ufficiale INGV Osservatorio Etneo sull'attività dell'Etna.",
-      "level": "medio",
-      "url": "https://www.ct.ingv.it/Dati/informative/vulcanico/ComunicatoETNA20260813173220.pdf"
     }
   ]
 }
