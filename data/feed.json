@@ -1,8 +1,17 @@
 {
-  "generated_at": "2026-11-20T03:28:49.308721+00:00",
+  "generated_at": "2026-11-20T10:55:18.703333+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
+    {
+      "id": "eq-48023722",
+      "timestamp": "2026-11-20T08:13:17.940000+00:00",
+      "type": "sismicita",
+      "title": "Evento sismico Ml 2.4",
+      "summary": "Localizzato: 4 km W Bronte (CT).",
+      "level": "medio",
+      "magnitude": 2.4
+    },
     {
       "id": "eq-48021112",
       "timestamp": "2026-11-19T21:54:13.530000+00:00",
@@ -74,15 +83,6 @@
       "summary": "Localizzato: 9 km W Milo (CT).",
       "level": "basso",
       "magnitude": 1.5
-    },
-    {
-      "id": "eq-47872282",
-      "timestamp": "2026-11-06T05:17:55.060000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.1",
-      "summary": "Localizzato: 12 km W Zafferana Etnea (CT).",
-      "level": "basso",
-      "magnitude": 1.1
     },
     {
       "id": "com-ComunicatoETNA20261012015852pdf",
