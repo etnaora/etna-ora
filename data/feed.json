@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-22T02:05:34.906757+00:00",
+  "generated_at": "2026-11-22T08:30:19.067100+00:00",
   "source": "INGV Osservatorio Etneo — webservice FDSN event (CC-BY 4.0)",
   "max_items": 25,
   "items": [
@@ -74,15 +74,6 @@
       "summary": "Localizzato: 6 km W Milo (CT).",
       "level": "basso",
       "magnitude": 1
-    },
-    {
-      "id": "eq-47028451",
-      "timestamp": "2026-11-08T01:54:07.030000+00:00",
-      "type": "sismicita",
-      "title": "Evento sismico Ml 1.5",
-      "summary": "Localizzato: 9 km W Milo (CT).",
-      "level": "basso",
-      "magnitude": 1.5
     },
     {
       "id": "com-ComunicatoETNA20261012015852pdf",
