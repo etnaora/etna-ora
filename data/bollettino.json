@@ -14,6 +14,6 @@
   "generated_at": "2026-11-25T07:48:03.283405+00:00",
   "last_success_at": "2026-11-25T07:48:03.283405+00:00",
   "stale": true,
-  "checked_at": "2026-11-25T19:01:47.892021+00:00",
+  "checked_at": "2026-11-26T03:25:13.500882+00:00",
   "stale_reason": "Bollettino INGV non recuperabile (503 Server Error: Service Unavailable for url: https://www.ct.ingv.it/index.php/monitoraggio-e-sorveglianza/prodotti-del-monitoraggio/bollettini-settimanali-multidisciplinari)"
 }
